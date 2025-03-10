@@ -53,24 +53,49 @@
     </style>
 </head>
 <body>
-    <h2>🎮 PS5 Game Counter 🎮</h2>
+    <h2>🎮 PS Game Counter 🎮</h2>
     <div id="counters"></div>
     <script>
         const numPS5 = 3;
+        const gamePrice = 7; // Price per game in birr
         const countersDiv = document.getElementById("counters");
-        
+
         function createCounter(ps5Number) {
             let count = localStorage.getItem("ps5_" + ps5Number) || 0;
+            let winsA = localStorage.getItem("ps5_" + ps5Number + "_A") || 0;
+            let winsB = localStorage.getItem("ps5_" + ps5Number + "_B") || 0;
             const counter = document.createElement("div");
             counter.classList.add("counter");
             counter.innerHTML = `
-                <h3>🕹️ PS5 ${ps5Number}</h3>
-                <p id="count_${ps5Number}">${count}</p>
-                <button class="increase" onclick="updateCount(${ps5Number}, 1)">+1</button>
-                <button class="decrease" onclick="updateCount(${ps5Number}, -1)">-1</button>
+                <h3>🕹️ PS ${ps5Number}</h3>
+                <p>Games Played: <span id="count_${ps5Number}">${count}</span></p>
+                <button class="increase" onclick="updateCount(${ps5Number}, 1)">+1 Game</button>
                 <button class="reset" onclick="resetCount(${ps5Number})">Reset</button>
+                <h3>🏆 Player Wins</h3>
+                <p>Player A: <span id="winsA_${ps5Number}">${winsA}</span></p>
+                <p>Player B: <span id="winsB_${ps5Number}">${winsB}</span></p>
+                <button class="increase" onclick="updateWins(${ps5Number}, 'A', 1)">+1 A</button>
+                <button class="increase" onclick="updateWins(${ps5Number}, 'B', 1)">+1 B</button>
+                <button class="reset" onclick="resetWins(${ps5Number})">Reset Wins</button>
+                <h3>💰 Total Price: <span id="totalPrice_${ps5Number}">${(count + parseInt(winsA) + parseInt(winsB)) * gamePrice}</span> Birr</h3>
             `;
             countersDiv.appendChild(counter);
+        }
+
+        function updateWins(ps5Number, player, change) {
+            let wins = parseInt(localStorage.getItem("ps5_" + ps5Number + "_" + player) || 0);
+            wins = Math.max(0, wins + change);
+            localStorage.setItem("ps5_" + ps5Number + "_" + player, wins);
+            document.getElementById("wins" + player + "_" + ps5Number).innerText = wins;
+            updatePrice(ps5Number); // Update total price when wins change
+        }
+
+        function resetWins(ps5Number) {
+            localStorage.setItem("ps5_" + ps5Number + "_A", 0);
+            localStorage.setItem("ps5_" + ps5Number + "_B", 0);
+            document.getElementById("winsA_" + ps5Number).innerText = 0;
+            document.getElementById("winsB_" + ps5Number).innerText = 0;
+            updatePrice(ps5Number); // Update total price when wins reset
         }
 
         function updateCount(ps5Number, change) {
@@ -78,11 +103,21 @@
             count = Math.max(0, count + change);
             localStorage.setItem("ps5_" + ps5Number, count);
             document.getElementById("count_" + ps5Number).innerText = count;
+            updatePrice(ps5Number); // Update total price when game count changes
         }
 
         function resetCount(ps5Number) {
             localStorage.setItem("ps5_" + ps5Number, 0);
             document.getElementById("count_" + ps5Number).innerText = 0;
+            updatePrice(ps5Number); // Update total price when game count reset
+        }
+
+        function updatePrice(ps5Number) {
+            let count = parseInt(localStorage.getItem("ps5_" + ps5Number) || 0);
+            let winsA = parseInt(localStorage.getItem("ps5_" + ps5Number + "_A") || 0);
+            let winsB = parseInt(localStorage.getItem("ps5_" + ps5Number + "_B") || 0);
+            let totalPrice = (count + winsA + winsB) * gamePrice;
+            document.getElementById("totalPrice_" + ps5Number).innerText = totalPrice;
         }
 
         for (let i = 1; i <= numPS5; i++) {
