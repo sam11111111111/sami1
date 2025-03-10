@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS5 Game Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .counter {
+            background: white;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            font-size: 18px;
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .increase { background-color: #4CAF50; color: white; }
+        .decrease { background-color: #f44336; color: white; }
+        .reset { background-color: #008CBA; color: white; }
+    </style>
+</head>
+<body>
+    <h2>PS5 Game Counter</h2>
+    <div id="counters"></div>
+    <script>
+        const numPS5 = 3;
+        const countersDiv = document.getElementById("counters");
+        
+        function createCounter(ps5Number) {
+            let count = localStorage.getItem("ps5_" + ps5Number) || 0;
+            const counter = document.createElement("div");
+            counter.classList.add("counter");
+            counter.innerHTML = `
+                <h3>PS5 ${ps5Number}</h3>
+                <p id="count_${ps5Number}">${count}</p>
+                <button class="increase" onclick="updateCount(${ps5Number}, 1)">+1</button>
+                <button class="decrease" onclick="updateCount(${ps5Number}, -1)">-1</button>
+                <button class="reset" onclick="resetCount(${ps5Number})">Reset</button>
+            `;
+            countersDiv.appendChild(counter);
+        }
+
+        function updateCount(ps5Number, change) {
+            let count = parseInt(localStorage.getItem("ps5_" + ps5Number) || 0);
+            count = Math.max(0, count + change);
+            localStorage.setItem("ps5_" + ps5Number, count);
+            document.getElementById("count_" + ps5Number).innerText = count;
+        }
+
+        function resetCount(ps5Number) {
+            localStorage.setItem("ps5_" + ps5Number, 0);
+            document.getElementById("count_" + ps5Number).innerText = 0;
+        }
+
+        for (let i = 1; i <= numPS5; i++) {
+            createCounter(i);
+        }
+    </script>
+</body>
+</html>
