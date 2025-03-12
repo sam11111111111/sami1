@@ -15,7 +15,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             height: 100vh;
             overflow: hidden;
         }
@@ -26,23 +25,21 @@
         .container {
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            flex-wrap: wrap; /* Ensures all counters are visible */
             gap: 10px;
             width: 100%;
             max-width: 900px;
         }
         .counter {
             background: #2a2a3b;
-            padding: 15px;
+            padding: 10px;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            flex: 1; /* Distributes space evenly */
-            min-width: 250px; /* Ensures all counters stay visible */
-            max-width: 300px; /* Prevents overly large counters */
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
         }
         h3 {
-            font-size: 18px;
+            font-size: 16px;
             margin-bottom: 5px;
         }
         p {
@@ -82,14 +79,14 @@
     </div>
 
     <script>
-        const numPS5 = 3; 
-        const gamePrice = 7; 
+        const numPS5 = 3;
+        const gamePrice = 7;
         const countersDiv = document.getElementById("counters");
 
         function createCounter(ps5Number) {
-            let count = localStorage.getItem(`ps5_${ps5Number}_games`) || 0;
-            let winsA = localStorage.getItem(`ps5_${ps5Number}_A`) || 0;
-            let winsB = localStorage.getItem(`ps5_${ps5Number}_B`) || 0;
+            let count = parseInt(localStorage.getItem(`ps5_${ps5Number}_games`) || 0);
+            let winsA = parseInt(localStorage.getItem(`ps5_${ps5Number}_A`) || 0);
+            let winsB = parseInt(localStorage.getItem(`ps5_${ps5Number}_B`) || 0);
 
             const counter = document.createElement("div");
             counter.classList.add("counter");
@@ -105,7 +102,7 @@
                 <button class="increase" onclick="updateWins(${ps5Number}, 'B', 1)">+1 B</button>
                 <button class="reset" onclick="resetWins(${ps5Number})">Reset Wins</button>
 
-                <h3>💰 ጠቅላላ ዋጋ: <span id="totalPrice_${ps5Number}">${(count + parseInt(winsA) + parseInt(winsB)) * gamePrice}</span> Birr</h3>
+                <h3>💰 ጠቅላላ ዋጋ: <span id="totalPrice_${ps5Number}">${(count + winsA + winsB) * gamePrice}</span> Birr</h3>
             `;
             countersDiv.appendChild(counter);
         }
