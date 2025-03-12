@@ -49,11 +49,26 @@
         button:hover {
             opacity: 0.8;
         }
+        .total-revenue {
+            background: #ff9800;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
     <h2>🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
     <div id="counters"></div>
+
+    <!-- Total Revenue Section -->
+    <div class="total-revenue">
+        💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
+    </div>
 
     <script>
         const numPS5 = 3; // Number of PS5s
@@ -121,11 +136,25 @@
             let winsB = parseInt(localStorage.getItem(`ps5_${ps5Number}_B`) || 0);
             let totalPrice = (count + winsA + winsB) * gamePrice;
             document.getElementById(`totalPrice_${ps5Number}`).innerText = totalPrice;
+            updateTotalRevenue();
+        }
+
+        function updateTotalRevenue() {
+            let totalRevenue = 0;
+            for (let i = 1; i <= numPS5; i++) {
+                let count = parseInt(localStorage.getItem(`ps5_${i}_games`) || 0);
+                let winsA = parseInt(localStorage.getItem(`ps5_${i}_A`) || 0);
+                let winsB = parseInt(localStorage.getItem(`ps5_${i}_B`) || 0);
+                totalRevenue += (count + winsA + winsB) * gamePrice;
+            }
+            document.getElementById("totalRevenue").innerText = totalRevenue;
         }
 
         for (let i = 1; i <= numPS5; i++) {
             createCounter(i);
         }
+
+        updateTotalRevenue(); // Update total revenue when page loads
     </script>
 </body>
 </html>
