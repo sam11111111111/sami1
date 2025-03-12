@@ -17,11 +17,11 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Prevent scrolling */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
         h2 {
-            font-size: 18px;
-            margin-bottom: 5px;
+            font-size: 20px;
+            margin-bottom: 10px;
         }
         .container {
             display: flex;
@@ -30,33 +30,51 @@
             width: 100%;
             max-width: 600px;
             gap: 10px;
+            margin-bottom: 20px;
         }
         .counter {
             background: #2a2a3b;
-            padding: 10px;
+            padding: 15px;
             border-radius: 10px;
-            width: 180px;
-            font-size: 12px;
+            width: 160px; /* Adjust width for smaller screens */
+            font-size: 14px;
+            margin: 5px;
         }
         button {
-            font-size: 10px;
+            font-size: 12px;
             padding: 5px;
             margin: 2px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            width: 70%;
         }
         .increase { background-color: #4CAF50; color: white; }
         .decrease { background-color: #f44336; color: white; }
         .reset { background-color: #008CBA; color: white; }
         .total-revenue {
             background: #ff9800;
-            padding: 10px;
+            padding: 15px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
-            width: 200px;
-            margin-top: 10px;
+            width: 100%;
+            max-width: 300px;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            h2 {
+                font-size: 18px;
+            }
+            .counter {
+                width: 120px; /* Adjust width for very small screens */
+                font-size: 12px;
+            }
+            .total-revenue {
+                font-size: 14px;
+                width: 90%;
+                max-width: none;
+            }
         }
     </style>
 </head>
