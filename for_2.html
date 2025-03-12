@@ -28,29 +28,30 @@
             font-size: 18px;
             margin-bottom: 10px;
         }
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 100%;
-            max-height: 600px;
-            max-width: 600px;
-            gap: 10px;
-            flex-grow: 1;
-            margin-bottom: 20px;
-        }
-        .counter {
-            background: #2a2a3b;
-            padding: 10px;
-            border-radius: 10px;
-            width: 120px;
-            font-size: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 380px;
-            box-sizing: border-box;
-        }
+    .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 90%; /* Increase width */
+    max-width: 900px; /* Adjust to make it larger */
+    gap: 20px; /* Increase spacing */
+    flex-grow: 1;
+    margin-bottom: 20px;
+    padding: 20px; /* Add padding to make it look bigger */
+}
+.counter {
+    background: rgba(42, 42, 59, 0.8);
+    padding: 15px; /* Increase padding */
+    border-radius: 15px; /* Increase border-radius */
+    width: 180px; /* Increase the width */
+    height: 200px; /* Increase the height */
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
         button {
             font-size: 10px;
             padding: 5px;
@@ -119,11 +120,11 @@
             counter.innerHTML = `
                 <h3>🕹️ PS ${psNumber}</h3>
                 <p>ጨዋታ: <span id="count_${psNumber}">${count}</span></p>
-                <button class="increase" onclick="updateCount(${psNumber}, 1)">+1</button>
-                <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1</button>
+                <button class="increase" onclick="updateCount(${psNumber}, 1)"><h2>+1</h2></button>
+                <button class="decrease" onclick="updateCount(${psNumber}, -1)"><h2>-1</h2></button>
                 <button class="reset" onclick="resetCount(${psNumber})">Reset</button>
 
-                <p>💰 Total for PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</p>
+                <h2>💰 Total for PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h2>
             `;
 
             countersDiv.appendChild(counter);
