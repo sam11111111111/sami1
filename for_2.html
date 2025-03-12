@@ -5,89 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PS Game Counter</title>
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-color: #1e1e2e;
-            background-image: url('psss.png');
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
-            color: #ffffff;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            overflow: hidden;
-        }
-        h2 {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-    .container {
+ body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #1e1e2e;
+    background-image: url('psss.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #ffffff;
+    height: 100vh;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
-    width: 100%; /* Increase width */
-    max-width: 900px; /* Adjust to make it larger */
-    gap: 20px; /* Increase spacing */
-    flex-grow: 1;
-    margin-bottom: 20px;
-    padding: 20px; /* Add padding to make it look bigger */
+    align-items: center;
+    overflow: hidden; /* Prevent scrolling */
 }
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* Make all PS counters appear in a single row */
+.container {
+    display: flex;
+    flex-direction: row; /* Ensure horizontal layout */
+    justify-content: center; /* Center the counters */
+    align-items: center;
+    gap: 15px; /* Add spacing between counters */
+    width: 100%;
+    max-width: 1200px; /* Adjust width */
+    padding: 10px;
+}
+
+/* Adjust counter box size to fit them side by side */
 .counter {
     background: rgba(42, 42, 59, 0.8);
-    padding: 15px; /* Increase padding */
-    border-radius: 2d5px; /* Increase border-radius */
-    width: 100%; /* Increase the width */
-    height: 200px; /* Increase the height */
+    padding: 15px;
+    border-radius: 15px;
+    width: 200px; /* Adjust size to fit in one row */
+    height: 230px;
     font-size: 14px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
     box-sizing: border-box;
 }
 
-        button {
-            font-size: 10px;
-            padding: 5px;
-            margin: 2px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-        .increase { background-color: #4CAF50; color: white; }
-        .decrease { background-color: #f44336; color: white; }
-        .reset { background-color: #008CBA; color: white; }
-        .total-revenue, .total-games {
-            background: #ff9800;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            width: 100%;
-            max-width: 300px;
-            margin-top: 10px;
-        }
-        @media (max-width: 600px) {
-            h2 {
-                font-size: 16px;
-            }
-            .counter {
-                width: 100px;
-                font-size: 10px;
-                height: 150px;
-            }
-            .total-revenue, .total-games {
-                font-size: 12px;
-                width: 90%;
-                max-width: none;
-            }
+/* Button Styles */
+button {
+    font-size: 12px;
+    padding: 6px;
+    margin: 3px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.increase { background-color: #4CAF50; color: white; }
+.decrease { background-color: #f44336; color: white; }
+.reset { background-color: #008CBA; color: white; }
+
+/* Total Revenue & Games */
+.total-revenue, .total-games {
+    background: #ff9800;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 280px;
+    margin-top: 10px;
+}
+
         }
     </style>
 </head>
