@@ -95,6 +95,8 @@
         🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span> ጨዋታዎች
     </div>
 
+    <button class="reset" onclick="resetAll()">Reset All</button>
+
     <script>
         const numPS = 3;
         const gamePrice = 7;
@@ -161,6 +163,21 @@
         function updatePrice(psNumber, oldCount, count) {
             let totalPrice = count * gamePrice;
             document.getElementById(`totalPrice_${psNumber}`).innerText = totalPrice;
+        }
+
+        function resetAll() {
+            // Reset all counters in localStorage
+            for (let i = 1; i <= numPS; i++) {
+                localStorage.setItem(`ps_${i}_games`, 0);
+                document.getElementById(`count_${i}`).innerText = 0;
+                document.getElementById(`totalPrice_${i}`).innerText = 0;
+            }
+
+            // Reset global totals
+            totalGamesPlayed = 0;
+            totalRevenue = 0;
+            document.getElementById("totalGames").innerText = totalGamesPlayed;
+            document.getElementById("totalRevenue").innerText = totalRevenue;
         }
 
         for (let i = 1; i <= numPS; i++) {
