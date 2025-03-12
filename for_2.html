@@ -13,21 +13,24 @@
             background-color: #1e1e2e;
             color: #ffffff;
             overflow: hidden; /* Prevent scrolling */
+            height: 100vh; /* Full screen height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         h2 {
             font-size: 22px;
             margin-bottom: 10px;
         }
-.container {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr; /* Change to 3 columns */
-    gap: 10px;
-    width: 100%;
-    max-width: 900px;
-    margin: auto;
-    padding: 5px;
-}
-
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 10px;
+            width: 90%;
+            max-width: 900px;
+        }
         .counter {
             background: #2a2a3b;
             padding: 10px;
@@ -35,22 +38,13 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             text-align: center;
         }
-        .counter:nth-child(3) {
-            grid-column: span 2; /* PS3 takes full width */
+        .ps3 {
+            grid-column: span 2; /* Make PS3 take full width */
             justify-self: center;
         }
-        h3 {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        p {
-            font-size: 12px;
-            font-weight: bold;
-            margin: 5px 0;
-        }
         button {
-            font-size: 12px;
-            padding: 4px 8px;
+            font-size: 14px;
+            padding: 5px 10px;
             margin: 3px;
             border: none;
             border-radius: 6px;
@@ -64,18 +58,22 @@
         .total-revenue {
             background: #ff9800;
             padding: 10px;
-            margin-top: 10px;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             width: 250px;
-            margin: auto;
+            text-align: center;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
     <h2>🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
     <div class="container" id="counters"></div>
+
+    <div class="total-revenue">
+        💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
+    </div>
 
     <script>
         const numPS5 = 3;
@@ -89,11 +87,14 @@
 
             const counter = document.createElement("div");
             counter.classList.add("counter");
+            if (ps5Number === 3) {
+                counter.classList.add("ps3"); // Make PS3 wider
+            }
             counter.innerHTML = `
                 <h3>🕹️ PS ${ps5Number}</h3>
                 <h2>ጨዋታ: <span id="count_${ps5Number}">${count}</span></h2>
-                <button class="increase" onclick="updateCount(${ps5Number}, 1)"><h3>+1 </h3></button>
-                <button class="decrease" onclick="updateCount(${ps5Number}, -1)"><h3> -1 </h3></button>
+                <button class="increase" onclick="updateCount(${ps5Number}, 1)">+1</button>
+                <button class="decrease" onclick="updateCount(${ps5Number}, -1)">-1</button>
                 <button class="reset" onclick="resetCount(${ps5Number})">Reset</button>
 
                 <h3>🏆 Wins</h3>
@@ -104,14 +105,6 @@
 
                 <h3>💰 Total: <span id="totalPrice_${ps5Number}">${(count + winsA + winsB) * gamePrice}</span> Birr</h3>
             `;
-
-            if (ps5Number === 3) {
-                // Add Total Revenue inside PS3 box
-                const totalRevenueDiv = document.createElement("div");
-                totalRevenueDiv.classList.add("total-revenue");
-                totalRevenueDiv.innerHTML = `💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr`;
-                counter.appendChild(totalRevenueDiv);
-            }
 
             countersDiv.appendChild(counter);
         }
