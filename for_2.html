@@ -20,7 +20,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between; /* Ensures spacing */
             align-items: center;
             overflow: hidden; /* Prevent scrolling */
         }
@@ -28,10 +28,10 @@
         /* Header */
         h2 {
             font-size: 20px;
-            margin-bottom: 10px;
+            margin-top: 10px;
         }
 
-        /* Counters (PS1, PS2, PS3) in a single row */
+        /* Container for all counters */
         .container {
             display: flex;
             flex-direction: row;
@@ -58,13 +58,13 @@
             box-sizing: border-box;
         }
 
-        /* Total Revenue & Games at the bottom */
+        /* Total Revenue & Games fixed at bottom */
         .bottom-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
-            position: absolute;
+            position: fixed;
             bottom: 20px;
         }
 
@@ -144,21 +144,17 @@
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
             let oldCount = count;
 
-            // First counter: Allow both + and -
             count = Math.max(0, count + change);
             localStorage.setItem(`ps_${psNumber}_games`, count);
             document.getElementById(`count_${psNumber}`).innerText = count;
 
-            // Update price for the current PS number
             updatePrice(psNumber, oldCount, count);
 
-            // Second counter (total games and total revenue) only updates when "+" is clicked
             if (change === 1) {
                 totalGamesPlayed += 1;
                 totalRevenue += gamePrice;
             }
 
-            // Update global totals
             document.getElementById("totalGames").innerText = totalGamesPlayed;
             document.getElementById("totalRevenue").innerText = totalRevenue;
         }
@@ -183,14 +179,12 @@
         }
 
         function resetAll() {
-            // Reset all counters in localStorage
             for (let i = 1; i <= numPS; i++) {
                 localStorage.setItem(`ps_${i}_games`, 0);
                 document.getElementById(`count_${i}`).innerText = 0;
                 document.getElementById(`totalPrice_${i}`).innerText = 0;
             }
 
-            // Reset global totals
             totalGamesPlayed = 0;
             totalRevenue = 0;
             document.getElementById("totalGames").innerText = totalGamesPlayed;
@@ -201,7 +195,6 @@
             createCounter(i);
         }
 
-        // Initialize the total counters on page load
         updateTotalRevenue();
 
         function updateTotalRevenue() {
