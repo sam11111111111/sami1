@@ -20,7 +20,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Ensures spacing */
+            justify-content: space-between;
             align-items: center;
             overflow: hidden; /* Prevent scrolling */
         }
@@ -41,6 +41,7 @@
             width: 100%;
             max-width: 1200px;
             padding: 10px;
+            margin-top: 20px;
         }
 
         /* Counter box */
@@ -58,7 +59,7 @@
             box-sizing: border-box;
         }
 
-        /* Total Revenue & Games fixed at bottom */
+        /* Bottom section for Total Revenue & Games */
         .bottom-section {
             display: flex;
             flex-direction: column;
@@ -68,14 +69,22 @@
             bottom: 20px;
         }
 
+        .total-box {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            justify-content: center;
+        }
+
         .total-revenue, .total-games {
             background: #ff9800;
             padding: 10px;
             border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
-            width: 280px;
+            width: 200px;
             margin: 5px;
+            text-align: center;
         }
 
         /* Buttons */
@@ -94,7 +103,7 @@
 
         /* Reset button at the bottom */
         .reset-bottom {
-            width: 280px;
+            width: 200px;
             margin-top: 10px;
         }
     </style>
@@ -105,11 +114,13 @@
     <div class="container" id="counters"></div>
 
     <div class="bottom-section">
-        <div class="total-revenue">
-            💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
-        </div>
-        <div class="total-games">
-            🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span> ጨዋታዎች
+        <div class="total-box">
+            <div class="total-revenue">
+                💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
+            </div>
+            <div class="total-games">
+                🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span> ጨዋታዎች
+            </div>
         </div>
         <button class="reset reset-bottom" onclick="resetAll()">Reset All</button>
     </div>
@@ -133,7 +144,6 @@
                 <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1</button>
                 <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1</button>
                 <button class="reset" onclick="resetCount(${psNumber})">Reset</button>
-
                 <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
             `;
 
