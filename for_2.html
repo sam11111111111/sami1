@@ -17,7 +17,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            overflow: hidden; /* Prevents scrolling */
+            overflow: hidden;
         }
         h2 {
             font-size: 22px;
@@ -26,17 +26,20 @@
         .container {
             display: flex;
             justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap; /* Ensures all counters are visible */
             gap: 10px;
             width: 100%;
-            max-width: 1200px;
+            max-width: 900px;
         }
         .counter {
             background: #2a2a3b;
             padding: 15px;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            width: 30%;
-            min-width: 200px;
+            flex: 1; /* Distributes space evenly */
+            min-width: 250px; /* Ensures all counters stay visible */
+            max-width: 300px; /* Prevents overly large counters */
         }
         h3 {
             font-size: 18px;
