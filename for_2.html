@@ -15,9 +15,9 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Ensure content is evenly spaced */
+            justify-content: space-between;
             align-items: center;
-            overflow: hidden; /* Prevent scrolling */
+            overflow: hidden;
         }
         h2 {
             font-size: 18px;
@@ -26,23 +26,23 @@
         .container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center; /* Center the counters */
+            justify-content: center;
             width: 100%;
             max-width: 600px;
             gap: 10px;
-            flex-grow: 1; /* Allow container to take up the space */
+            flex-grow: 1;
             margin-bottom: 20px;
         }
         .counter {
             background: #2a2a3b;
             padding: 10px;
             border-radius: 10px;
-            width: 120px; /* Adjust width for smaller screens */
+            width: 120px;
             font-size: 12px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 180px; /* Fixed height */
+            height: 180px;
             box-sizing: border-box;
         }
         button {
@@ -57,7 +57,7 @@
         .increase { background-color: #4CAF50; color: white; }
         .decrease { background-color: #f44336; color: white; }
         .reset { background-color: #008CBA; color: white; }
-        .total-revenue {
+        .total-revenue, .total-games {
             background: #ff9800;
             padding: 10px;
             border-radius: 8px;
@@ -65,17 +65,18 @@
             font-weight: bold;
             width: 100%;
             max-width: 300px;
+            margin-top: 10px;
         }
         @media (max-width: 600px) {
             h2 {
                 font-size: 16px;
             }
             .counter {
-                width: 100px; /* Adjust width for very small screens */
+                width: 100px;
                 font-size: 10px;
-                height: 150px; /* Adjust height for small screens */
+                height: 150px;
             }
-            .total-revenue {
+            .total-revenue, .total-games {
                 font-size: 12px;
                 width: 90%;
                 max-width: none;
@@ -90,16 +91,20 @@
     <div class="total-revenue">
         💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
     </div>
+    <div class="total-games">
+        🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span> ጨዋታዎች
+    </div>
 
     <script>
         const numPS = 3;
         const gamePrice = 7;
         const countersDiv = document.getElementById("counters");
 
+        let totalGamesPlayed = 0;
+        let totalRevenue = 0;
+
         function createCounter(psNumber) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
-            let winsA = parseInt(localStorage.getItem(`ps_${psNumber}_A`) || 0);
-            let winsB = parseInt(localStorage.getItem(`ps_${psNumber}_B`) || 0);
 
             const counter = document.createElement("div");
             counter.classList.add("counter");
@@ -110,12 +115,7 @@
                 <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1</button>
                 <button class="reset" onclick="resetCount(${psNumber})">Reset</button>
 
-                <p>🏆 Wins A: <span id="winsA_${psNumber}">${winsA}</span> | B: <span id="winsB_${psNumber}">${winsB}</span></p>
-                <button class="increase" onclick="updateWins(${psNumber}, 'A', 1)">+1 A</button>
-                <button class="increase" onclick="updateWins(${psNumber}, 'B', 1)">+1 B</button>
-                <button class="reset" onclick="resetWins(${psNumber})">Reset Wins</button>
-
-                <p>💰 Total: <span id="totalPrice_${psNumber}">${(count + winsA + winsB) * gamePrice}</span> Birr</p>
+                <p>💰 Total for PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</p>
             `;
 
             countersDiv.appendChild(counter);
@@ -123,59 +123,66 @@
 
         function updateCount(psNumber, change) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+            let oldCount = count;
+
+            // For the first counter, you allow both + and -
             count = Math.max(0, count + change);
             localStorage.setItem(`ps_${psNumber}_games`, count);
             document.getElementById(`count_${psNumber}`).innerText = count;
-            updatePrice(psNumber);
+
+            // Update price for the current PS number
+            updatePrice(psNumber, oldCount, count);
+
+            // Update the second counter (total games and total revenue) when "+" is clicked
+            if (change === 1) {
+                totalGamesPlayed += 1;
+                totalRevenue += gamePrice;
+            }
+
+            // Update global totals
+            document.getElementById("totalGames").innerText = totalGamesPlayed;
+            document.getElementById("totalRevenue").innerText = totalRevenue;
         }
 
         function resetCount(psNumber) {
+            let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+            totalGamesPlayed -= count;
+            totalRevenue -= count * gamePrice;
+
             localStorage.setItem(`ps_${psNumber}_games`, 0);
             document.getElementById(`count_${psNumber}`).innerText = 0;
-            updatePrice(psNumber);
-        }
 
-        function updateWins(psNumber, player, change) {
-            let wins = parseInt(localStorage.getItem(`ps_${psNumber}_${player}`) || 0);
-            wins = Math.max(0, wins + change);
-            localStorage.setItem(`ps_${psNumber}_${player}`, wins);
-            document.getElementById(`wins${player}_${psNumber}`).innerText = wins;
-            updatePrice(psNumber);
-        }
-
-        function resetWins(psNumber) {
-            localStorage.setItem(`ps_${psNumber}_A`, 0);
-            localStorage.setItem(`ps_${psNumber}_B`, 0);
-            document.getElementById(`winsA_${psNumber}`).innerText = 0;
-            document.getElementById(`winsB_${psNumber}`).innerText = 0;
-            updatePrice(psNumber);
-        }
-
-        function updatePrice(psNumber) {
-            let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
-            let winsA = parseInt(localStorage.getItem(`ps_${psNumber}_A`) || 0);
-            let winsB = parseInt(localStorage.getItem(`ps_${psNumber}_B`) || 0);
-            let totalPrice = (count + winsA + winsB) * gamePrice;
-            document.getElementById(`totalPrice_${psNumber}`).innerText = totalPrice;
-            updateTotalRevenue();
-        }
-
-        function updateTotalRevenue() {
-            let totalRevenue = 0;
-            for (let i = 1; i <= numPS; i++) {
-                let count = parseInt(localStorage.getItem(`ps_${i}_games`) || 0);
-                let winsA = parseInt(localStorage.getItem(`ps_${i}_A`) || 0);
-                let winsB = parseInt(localStorage.getItem(`ps_${i}_B`) || 0);
-                totalRevenue += (count + winsA + winsB) * gamePrice;
-            }
+            document.getElementById("totalGames").innerText = totalGamesPlayed;
             document.getElementById("totalRevenue").innerText = totalRevenue;
+
+            updatePrice(psNumber, count, 0);
+        }
+
+        function updatePrice(psNumber, oldCount, count) {
+            let totalPrice = count * gamePrice;
+            document.getElementById(`totalPrice_${psNumber}`).innerText = totalPrice;
         }
 
         for (let i = 1; i <= numPS; i++) {
             createCounter(i);
         }
 
+        // Initialize the total counters on page load
         updateTotalRevenue();
+
+        function updateTotalRevenue() {
+            totalGamesPlayed = 0;
+            totalRevenue = 0;
+
+            for (let i = 1; i <= numPS; i++) {
+                let count = parseInt(localStorage.getItem(`ps_${i}_games`) || 0);
+                totalGamesPlayed += count;
+                totalRevenue += count * gamePrice;
+            }
+
+            document.getElementById("totalGames").innerText = totalGamesPlayed;
+            document.getElementById("totalRevenue").innerText = totalRevenue;
+        }
     </script>
 </body>
 </html>
