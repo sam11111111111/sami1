@@ -120,11 +120,11 @@
             counter.innerHTML = `
                 <h3>🕹️ PS ${psNumber}</h3>
                 <p>ጨዋታ: <span id="count_${psNumber}">${count}</span></p>
-                <button class="increase" onclick="updateCount(${psNumber}, 1)"><h2>+1</h2></button>
-                <button class="decrease" onclick="updateCount(${psNumber}, -1)"><h2>-1</h2></button>
+                <button class="increase" onclick="updateCount(${psNumber}, 1)"><h3>+1</h3></button>
+                <button class="decrease" onclick="updateCount(${psNumber}, -1)"><h3>-1</h3></button>
                 <button class="reset" onclick="resetCount(${psNumber})">Reset</button>
 
-                <h2>💰 Total for PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h2>
+                <h4>💰 Total for PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
             `;
 
             countersDiv.appendChild(counter);
