@@ -92,13 +92,13 @@
             counter.innerHTML = `
                 <h3>🕹️ PS ${ps5Number}</h3>
                 <h2>ጨዋታ: <span id="count_${ps5Number}">${count}</span></h2>
-                <button class="increase" onclick="updateCount(${ps5Number}, 1)">+1</button>
+                <h3><button class="increase" onclick="updateCount(${ps5Number}, 1)">+1</button></h3>
                 <button class="reset" onclick="resetCount(${ps5Number})">Reset</button>
 
                 <h3>🏆 Wins</h3>
                 <p>A: <span id="winsA_${ps5Number}">${winsA}</span> | B: <span id="winsB_${ps5Number}">${winsB}</span></p>
-                <button class="increase" onclick="updateWins(${ps5Number}, 'A', 1)">+1 A</button>
-                <button class="increase" onclick="updateWins(${ps5Number}, 'B', 1)">+1 B</button>
+                <h3><button class="increase" onclick="updateWins(${ps5Number}, 'A', 1)">+1 A</button></h3>
+                <h3><button class="increase" onclick="updateWins(${ps5Number}, 'B', 1)">+1 B</button></h3>
                 <button class="reset" onclick="resetWins(${ps5Number})">Reset Wins</button>
 
                 <h3>💰 Total: <span id="totalPrice_${ps5Number}">${(count + winsA + winsB) * gamePrice}</span> Birr</h3>
