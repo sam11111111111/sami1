@@ -12,6 +12,7 @@
             padding: 10px;
             background-color: #1e1e2e;
             color: #ffffff;
+            overflow: hidden; /* Prevent scrolling */
         }
         h2 {
             font-size: 22px;
@@ -19,34 +20,34 @@
         }
         .container {
             display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 5px;
             width: 100%;
             max-width: 900px;
             margin: auto;
+            padding: 5px;
         }
         .counter {
             background: #2a2a3b;
-            padding: 10px;
-            border-radius: 12px;
+            padding: 8px;
+            border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             flex: 1;
-            min-width: 250px;
-            max-width: 300px;
+            min-width: 30%;
+            text-align: center;
         }
         h3 {
-            font-size: 16px;
+            font-size: 14px;
             margin-bottom: 5px;
         }
         p {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             margin: 5px 0;
         }
         button {
-            font-size: 14px;
-            padding: 6px 10px;
+            font-size: 12px;
+            padding: 4px 8px;
             margin: 3px;
             border: none;
             border-radius: 6px;
@@ -90,17 +91,17 @@
             counter.classList.add("counter");
             counter.innerHTML = `
                 <h3>🕹️ PS ${ps5Number}</h3>
-                <p>ጨዋታዎች: <span id="count_${ps5Number}">${count}</span></p>
+                <p>Games: <span id="count_${ps5Number}">${count}</span></p>
                 <button class="increase" onclick="updateCount(${ps5Number}, 1)">+1</button>
                 <button class="reset" onclick="resetCount(${ps5Number})">Reset</button>
 
-                <h3>🏆 ማን አሸነፈ?</h3>
+                <h3>🏆 Wins</h3>
                 <p>A: <span id="winsA_${ps5Number}">${winsA}</span> | B: <span id="winsB_${ps5Number}">${winsB}</span></p>
                 <button class="increase" onclick="updateWins(${ps5Number}, 'A', 1)">+1 A</button>
                 <button class="increase" onclick="updateWins(${ps5Number}, 'B', 1)">+1 B</button>
                 <button class="reset" onclick="resetWins(${ps5Number})">Reset Wins</button>
 
-                <h3>💰 ጠቅላላ ዋጋ: <span id="totalPrice_${ps5Number}">${(count + winsA + winsB) * gamePrice}</span> Birr</h3>
+                <h3>💰 Total: <span id="totalPrice_${ps5Number}">${(count + winsA + winsB) * gamePrice}</span> Birr</h3>
             `;
             countersDiv.appendChild(counter);
         }
