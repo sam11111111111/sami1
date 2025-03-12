@@ -9,15 +9,15 @@
             font-family: 'Poppins', sans-serif;
             text-align: center;
             margin: 0;
-            padding: 10px;
+            padding: 0;
             background-color: #1e1e2e;
             color: #ffffff;
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between; /* Adjust to evenly space content */
             align-items: center;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
+            overflow: hidden; /* Prevent scrolling */
         }
         h2 {
             font-size: 20px;
@@ -30,7 +30,8 @@
             width: 100%;
             max-width: 600px;
             gap: 10px;
-            margin-bottom: 20px;
+            flex-grow: 1; /* Allow container to grow */
+            justify-content: space-evenly; /* Even distribution of counters */
         }
         .counter {
             background: #2a2a3b;
@@ -39,6 +40,10 @@
             width: 160px; /* Adjust width for smaller screens */
             font-size: 14px;
             margin: 5px;
+            flex-grow: 1; /* Allow counters to adjust */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         button {
             font-size: 12px;
@@ -61,6 +66,7 @@
             width: 100%;
             max-width: 300px;
             margin-top: 20px;
+            margin-bottom: 20px;
         }
         @media (max-width: 600px) {
             h2 {
