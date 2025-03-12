@@ -20,9 +20,8 @@
         }
         .container {
             display: grid;
-            grid-template-areas:
-                "ps1 ps2"
-                "ps3 ps3";
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
             gap: 10px;
             width: 100%;
             max-width: 900px;
@@ -31,17 +30,24 @@
         }
         .counter {
             background: #2a2a3b;
-            padding: 8px;
+            padding: 10px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             text-align: center;
         }
-        #ps1 { grid-area: ps1; }
-        #ps2 { grid-area: ps2; }
-        #ps3 { grid-area: ps3; }
-
-        h3 { font-size: 14px; margin-bottom: 5px; }
-        p { font-size: 12px; font-weight: bold; margin: 5px 0; }
+        .counter:nth-child(3) {
+            grid-column: span 2; /* PS3 takes full width */
+            justify-self: center;
+        }
+        h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        p {
+            font-size: 12px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
         button {
             font-size: 12px;
             padding: 4px 8px;
@@ -69,42 +75,45 @@
 </head>
 <body>
     <h2>🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
-    <div class="container">
-        <div class="counter" id="ps1"></div>
-        <div class="counter" id="ps2"></div>
-        <div class="counter" id="ps3"></div>
-    </div>
-
-    <div class="total-revenue">
-        💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
-    </div>
+    <div class="container" id="counters"></div>
 
     <script>
         const numPS5 = 3;
         const gamePrice = 7;
+        const countersDiv = document.getElementById("counters");
 
         function createCounter(ps5Number) {
             let count = parseInt(localStorage.getItem(`ps5_${ps5Number}_games`) || 0);
             let winsA = parseInt(localStorage.getItem(`ps5_${ps5Number}_A`) || 0);
             let winsB = parseInt(localStorage.getItem(`ps5_${ps5Number}_B`) || 0);
 
-            const counter = document.getElementById(`ps${ps5Number}`);
+            const counter = document.createElement("div");
+            counter.classList.add("counter");
             counter.innerHTML = `
                 <h3>🕹️ PS ${ps5Number}</h3>
                 <h2>ጨዋታ: <span id="count_${ps5Number}">${count}</span></h2>
-                <button class="increase" onclick="updateCount(${ps5Number}, 1)">+1</button>
-                <button class="decrease" onclick="updateCount(${ps5Number}, -1)">-1</button>
+                <button class="increase" onclick="updateCount(${ps5Number}, 1)"><h3>+1 </h3></button>
+                <button class="decrease" onclick="updateCount(${ps5Number}, -1)"><h3> -1 </h3></button>
                 <button class="reset" onclick="resetCount(${ps5Number})">Reset</button>
 
                 <h3>🏆 Wins</h3>
                 <h3>A: <span id="winsA_${ps5Number}">${winsA}</span> | B: <span id="winsB_${ps5Number}">${winsB}</span></h3>
-
                 <button class="increase" onclick="updateWins(${ps5Number}, 'A', 1)">+1 A</button>
                 <button class="increase" onclick="updateWins(${ps5Number}, 'B', 1)">+1 B</button>
                 <button class="reset" onclick="resetWins(${ps5Number})">Reset Wins</button>
 
                 <h3>💰 Total: <span id="totalPrice_${ps5Number}">${(count + winsA + winsB) * gamePrice}</span> Birr</h3>
             `;
+
+            if (ps5Number === 3) {
+                // Add Total Revenue inside PS3 box
+                const totalRevenueDiv = document.createElement("div");
+                totalRevenueDiv.classList.add("total-revenue");
+                totalRevenueDiv.innerHTML = `💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr`;
+                counter.appendChild(totalRevenueDiv);
+            }
+
+            countersDiv.appendChild(counter);
         }
 
         function updateCount(ps5Number, change) {
