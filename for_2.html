@@ -5,99 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PS Game Counter</title>
     <style>
- body {
-    font-family: 'Poppins', sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    background-color: #1e1e2e;
-    background-image: url('psss.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    color: #ffffff;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Prevent scrolling */
-}
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e2e;
+            background-image: url('psss.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Prevent scrolling */
+        }
 
-h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
+        /* Header */
+        h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
 
-/* Make all PS counters appear in a single row */
-.container {
-    display: flex;
-    flex-direction: row; /* Ensure horizontal layout */
-    justify-content: center; /* Center the counters */
-    align-items: center;
-    gap: 15px; /* Add spacing between counters */
-    width: 100%;
-    max-width: 1200px; /* Adjust width */
-    padding: 10px;
-}
+        /* Counters (PS1, PS2, PS3) in a single row */
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 10px;
+        }
 
-/* Adjust counter box size to fit them side by side */
-.counter {
-    background: rgba(42, 42, 59, 0.8);
-    padding: 15px;
-    border-radius: 15px;
-    width: 200px; /* Adjust size to fit in one row */
-    height: 230px;
-    font-size: 14px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    box-sizing: border-box;
-}
+        /* Counter box */
+        .counter {
+            background: rgba(42, 42, 59, 0.8);
+            padding: 15px;
+            border-radius: 15px;
+            width: 200px;
+            height: 230px;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
 
-/* Button Styles */
-button {
-    font-size: 12px;
-    padding: 6px;
-    margin: 3px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-}
+        /* Total Revenue & Games at the bottom */
+        .bottom-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            position: absolute;
+            bottom: 20px;
+        }
 
-.increase { background-color: #4CAF50; color: white; }
-.decrease { background-color: #f44336; color: white; }
-.reset { background-color: #008CBA; color: white; }
+        .total-revenue, .total-games {
+            background: #ff9800;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 280px;
+            margin: 5px;
+        }
 
-/* Total Revenue & Games */
-.total-revenue, .total-games {
-    background: #ff9800;
-    padding: 5px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    width: 280px;
-    margin-top: 10px;
-}
+        /* Buttons */
+        button {
+            font-size: 14px;
+            padding: 6px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
 
+        .increase { background-color: #4CAF50; color: white; }
+        .decrease { background-color: #f44336; color: white; }
+        .reset { background-color: #008CBA; color: white; }
+
+        /* Reset button at the bottom */
+        .reset-bottom {
+            width: 280px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <h2>🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
+
     <div class="container" id="counters"></div>
 
-    <div class="total-revenue">
-        💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
+    <div class="bottom-section">
+        <div class="total-revenue">
+            💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
+        </div>
+        <div class="total-games">
+            🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span> ጨዋታዎች
+        </div>
+        <button class="reset reset-bottom" onclick="resetAll()">Reset All</button>
     </div>
-    <div class="total-games">
-        🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span> ጨዋታዎች
-    </div>
-
-    <button class="reset" onclick="resetAll()">Reset All</button>
 
     <script>
         const numPS = 3;
@@ -129,7 +144,7 @@ button {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
             let oldCount = count;
 
-            // For the first counter, you allow both + and -
+            // First counter: Allow both + and -
             count = Math.max(0, count + change);
             localStorage.setItem(`ps_${psNumber}_games`, count);
             document.getElementById(`count_${psNumber}`).innerText = count;
@@ -137,7 +152,7 @@ button {
             // Update price for the current PS number
             updatePrice(psNumber, oldCount, count);
 
-            // Update the second counter (total games and total revenue) when "+" is clicked
+            // Second counter (total games and total revenue) only updates when "+" is clicked
             if (change === 1) {
                 totalGamesPlayed += 1;
                 totalRevenue += gamePrice;
