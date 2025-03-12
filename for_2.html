@@ -3,55 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PS5 Game Counter</title>
+    <title>PS Game Counter</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
             text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             background-color: #1e1e2e;
             color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* No scrolling */
         }
         h2 {
-            font-size: 22px;
-            margin-bottom: 15px;
+            font-size: 18px;
+            margin-bottom: 5px;
         }
         .container {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
+            gap: 8px;
         }
         .counter {
             background: #2a2a3b;
-            padding: 15px;
+            padding: 8px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            width: 300px;
-            text-align: center;
+            width: 30%;
+            min-width: 180px;
+            font-size: 12px;
         }
         button {
-            font-size: 14px;
-            padding: 8px 12px;
-            margin: 5px;
+            font-size: 10px;
+            padding: 5px;
+            margin: 2px;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: 0.3s;
         }
         .increase { background-color: #4CAF50; color: white; }
         .decrease { background-color: #f44336; color: white; }
         .reset { background-color: #008CBA; color: white; }
-        button:hover { opacity: 0.8; }
         .total-revenue {
             background: #ff9800;
-            padding: 15px;
+            padding: 10px;
             border-radius: 8px;
-            font-size: 18px;
+            font-size: 14px;
             font-weight: bold;
-            width: 250px;
-            margin: 20px auto 0;
+            width: 200px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -77,18 +80,17 @@
             counter.classList.add("counter");
             counter.innerHTML = `
                 <h3>🕹️ PS ${psNumber}</h3>
-                <h2>ጨዋታ: <span id="count_${psNumber}">${count}</span></h2>
+                <p>ጨዋታ: <span id="count_${psNumber}">${count}</span></p>
                 <button class="increase" onclick="updateCount(${psNumber}, 1)">+1</button>
                 <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1</button>
                 <button class="reset" onclick="resetCount(${psNumber})">Reset</button>
 
-                <h3>🏆 Wins</h3>
-                <h3>A: <span id="winsA_${psNumber}">${winsA}</span> | B: <span id="winsB_${psNumber}">${winsB}</span></h3>
+                <p>🏆 Wins A: <span id="winsA_${psNumber}">${winsA}</span> | B: <span id="winsB_${psNumber}">${winsB}</span></p>
                 <button class="increase" onclick="updateWins(${psNumber}, 'A', 1)">+1 A</button>
                 <button class="increase" onclick="updateWins(${psNumber}, 'B', 1)">+1 B</button>
                 <button class="reset" onclick="resetWins(${psNumber})">Reset Wins</button>
 
-                <h3>💰 Total: <span id="totalPrice_${psNumber}">${(count + winsA + winsB) * gamePrice}</span> Birr</h3>
+                <p>💰 Total: <span id="totalPrice_${psNumber}">${(count + winsA + winsB) * gamePrice}</span> Birr</p>
             `;
 
             countersDiv.appendChild(counter);
