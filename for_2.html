@@ -9,43 +9,32 @@
             font-family: 'Poppins', sans-serif;
             text-align: center;
             margin: 0;
-            padding: 10px;
+            padding: 20px;
             background-color: #1e1e2e;
             color: #ffffff;
-            overflow: hidden; /* Prevent scrolling */
-            height: 100vh; /* Full screen height */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
         h2 {
             font-size: 22px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto auto;
-            gap: 10px;
-            width: 90%;
-            max-width: 900px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
         }
         .counter {
             background: #2a2a3b;
-            padding: 10px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            width: 300px;
             text-align: center;
-        }
-        .ps3 {
-            grid-column: span 2; /* Make PS3 take full width */
-            justify-self: center;
         }
         button {
             font-size: 14px;
-            padding: 5px 10px;
-            margin: 3px;
+            padding: 8px 12px;
+            margin: 5px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
@@ -57,13 +46,12 @@
         button:hover { opacity: 0.8; }
         .total-revenue {
             background: #ff9800;
-            padding: 10px;
+            padding: 15px;
             border-radius: 8px;
             font-size: 18px;
             font-weight: bold;
             width: 250px;
-            text-align: center;
-            margin-top: 15px;
+            margin: 20px auto 0;
         }
     </style>
 </head>
@@ -76,90 +64,87 @@
     </div>
 
     <script>
-        const numPS5 = 3;
+        const numPS = 3;
         const gamePrice = 7;
         const countersDiv = document.getElementById("counters");
 
-        function createCounter(ps5Number) {
-            let count = parseInt(localStorage.getItem(`ps5_${ps5Number}_games`) || 0);
-            let winsA = parseInt(localStorage.getItem(`ps5_${ps5Number}_A`) || 0);
-            let winsB = parseInt(localStorage.getItem(`ps5_${ps5Number}_B`) || 0);
+        function createCounter(psNumber) {
+            let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+            let winsA = parseInt(localStorage.getItem(`ps_${psNumber}_A`) || 0);
+            let winsB = parseInt(localStorage.getItem(`ps_${psNumber}_B`) || 0);
 
             const counter = document.createElement("div");
             counter.classList.add("counter");
-            if (ps5Number === 3) {
-                counter.classList.add("ps3"); // Make PS3 wider
-            }
             counter.innerHTML = `
-                <h3>🕹️ PS ${ps5Number}</h3>
-                <h2>ጨዋታ: <span id="count_${ps5Number}">${count}</span></h2>
-                <button class="increase" onclick="updateCount(${ps5Number}, 1)">+1</button>
-                <button class="decrease" onclick="updateCount(${ps5Number}, -1)">-1</button>
-                <button class="reset" onclick="resetCount(${ps5Number})">Reset</button>
+                <h3>🕹️ PS ${psNumber}</h3>
+                <h2>ጨዋታ: <span id="count_${psNumber}">${count}</span></h2>
+                <button class="increase" onclick="updateCount(${psNumber}, 1)">+1</button>
+                <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1</button>
+                <button class="reset" onclick="resetCount(${psNumber})">Reset</button>
 
                 <h3>🏆 Wins</h3>
-                <h3>A: <span id="winsA_${ps5Number}">${winsA}</span> | B: <span id="winsB_${ps5Number}">${winsB}</span></h3>
-                <button class="increase" onclick="updateWins(${ps5Number}, 'A', 1)">+1 A</button>
-                <button class="increase" onclick="updateWins(${ps5Number}, 'B', 1)">+1 B</button>
-                <button class="reset" onclick="resetWins(${ps5Number})">Reset Wins</button>
+                <h3>A: <span id="winsA_${psNumber}">${winsA}</span> | B: <span id="winsB_${psNumber}">${winsB}</span></h3>
+                <button class="increase" onclick="updateWins(${psNumber}, 'A', 1)">+1 A</button>
+                <button class="increase" onclick="updateWins(${psNumber}, 'B', 1)">+1 B</button>
+                <button class="reset" onclick="resetWins(${psNumber})">Reset Wins</button>
 
-                <h3>💰 Total: <span id="totalPrice_${ps5Number}">${(count + winsA + winsB) * gamePrice}</span> Birr</h3>
+                <h3>💰 Total: <span id="totalPrice_${psNumber}">${(count + winsA + winsB) * gamePrice}</span> Birr</h3>
             `;
 
             countersDiv.appendChild(counter);
         }
 
-        function updateCount(ps5Number, change) {
-            let count = parseInt(localStorage.getItem(`ps5_${ps5Number}_games`) || 0);
+        function updateCount(psNumber, change) {
+            let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
             count = Math.max(0, count + change);
-            localStorage.setItem(`ps5_${ps5Number}_games`, count);
-            document.getElementById(`count_${ps5Number}`).innerText = count;
-            updatePrice(ps5Number);
+            localStorage.setItem(`ps_${psNumber}_games`, count);
+            document.getElementById(`count_${psNumber}`).innerText = count;
+            updatePrice(psNumber);
         }
 
-        function resetCount(ps5Number) {
-            localStorage.setItem(`ps5_${ps5Number}_games`, 0);
-            document.getElementById(`count_${ps5Number}`).innerText = 0;
-            updatePrice(ps5Number);
+        function resetCount(psNumber) {
+            localStorage.setItem(`ps_${psNumber}_games`, 0);
+            document.getElementById(`count_${psNumber}`).innerText = 0;
+            updatePrice(psNumber);
         }
 
-        function updateWins(ps5Number, player, change) {
-            let wins = parseInt(localStorage.getItem(`ps5_${ps5Number}_${player}`) || 0);
+        function updateWins(psNumber, player, change) {
+            let wins = parseInt(localStorage.getItem(`ps_${psNumber}_${player}`) || 0);
             wins = Math.max(0, wins + change);
-            localStorage.setItem(`ps5_${ps5Number}_${player}`, wins);
-            document.getElementById(`wins${player}_${ps5Number}`).innerText = wins;
-            updatePrice(ps5Number);
+            localStorage.setItem(`ps_${psNumber}_${player}`, wins);
+            document.getElementById(`wins${player}_${psNumber}`).innerText = wins;
+            updatePrice(psNumber);
         }
 
-        function resetWins(ps5Number) {
-            localStorage.setItem(`ps5_${ps5Number}_A`, 0);
-            localStorage.setItem(`ps5_${ps5Number}_B`, 0);
-            document.getElementById(`winsA_${ps5Number}`).innerText = 0;
-            document.getElementById(`winsB_${ps5Number}`).innerText = 0;
-            updatePrice(ps5Number);
+        function resetWins(psNumber) {
+            localStorage.setItem(`ps_${psNumber}_A`, 0);
+            localStorage.setItem(`ps_${psNumber}_B`, 0);
+            document.getElementById(`winsA_${psNumber}`).innerText = 0;
+            document.getElementById(`winsB_${psNumber}`).innerText = 0;
+            updatePrice(psNumber);
         }
 
-        function updatePrice(ps5Number) {
-            let count = parseInt(localStorage.getItem(`ps5_${ps5Number}_games`) || 0);
-            let winsA = parseInt(localStorage.getItem(`ps5_${ps5Number}_A`) || 0);
-            let winsB = parseInt(localStorage.getItem(`ps5_${ps5Number}_B`) || 0);
+        function updatePrice(psNumber) {
+            let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+            let winsA = parseInt(localStorage.getItem(`ps_${psNumber}_A`) || 0);
+            let winsB = parseInt(localStorage.getItem(`ps_${psNumber}_B`) || 0);
             let totalPrice = (count + winsA + winsB) * gamePrice;
-            document.getElementById(`totalPrice_${ps5Number}`).innerText = totalPrice;
+            document.getElementById(`totalPrice_${psNumber}`).innerText = totalPrice;
             updateTotalRevenue();
         }
 
         function updateTotalRevenue() {
             let totalRevenue = 0;
-            for (let i = 1; i <= numPS5; i++) {
-                let count = parseInt(localStorage.getItem(`ps5_${i}_games`) || 0);
-                let winsA = parseInt(localStorage.getItem(`ps5_${i}_A`) || 0);
-                let winsB = parseInt(localStorage.getItem(`ps5_${i}_B`) || 0);
+            for (let i = 1; i <= numPS; i++) {
+                let count = parseInt(localStorage.getItem(`ps_${i}_games`) || 0);
+                let winsA = parseInt(localStorage.getItem(`ps_${i}_A`) || 0);
+                let winsB = parseInt(localStorage.getItem(`ps_${i}_B`) || 0);
                 totalRevenue += (count + winsA + winsB) * gamePrice;
             }
             document.getElementById("totalRevenue").innerText = totalRevenue;
         }
 
-        for (let i = 1; i <= numPS5; i++) {
+        for (let i = 1; i <= numPS; i++) {
             createCounter(i);
         }
 
