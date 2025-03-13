@@ -21,7 +21,7 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            overflow: hidden; /* Prevent scrolling */
+            overflow: hidden;
             padding: 10px;
         }
 
@@ -31,9 +31,9 @@
         }
 
         .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            display: flex;
             gap: 10px;
+            justify-content: center;
             width: 100%;
             max-width: 800px;
             padding: 10px;
@@ -139,14 +139,20 @@
 
         function updateCount(psNumber, change) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
-            let oldCount = count;
 
-            count = Math.max(0, count + change);
-            localStorage.setItem(`ps_${psNumber}_games`, count);
-            document.getElementById(`count_${psNumber}`).innerText = count;
-            document.getElementById(`totalPrice_${psNumber}`).innerText = count * gamePrice;
+            let newCount = Math.max(0, count + change);
+            localStorage.setItem(`ps_${psNumber}_games`, newCount);
+            document.getElementById(`count_${psNumber}`).innerText = newCount;
+            document.getElementById(`totalPrice_${psNumber}`).innerText = newCount * gamePrice;
 
-            updateTotalRevenue(oldCount, count);
+            // Increase total count & price ONLY when clicking "+"
+            if (change > 0) {
+                totalGamesPlayed += 1;
+                totalRevenue += gamePrice;
+            }
+
+            document.getElementById("totalGames").innerText = totalGamesPlayed;
+            document.getElementById("totalRevenue").innerText = totalRevenue;
         }
 
         function resetCount(psNumber) {
@@ -155,35 +161,20 @@
             localStorage.setItem(`ps_${psNumber}_games`, 0);
             document.getElementById(`count_${psNumber}`).innerText = 0;
             document.getElementById(`totalPrice_${psNumber}`).innerText = 0;
-
-            updateTotalRevenue(count, 0);
-        }
-
-        function updateTotalRevenue(oldCount = 0, newCount = 0) {
-            totalGamesPlayed = 0;
-            totalRevenue = 0;
-
-            for (let i = 1; i <= numPS; i++) {
-                let count = parseInt(localStorage.getItem(`ps_${i}_games`) || 0);
-                totalGamesPlayed += count;
-                totalRevenue += count * gamePrice;
-            }
-
-            document.getElementById("totalGames").innerText = totalGamesPlayed;
-            document.getElementById("totalRevenue").innerText = totalRevenue;
         }
 
         function resetAll() {
+            totalGamesPlayed = 0;
+            totalRevenue = 0;
+
             for (let i = 1; i <= numPS; i++) {
                 localStorage.setItem(`ps_${i}_games`, 0);
                 document.getElementById(`count_${i}`).innerText = 0;
                 document.getElementById(`totalPrice_${i}`).innerText = 0;
             }
 
-            totalGamesPlayed = 0;
-            totalRevenue = 0;
-            document.getElementById("totalGames").innerText = totalGamesPlayed;
-            document.getElementById("totalRevenue").innerText = totalRevenue;
+            document.getElementById("totalGames").innerText = 0;
+            document.getElementById("totalRevenue").innerText = 0;
         }
 
         for (let i = 1; i <= numPS; i++) {
