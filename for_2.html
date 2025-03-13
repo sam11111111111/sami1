@@ -20,9 +20,8 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             align-items: center;
-            overflow: hidden; /* Prevent scrolling */
+            overflow: hidden;
         }
 
         /* Header */
@@ -31,49 +30,44 @@
             margin-top: 10px;
         }
 
-        /* Container for all counters */
-        .container {
+        /* Container for counters */
+        .counter-container {
             display: flex;
-            flex-direction: row;
+            flex-wrap: wrap;
             justify-content: center;
-            align-items: center;
-            gap: 20px;
+            gap: 15px;
             width: 100%;
             max-width: 1200px;
-            padding: 10px;
-            margin-top: 20px;
+            margin: 10px 0;
         }
 
-        /* Counter box */
+        /* Counter Box */
         .counter {
             background: rgba(42, 42, 59, 0.8);
             padding: 15px;
-            border-radius: 15px;
-            width: 200px;
-            height: 230px;
+            border-radius: 10px;
+            width: 150px;
             font-size: 14px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             align-items: center;
             box-sizing: border-box;
         }
 
-        /* Bottom section for Total Revenue & Games */
+        /* Bottom Section for Total Revenue */
         .bottom-section {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
-            position: fixed;
-            bottom: 20px;
+            gap: 10px;
         }
 
         .total-box {
             display: flex;
-            flex-direction: row;
-            gap: 20px;
-            justify-content: center;
+            gap: 15px;
         }
 
         .total-revenue, .total-games {
@@ -82,8 +76,7 @@
             border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
-            width: 200px;
-            margin: 5px;
+            width: 150px;
             text-align: center;
         }
 
@@ -101,17 +94,32 @@
         .decrease { background-color: #f44336; color: white; }
         .reset { background-color: #008CBA; color: white; }
 
-        /* Reset button at the bottom */
-        .reset-bottom {
-            width: 200px;
-            margin-top: 10px;
+        /* Mobile adjustments */
+        @media (max-width: 600px) {
+            .counter-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .total-box {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .counter {
+                width: 200px;
+            }
+
+            .total-revenue, .total-games {
+                width: 200px;
+            }
         }
     </style>
 </head>
 <body>
     <h2>🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
 
-    <div class="container" id="counters"></div>
+    <div class="counter-container" id="counters"></div>
 
     <div class="bottom-section">
         <div class="total-box">
@@ -119,10 +127,10 @@
                 💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
             </div>
             <div class="total-games">
-                🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span> ጨዋታዎች
+                🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span>
             </div>
         </div>
-        <button class="reset reset-bottom" onclick="resetAll()">Reset All</button>
+        <button class="reset" onclick="resetAll()">Reset All</button>
     </div>
 
     <script>
@@ -140,11 +148,11 @@
             counter.classList.add("counter");
             counter.innerHTML = `
                 <h3>🕹️ PS ${psNumber}</h3>
-                <h2>ጨዋታ:</h2> <span id="count_${psNumber}">${count}</span></p>
-                <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1</button>
+                <h2>ጨዋታ:</h2> <span id="count_${psNumber}">${count}</span>
+                <button class="increase" onclick="updateCount(${psNumber}, 1)">+1</button>
                 <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1</button>
                 <button class="reset" onclick="resetCount(${psNumber})">Reset</button>
-                <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
+                <h4>💰 <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
             `;
 
             countersDiv.appendChild(counter);
