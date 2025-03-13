@@ -145,8 +145,8 @@
             counter.innerHTML = `
                 <h3>🕹️ PS ${psNumber}</h3>
                 <h2>ጨዋታ:</h2> <span id="count_${psNumber}">${count}</span></p>
-                <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1<br><br> </button><br><br>
-                <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1<br><br></button>
+                <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1<br> </button><br>
+                <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1<br></button><br>
                 <button class="reset" onclick="resetCount(${psNumber})">Reset</button>
                 <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
             `;
