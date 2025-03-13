@@ -27,32 +27,32 @@
 
         /* Header */
         h2 {
-            font-size: 18px;
+            font-size: 22px; /* Slightly bigger header */
             margin-top: 10px;
         }
 
         /* Container for all counters */
         .container {
-             height: 600px; 
             display: flex;
             flex-direction: row;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 30px; /* Increased the gap between counters */
             width: 100%;
-            max-width: 1500px;
-            padding: 10px;
-            margin-top: 20px; /* Reduce the top margin to prevent overflow */
+            max-width: 1500px; /* Increased the max-width of the container */
+            padding: 20px; /* Increased padding */
+            margin-top: 40px; /* Increased top margin */
+            height: 400px; /* Increase the height of the container */
         }
 
         /* Counter box */
         .counter {
             background: rgba(42, 42, 59, 0.8);
-            padding: 15px;
+            padding: 20px; /* Increased padding */
             border-radius: 15px;
-            width: 180px; /* Reduced width */
-            height: 230px;
-            font-size: 14px;
+            width: 220px; /* Increased width of the counter */
+            height: 250px; /* Increased height of the counter */
+            font-size: 16px; /* Increased font size */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -79,20 +79,19 @@
 
         .total-revenue, .total-games {
             background: #ff9800;
-            padding: 8px;
+            padding: 12px; /* Increased padding */
             border-radius: 8px;
-            font-size: 14px; /* Reduced font size */
+            font-size: 16px; /* Increased font size */
             font-weight: bold;
-            width: 180px;
+            width: 220px; /* Increased width of total boxes */
             margin: 5px;
             text-align: center;
         }
 
-
         /* Buttons */
         button {
-            font-size: 14px;
-            padding: 6px;
+            font-size: 16px; /* Increased font size */
+            padding: 8px; /* Increased padding */
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -105,11 +104,8 @@
 
         /* Reset button at the bottom */
         .reset-bottom {
-            width: 180px; /* Reduced width to match total section */
+            width: 220px; /* Increased width */
             margin-top: 10px;
-        }
-        .reset{
-            border-radius: 2px;
         }
     </style>
 </head>
@@ -124,7 +120,7 @@
                 💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
             </div>
             <div class="total-games">
-                🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span>
+                🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span> ጨዋታዎች
             </div>
         </div>
         <button class="reset reset-bottom" onclick="resetAll()">Reset All</button>
@@ -146,8 +142,8 @@
             counter.innerHTML = `
                 <h3>🕹️ PS ${psNumber}</h3>
                 <h2>ጨዋታ:</h2> <span id="count_${psNumber}">${count}</span></p>
-                <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1<br> </button><br>
-                <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1<br></button><br>
+                <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1</button>
+                <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1</button>
                 <button class="reset" onclick="resetCount(${psNumber})">Reset</button>
                 <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
             `;
