@@ -27,7 +27,7 @@
 
         /* Header */
         h2 {
-            font-size: 20px;
+            font-size: 18px;
             margin-top: 10px;
         }
 
@@ -41,7 +41,7 @@
             width: 100%;
             max-width: 1200px;
             padding: 10px;
-            margin-top: 50px; /* Increase top margin to push counters down */
+            margin-top: 20px; /* Reduce the top margin to prevent overflow */
         }
 
         /* Counter box */
@@ -49,7 +49,7 @@
             background: rgba(42, 42, 59, 0.8);
             padding: 15px;
             border-radius: 15px;
-            width: 200px;
+            width: 180px; /* Reduced width */
             height: 230px;
             font-size: 14px;
             display: flex;
@@ -66,23 +66,23 @@
             align-items: center;
             width: 100%;
             position: fixed;
-            bottom: 40px; /* Move the bottom section up */
+            bottom: 20px; /* Move the bottom section up slightly */
         }
 
         .total-box {
             display: flex;
             flex-direction: row;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
         }
 
         .total-revenue, .total-games {
             background: #ff9800;
-            padding: 10px;
+            padding: 8px;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 14px; /* Reduced font size */
             font-weight: bold;
-            width: 200px;
+            width: 180px;
             margin: 5px;
             text-align: center;
         }
@@ -103,7 +103,7 @@
 
         /* Reset button at the bottom */
         .reset-bottom {
-            width: 200px;
+            width: 180px; /* Reduced width to match total section */
             margin-top: 10px;
         }
     </style>
