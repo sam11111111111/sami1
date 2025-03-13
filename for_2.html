@@ -41,8 +41,7 @@
             width: 100%;
             max-width: 1200px;
             padding: 10px;
-            margin-top: 20px; /* Adjust margin for higher position */
-            flex-grow: 1; /* Allow counters to grow and push the total section down */
+            margin-top: 50px; /* Increase top margin to push counters down */
         }
 
         /* Counter box */
@@ -60,13 +59,14 @@
             box-sizing: border-box;
         }
 
-        /* Total section positioning */
-        .total-section {
+        /* Bottom section for Total Revenue & Games */
+        .bottom-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
-            margin-top: 20px; /* Adjust margin for better position */
+            position: fixed;
+            bottom: 40px; /* Move the bottom section up */
         }
 
         .total-box {
@@ -111,8 +111,9 @@
 <body>
     <h2>🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
 
-    <!-- Total section -->
-    <div class="total-section">
+    <div class="container" id="counters"></div>
+
+    <div class="bottom-section">
         <div class="total-box">
             <div class="total-revenue">
                 💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
@@ -123,9 +124,6 @@
         </div>
         <button class="reset reset-bottom" onclick="resetAll()">Reset All</button>
     </div>
-
-    <!-- Container for counters -->
-    <div class="container" id="counters"></div>
 
     <script>
         const numPS = 3;
