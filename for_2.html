@@ -62,7 +62,7 @@
         /* Bottom section for Total Revenue & Games */
         .bottom-section {
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Stack items vertically */
             align-items: center;
             width: 100%;
             position: fixed;
@@ -71,7 +71,7 @@
 
         .total-box {
             display: flex;
-            flex-direction: row;
+            flex-direction: column; /* Stack Total Revenue and Total Games vertically */
             gap: 15px;
             justify-content: center;
         }
@@ -119,7 +119,7 @@
                 💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
             </div>
             <div class="total-games">
-                🎮 አጠቃላይ: <span id="totalGames">0</span> ጨዋታዎች
+                🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span> ጨዋታዎች
             </div>
         </div>
         <button class="reset reset-bottom" onclick="resetAll()">Reset All</button>
