@@ -25,13 +25,11 @@
             padding: 10px;
         }
 
-        /* Header */
         h2 {
             font-size: 20px;
             margin-bottom: 5px;
         }
 
-        /* Container for counters */
         .container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -41,7 +39,6 @@
             padding: 10px;
         }
 
-        /* Counter box */
         .counter {
             background: rgba(42, 42, 59, 0.8);
             padding: 10px;
@@ -54,7 +51,6 @@
             height: 160px;
         }
 
-        /* Bottom section for totals */
         .bottom-section {
             width: 100%;
             max-width: 400px;
@@ -76,7 +72,6 @@
             text-align: center;
         }
 
-        /* Buttons */
         button {
             font-size: 12px;
             padding: 5px;
@@ -89,6 +84,13 @@
         .increase { background-color: #4CAF50; color: white; }
         .decrease { background-color: #f44336; color: white; }
         .reset { background-color: #008CBA; color: white; }
+
+        .reset-all {
+            margin-top: 10px;
+            width: 100%;
+            max-width: 150px;
+            padding: 8px;
+        }
 
     </style>
 </head>
@@ -106,12 +108,16 @@
                 🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span>
             </div>
         </div>
+        <button class="reset reset-all" onclick="resetAll()">Reset All</button>
     </div>
 
     <script>
         const numPS = 3;
         const gamePrice = 7;
         const countersDiv = document.getElementById("counters");
+
+        let totalGamesPlayed = 0;
+        let totalRevenue = 0;
 
         function createCounter(psNumber) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
@@ -128,27 +134,34 @@
             `;
 
             countersDiv.appendChild(counter);
+            updateTotalRevenue();
         }
 
         function updateCount(psNumber, change) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+            let oldCount = count;
+
             count = Math.max(0, count + change);
             localStorage.setItem(`ps_${psNumber}_games`, count);
             document.getElementById(`count_${psNumber}`).innerText = count;
             document.getElementById(`totalPrice_${psNumber}`).innerText = count * gamePrice;
-            updateTotalRevenue();
+
+            updateTotalRevenue(oldCount, count);
         }
 
         function resetCount(psNumber) {
+            let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+
             localStorage.setItem(`ps_${psNumber}_games`, 0);
             document.getElementById(`count_${psNumber}`).innerText = 0;
             document.getElementById(`totalPrice_${psNumber}`).innerText = 0;
-            updateTotalRevenue();
+
+            updateTotalRevenue(count, 0);
         }
 
-        function updateTotalRevenue() {
-            let totalGamesPlayed = 0;
-            let totalRevenue = 0;
+        function updateTotalRevenue(oldCount = 0, newCount = 0) {
+            totalGamesPlayed = 0;
+            totalRevenue = 0;
 
             for (let i = 1; i <= numPS; i++) {
                 let count = parseInt(localStorage.getItem(`ps_${i}_games`) || 0);
@@ -160,11 +173,22 @@
             document.getElementById("totalRevenue").innerText = totalRevenue;
         }
 
+        function resetAll() {
+            for (let i = 1; i <= numPS; i++) {
+                localStorage.setItem(`ps_${i}_games`, 0);
+                document.getElementById(`count_${i}`).innerText = 0;
+                document.getElementById(`totalPrice_${i}`).innerText = 0;
+            }
+
+            totalGamesPlayed = 0;
+            totalRevenue = 0;
+            document.getElementById("totalGames").innerText = totalGamesPlayed;
+            document.getElementById("totalRevenue").innerText = totalRevenue;
+        }
+
         for (let i = 1; i <= numPS; i++) {
             createCounter(i);
         }
-
-        updateTotalRevenue();
     </script>
 </body>
 </html>
