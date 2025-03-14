@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             background-color: #1e1e2e;
-            background-image: url('psss.png');
+            background-image: url('images (1).jpg');
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -176,14 +176,14 @@
 
         function resetCount(psNumber) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
-            totalGamesPlayed -= count;
-            totalRevenue -= count * gamePrice;
+           // totalGamesPlayed -= count;
+            //totalRevenue -= count * gamePrice;
 
             localStorage.setItem(`ps_${psNumber}_games`, 0);
             document.getElementById(`count_${psNumber}`).innerText = 0;
 
-            document.getElementById("totalGames").innerText = totalGamesPlayed;
-            document.getElementById("totalRevenue").innerText = totalRevenue;
+            //document.getElementById("totalGames").innerText = totalGamesPlayed;
+            //document.getElementById("totalRevenue").innerText = totalRevenue;
 
             updatePrice(psNumber, count, 0);
         }
