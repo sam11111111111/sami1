@@ -148,15 +148,12 @@
                 🏦 ቁጠባ: <span id="per">0</span> ብር
             </div>
 
-<div class="transaction-history">
-    <h3>ታሪክ ተሳፋሪ (Transaction History)</h3>
-    <ul id="transactionLogs"></ul>
-</div>
 
-            
         </div>
         <button class="reset reset-bottom" onclick="confirmReset()">Reset All</button>
-        
+        <button onclick="window.location.href = 'history.html';">View Transaction History</button>
+
+
     </div>
 
     <script>
@@ -168,6 +165,22 @@
 
         let totalGamesPlayed = 0;
         let totalRevenue = 0;
+
+
+function initializeValues() {
+    totalGamesPlayed = parseInt(localStorage.getItem("totalGamesPlayed")) || 0;
+    totalRevenue = parseFloat(localStorage.getItem("totalRevenue")) || 0;
+    let yy = parseFloat(localStorage.getItem("per")) || 0;
+
+    document.getElementById("per").innerText = yy;
+    document.getElementById("totalGames").innerText = totalGamesPlayed;
+    document.getElementById("totalRevenue").innerText = totalRevenue;
+}
+
+    // Call the initializeValues function to set values on page load
+    initializeValues();
+
+
 
         function createCounter(psNumber) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
@@ -203,25 +216,33 @@ function logTransaction(action, psNumber, change) {
 }
 
 
+function saveTransaction(psNumber, change) {
+    let transactionHistory = JSON.parse(localStorage.getItem('transactionHistory')) || [];
+    let date = new Date();
+    let action = (change > 0) ? 'Increase' : 'Decrease';
+    let transactionMessage = `${action} games on PS ${psNumber}: ${change > 0 ? '+1' : '-1'} at ${date.toLocaleString()}`;
+    
+    transactionHistory.push(transactionMessage);
+    localStorage.setItem('transactionHistory', JSON.stringify(transactionHistory));
+}
 
 function updateCount(psNumber, change) {
     let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
     let oldCount = count;
 
+    // Update count based on the change
     count = Math.max(0, count + change);
     localStorage.setItem(`ps_${psNumber}_games`, count);
     document.getElementById(`count_${psNumber}`).innerText = count;
 
     updatePrice(psNumber, oldCount, count);
 
+    // Save the transaction to the history
+    saveTransaction(psNumber, change);
+
     if (change === 1) {
         totalGamesPlayed += 1;
         totalRevenue += gamePrice;
-        logTransaction("update", psNumber, change);
-    } else if (change === -1) {
-        totalGamesPlayed -= 1;
-        totalRevenue -= gamePrice;
-        logTransaction("update", psNumber, change);
     }
 
     let c = 20 * totalRevenue;
@@ -230,7 +251,13 @@ function updateCount(psNumber, change) {
     document.getElementById("per").innerText = yy;
     document.getElementById("totalGames").innerText = totalGamesPlayed;
     document.getElementById("totalRevenue").innerText = totalRevenue;
+
+    // Save the updated values in localStorage
+    localStorage.setItem("totalGamesPlayed", totalGamesPlayed);
+    localStorage.setItem("totalRevenue", totalRevenue);
+    localStorage.setItem("per", yy);
 }
+
 
         function resetCount(psNumber) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
