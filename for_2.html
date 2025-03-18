@@ -22,18 +22,15 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            overflow: hidden; /* Prevent scrolling */
+            overflow: hidden;
         }
 
-        /* Header */
         h2 {
             font-size: 18px;
             margin-top: 10px;
         }
 
-        /* Container for all counters */
         .container {
-           
             display: flex;
             flex-direction: row;
             justify-content: center;
@@ -42,15 +39,13 @@
             width: 100%;
             max-width: 1500px;
             padding: 10px;
-            margin-top: 20px; /* Reduce the top margin to prevent overflow */
+            margin-top: 20px;
         }
 
-        /* Counter box */
         .counter {
-          /*  background: rgba(42, 42, 59, 0.8); */
             padding: 15px;
             border-radius: 15px;
-            width: 180px; /* Reduced width */
+            width: 180px;
             height: 230px;
             font-size: 14px;
             display: flex;
@@ -60,19 +55,18 @@
             box-sizing: border-box;
         }
 
-        /* Bottom section for Total Revenue & Games */
         .bottom-section {
             display: flex;
-            flex-direction: column; /* Stack items vertically */
+            flex-direction: column;
             align-items: center;
             width: 100%;
             position: fixed;
-            bottom: 10px; /* Move the bottom section up slightly */
+            bottom: 10px;
         }
 
         .total-box {
             display: flex;
-            flex-direction: column-reverse; /* Stack Total Revenue and Total Games vertically */
+            flex-direction: column-reverse;
             gap: 0px;
             justify-content: center;
         }
@@ -81,15 +75,13 @@
             background: #ff9800;
             padding: 4px;
             border-radius: 8px;
-            font-size: 10px; /* Reduced font size */
+            font-size: 10px;
             font-weight: bold;
             width: 180px;
             margin: 5px;
             text-align: center;
         }
 
-
-        /* Buttons */
         button {
             font-size: 14px;
             padding: 6px;
@@ -102,15 +94,11 @@
         .increase { background-color: #4CAF50; color: white; }
         .decrease { background-color: #f44336; color: white; }
         .reset { background-color: #008CBA; color: white; }
-
-        /* Reset button at the bottom */
         .reset-bottom {
-            width: 180px; /* Reduced width to match total section */
+            width: 180px;
             margin-top: 10px;
         }
-        .reset{
-            border-radius: 2px;
-        }
+        .reset { border-radius: 2px; }
     </style>
 </head>
 <body>
@@ -126,18 +114,18 @@
             <div class="total-games">
                 🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span>
             </div>
-                <div class="perr"> 
-                      🏦 ቁጠባ: <span id="per">0</span> ብር
-                </div>
-                
-            
+            <div class="perr"> 
+                🏦 ቁጠባ: <span id="per">0</span> ብር
+            </div>
         </div>
-        <button class="reset reset-bottom" onclick="resetAll()">Reset All</button>
+        <button class="reset reset-bottom" onclick="confirmReset()">Reset All</button>
     </div>
 
     <script>
         const numPS = 3;
         const gamePrice = 7;
+        const adminPIN = "1234";  // Change this PIN for security
+
         const countersDiv = document.getElementById("counters");
 
         let totalGamesPlayed = 0;
@@ -150,8 +138,6 @@
             counter.classList.add("counter");
             counter.innerHTML = `
                 <h3>🕹️ PS ${psNumber}</h3>
-                
-                
                 <h2>ጨዋታ:</h2> <span id="count_${psNumber}">${count}</span></p>
                 <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1<br> </button><br>
                 <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1<br></button><br>
@@ -161,9 +147,6 @@
 
             countersDiv.appendChild(counter);
         }
-
-
-
 
         function updateCount(psNumber, change) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
@@ -179,8 +162,9 @@
                 totalGamesPlayed += 1;
                 totalRevenue += gamePrice;
             }
+
             let c = 20 * totalRevenue;
-            let yy = c/100;
+            let yy = c / 100;
 
             document.getElementById("per").innerText = yy;
             document.getElementById("totalGames").innerText = totalGamesPlayed;
@@ -189,14 +173,8 @@
 
         function resetCount(psNumber) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
-           // totalGamesPlayed -= count;
-            //totalRevenue -= count * gamePrice;
-
             localStorage.setItem(`ps_${psNumber}_games`, 0);
             document.getElementById(`count_${psNumber}`).innerText = 0;
-
-            //document.getElementById("totalGames").innerText = totalGamesPlayed;
-            //document.getElementById("totalRevenue").innerText = totalRevenue;
 
             updatePrice(psNumber, count, 0);
         }
@@ -204,6 +182,16 @@
         function updatePrice(psNumber, oldCount, count) {
             let totalPrice = count * gamePrice;
             document.getElementById(`totalPrice_${psNumber}`).innerText = totalPrice;
+        }
+
+        function confirmReset() {
+            let userPIN = prompt("🔐 Enter Admin PIN to Reset:");
+            if (userPIN === adminPIN) {
+                resetAll();
+                alert("✅ All data has been reset!");
+            } else {
+                alert("❌ Incorrect PIN! Reset Canceled.");
+            }
         }
 
         function resetAll() {
