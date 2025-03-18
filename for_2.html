@@ -238,7 +238,240 @@ function updateCount(psNumber, change) {
     updatePrice(psNumber, oldCount, count);
 
     // Save the transaction to the history
-    saveTransaction(psNumber, change);
+    saveTransaction(psNumber, change);<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS Game Counter</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e2e;
+            background-image: url('ps42.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 1500px;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .counter {
+            padding: 15px;
+            border-radius: 15px;
+            width: 180px;
+            height: 230px;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .bottom-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            bottom: 10px;
+        }
+
+        .total-box {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 0px;
+            justify-content: center;
+        }
+
+        .total-revenue, .total-games, .perr {
+            background: #ff9800;
+            padding: 4px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: bold;
+            width: 180px;
+            margin: 5px;
+            text-align: center;
+        }
+
+        button {
+            font-size: 14px;
+            padding: 6px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .increase { background-color: #4CAF50; color: white; }
+        .decrease { background-color: #f44336; color: white; }
+        .reset { background-color: #008CBA; color: white; }
+        .reset-bottom {
+            width: 180px;
+            margin-top: 10px;
+        }
+        .reset { border-radius: 2px; }
+    </style>
+</head>
+<body>
+    <h2>🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
+
+    <div class="container" id="counters"></div>
+
+    <div class="bottom-section">
+        <div class="total-box">
+            <div class="total-revenue">
+                💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> ብር
+            </div>
+            <div class="total-games">
+                🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span>
+            </div>
+            <div class="perr"> 
+                🏦 ቁጠባ: <span id="per">0</span> ብር
+            </div>
+        </div>
+        <button class="reset reset-bottom" onclick="confirmReset()">Reset All</button>
+        
+    </div>
+
+    <script>
+        const numPS = 3;
+        const gamePrice = 7;
+        const adminPIN = "1234";  // Change this PIN for security
+
+        const countersDiv = document.getElementById("counters");
+
+        let totalGamesPlayed = 0;
+        let totalRevenue = 0;
+
+        function createCounter(psNumber) {
+            let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+
+            const counter = document.createElement("div");
+            counter.classList.add("counter");
+            counter.innerHTML = `
+                <h3>🕹️ PS ${psNumber}</h3>
+                <h2>ጨዋታ:</h2> <span id="count_${psNumber}">${count}</span></p>
+                <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1<br> </button><br>
+                <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1<br></button><br>
+                <button class="reset" onclick="resetCount(${psNumber})">Reset</button>
+                <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
+            `;
+
+            countersDiv.appendChild(counter);
+        }
+
+        function updateCount(psNumber, change) {
+            let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+            let oldCount = count;
+
+            count = Math.max(0, count + change);
+            localStorage.setItem(`ps_${psNumber}_games`, count);
+            document.getElementById(`count_${psNumber}`).innerText = count;
+
+            updatePrice(psNumber, oldCount, count);
+
+            if (change === 1) {
+                totalGamesPlayed += 1;
+                totalRevenue += gamePrice;
+            }
+
+            let c = 20 * totalRevenue;
+            let yy = c / 100;
+
+            document.getElementById("per").innerText = yy;
+            document.getElementById("totalGames").innerText = totalGamesPlayed;
+            document.getElementById("totalRevenue").innerText = totalRevenue;
+        }
+
+        function resetCount(psNumber) {
+            let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+            localStorage.setItem(`ps_${psNumber}_games`, 0);
+            document.getElementById(`count_${psNumber}`).innerText = 0;
+
+            updatePrice(psNumber, count, 0);
+        }
+
+        function updatePrice(psNumber, oldCount, count) {
+            let totalPrice = count * gamePrice;
+            document.getElementById(`totalPrice_${psNumber}`).innerText = totalPrice;
+        }
+
+        function confirmReset() {
+            let userPIN = prompt("🔐 Enter Admin PIN to Reset:");
+            if (userPIN === adminPIN) {
+                resetAll();
+                alert("✅ All data has been reset!");
+            } else {
+                alert("❌ Incorrect PIN! Reset Canceled.");
+            }
+        }
+
+        function resetAll() {
+            for (let i = 1; i <= numPS; i++) {
+                localStorage.setItem(`ps_${i}_games`, 0);
+                document.getElementById(`count_${i}`).innerText = 0;
+                document.getElementById(`totalPrice_${i}`).innerText = 0;
+            }
+
+            totalGamesPlayed = 0;
+            totalRevenue = 0;
+            document.getElementById("totalGames").innerText = totalGamesPlayed;
+            document.getElementById("totalRevenue").innerText = totalRevenue;
+            document.getElementById("per").innerText = 0;
+        }
+
+        for (let i = 1; i <= numPS; i++) {
+            createCounter(i);
+        }
+
+        updateTotalRevenue();
+
+        function updateTotalRevenue() {
+            totalGamesPlayed = 0;
+            totalRevenue = 0;
+
+            for (let i = 1; i <= numPS; i++) {
+                let count = parseInt(localStorage.getItem(`ps_${i}_games`) || 0);
+                totalGamesPlayed += count;
+                totalRevenue += count * gamePrice;
+            }
+
+            document.getElementById("totalGames").innerText = totalGamesPlayed;
+            document.getElementById("totalRevenue").innerText = totalRevenue;
+        }
+    </script>
+</body>
+</html>
+
 
     if (change === 1) {
         totalGamesPlayed += 1;
