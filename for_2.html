@@ -77,7 +77,7 @@
             justify-content: center;
         }
 
-        .total-revenue, .total-games {
+        .total-revenue, .total-games, .perr {
             background: #ff9800;
             padding: 8px;
             border-radius: 8px;
@@ -121,11 +121,16 @@
     <div class="bottom-section">
         <div class="total-box">
             <div class="total-revenue">
-                💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> Birr
+                💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> ብር
             </div>
             <div class="total-games">
                 🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span>
             </div>
+                <div class="perr"> 
+                      🏦 ቁጠባ: <span id="per">0</span> ብር
+                </div>
+                
+            
         </div>
         <button class="reset reset-bottom" onclick="resetAll()">Reset All</button>
     </div>
@@ -169,7 +174,10 @@
                 totalGamesPlayed += 1;
                 totalRevenue += gamePrice;
             }
+            let c = 20 * totalRevenue;
+            let yy = c/100;
 
+            document.getElementById("per").innerText = yy;
             document.getElementById("totalGames").innerText = totalGamesPlayed;
             document.getElementById("totalRevenue").innerText = totalRevenue;
         }
@@ -204,6 +212,7 @@
             totalRevenue = 0;
             document.getElementById("totalGames").innerText = totalGamesPlayed;
             document.getElementById("totalRevenue").innerText = totalRevenue;
+            document.getElementById("per").innerText = 0;
         }
 
         for (let i = 1; i <= numPS; i++) {
