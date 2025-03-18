@@ -4,8 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PS Game Counter</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+
+
+        .transaction-history {
+    margin-top: 30px;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 10px;
+    width: 300px;
+    text-align: left;
+    color: white;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.transaction-history h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.transaction-history ul {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 12px;
+}
+
+.transaction-history li {
+    margin: 5px 0;
+}
+
         body {
             font-family: 'Poppins', sans-serif;
             text-align: center;
@@ -73,7 +102,7 @@
         }
 
         .total-revenue, .total-games, .perr {
-            background: #EFDCAB;
+            background: #ff9800;
             padding: 4px;
             border-radius: 8px;
             font-size: 10px;
@@ -99,12 +128,7 @@
             width: 180px;
             margin-top: 10px;
         }
-
-        .graph-container {
-            width: 90%;
-            max-width: 600px;
-            margin-top: 20px;
-        }
+        .reset { border-radius: 2px; }
     </style>
 </head>
 <body>
@@ -123,20 +147,25 @@
             <div class="perr"> 
                 🏦 ቁጠባ: <span id="per">0</span> ብር
             </div>
+
+<div class="transaction-history">
+    <h3>ታሪክ ተሳፋሪ (Transaction History)</h3>
+    <ul id="transactionLogs"></ul>
+</div>
+
+            
         </div>
         <button class="reset reset-bottom" onclick="confirmReset()">Reset All</button>
-    </div>
-
-    <div class="graph-container">
-        <canvas id="revenueChart"></canvas>
+        
     </div>
 
     <script>
         const numPS = 3;
         const gamePrice = 7;
-        const adminPIN = "1234";
+        const adminPIN = "1234";  // Change this PIN for security
 
         const countersDiv = document.getElementById("counters");
+
         let totalGamesPlayed = 0;
         let totalRevenue = 0;
 
@@ -148,73 +177,118 @@
             counter.innerHTML = `
                 <h3>🕹️ PS ${psNumber}</h3>
                 <h2>ጨዋታ:</h2> <span id="count_${psNumber}">${count}</span></p>
-                <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1</button><br>
-                <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1</button><br>
+                <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1<br> </button><br>
+                <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1<br></button><br>
                 <button class="reset" onclick="resetCount(${psNumber})">Reset</button>
-                <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> ብር</h4>
+                <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
             `;
 
             countersDiv.appendChild(counter);
         }
 
-        function updateCount(psNumber, change) {
+
+
+function logTransaction(action, psNumber, change) {
+    const logList = document.getElementById('transactionLogs');
+    const date = new Date().toLocaleString(); // Current date and time
+    const logMessage = document.createElement('li');
+
+    if (action === "update") {
+        logMessage.innerText = `${date}: PS ${psNumber} - ጨዋታ ${change > 0 ? "+1" : "-1"} ተጨምሮታል.`;
+    } else if (action === "reset") {
+        logMessage.innerText = `${date}: PS ${psNumber} ተመንታቸው ተመልሰዋል.`;
+    }
+
+    logList.appendChild(logMessage);
+}
+
+
+
+function updateCount(psNumber, change) {
+    let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+    let oldCount = count;
+
+    count = Math.max(0, count + change);
+    localStorage.setItem(`ps_${psNumber}_games`, count);
+    document.getElementById(`count_${psNumber}`).innerText = count;
+
+    updatePrice(psNumber, oldCount, count);
+
+    if (change === 1) {
+        totalGamesPlayed += 1;
+        totalRevenue += gamePrice;
+        logTransaction("update", psNumber, change);
+    } else if (change === -1) {
+        totalGamesPlayed -= 1;
+        totalRevenue -= gamePrice;
+        logTransaction("update", psNumber, change);
+    }
+
+    let c = 20 * totalRevenue;
+    let yy = c / 100;
+
+    document.getElementById("per").innerText = yy;
+    document.getElementById("totalGames").innerText = totalGamesPlayed;
+    document.getElementById("totalRevenue").innerText = totalRevenue;
+}
+
+        function resetCount(psNumber) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
-            count = Math.max(0, count + change);
-            localStorage.setItem(`ps_${psNumber}_games`, count);
-            document.getElementById(`count_${psNumber}`).innerText = count;
+            localStorage.setItem(`ps_${psNumber}_games`, 0);
+            document.getElementById(`count_${psNumber}`).innerText = 0;
 
-            totalGamesPlayed += change;
-            totalRevenue += change * gamePrice;
-
-            document.getElementById("totalGames").innerText = totalGamesPlayed;
-            document.getElementById("totalRevenue").innerText = totalRevenue;
-            saveDailyStats();
+            updatePrice(psNumber, count, 0);
+            logTransaction("reset", psNumber);
         }
 
-        function saveDailyStats() {
-            let today = new Date().toISOString().split("T")[0];
-            let dailyStats = JSON.parse(localStorage.getItem("dailyStats")) || {};
-            dailyStats[today] = { games: totalGamesPlayed, revenue: totalRevenue };
-            localStorage.setItem("dailyStats", JSON.stringify(dailyStats));
-            updateChart();
+        function updatePrice(psNumber, oldCount, count) {
+            let totalPrice = count * gamePrice;
+            document.getElementById(`totalPrice_${psNumber}`).innerText = totalPrice;
         }
 
-        function resetDailyStats() {
-            let today = new Date().toISOString().split("T")[0];
-            let lastReset = localStorage.getItem("lastResetDate");
-
-            if (lastReset !== today) {
-                localStorage.setItem("lastResetDate", today);
-                for (let i = 1; i <= numPS; i++) {
-                    localStorage.setItem(`ps_${i}_games`, 0);
-                }
-                totalGamesPlayed = 0;
-                totalRevenue = 0;
-                document.getElementById("totalGames").innerText = totalGamesPlayed;
-                document.getElementById("totalRevenue").innerText = totalRevenue;
+        function confirmReset() {
+            let userPIN = prompt("🔐 Enter Admin PIN to Reset:");
+            if (userPIN === adminPIN) {
+                resetAll();
+                alert("✅ All data has been reset!");
+            } else {
+                alert("❌ Incorrect PIN! Reset Canceled.");
             }
         }
 
-        function updateChart() {
-            let dailyStats = JSON.parse(localStorage.getItem("dailyStats")) || {};
-            let labels = Object.keys(dailyStats);
-            let revenues = labels.map(date => dailyStats[date].revenue);
+        function resetAll() {
+            for (let i = 1; i <= numPS; i++) {
+                localStorage.setItem(`ps_${i}_games`, 0);
+                document.getElementById(`count_${i}`).innerText = 0;
+                document.getElementById(`totalPrice_${i}`).innerText = 0;
+            }
 
-            new Chart(document.getElementById("revenueChart"), {
-                type: "line",
-                data: {
-                    labels: labels,
-                    datasets: [{ label: "Daily Revenue", data: revenues, borderColor: "orange", fill: false }]
-                }
-            });
+            totalGamesPlayed = 0;
+            totalRevenue = 0;
+            document.getElementById("totalGames").innerText = totalGamesPlayed;
+            document.getElementById("totalRevenue").innerText = totalRevenue;
+            document.getElementById("per").innerText = 0;
         }
 
         for (let i = 1; i <= numPS; i++) {
             createCounter(i);
         }
 
-        resetDailyStats();
-        updateChart();
+        updateTotalRevenue();
+
+        function updateTotalRevenue() {
+            totalGamesPlayed = 0;
+            totalRevenue = 0;
+
+            for (let i = 1; i <= numPS; i++) {
+                let count = parseInt(localStorage.getItem(`ps_${i}_games`) || 0);
+                totalGamesPlayed += count;
+                totalRevenue += count * gamePrice;
+            }
+
+            document.getElementById("totalGames").innerText = totalGamesPlayed;
+            document.getElementById("totalRevenue").innerText = totalRevenue;
+        }
     </script>
 </body>
 </html>
