@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background-color: #1e1e2e;
+            color: white;
+        }
+        .history-container {
+            margin-top: 20px;
+        }
+        h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 5px;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Transaction History</h2>
+    <div class="history-container">
+        <ul id="historyList"></ul>
+    </div>
+
+    <button onclick="goBack()">Back to Main</button>
+
+    <script>
+        // Display transaction history
+        function displayTransactionHistory() {
+            const historyList = document.getElementById("historyList");
+            let transactionHistory = JSON.parse(localStorage.getItem('transactionHistory')) || [];
+
+            if (transactionHistory.length === 0) {
+                historyList.innerHTML = "<li>No transaction history found.</li>";
+            } else {
+                historyList.innerHTML = "";
+                transactionHistory.forEach(transaction => {
+                    let li = document.createElement('li');
+                    li.innerText = transaction;
+                    historyList.appendChild(li);
+                });
+            }
+        }
+
+        function goBack() {
+            window.location.href = 'for_2.html';  // Redirect to the main page
+        }
+
+        // Display the transaction history when the page is loaded
+        displayTransactionHistory();
+    </script>
+</body>
+</html>
