@@ -67,21 +67,21 @@
             align-items: center;
             width: 100%;
             position: fixed;
-            bottom: 20px; /* Move the bottom section up slightly */
+            bottom: 10px; /* Move the bottom section up slightly */
         }
 
         .total-box {
             display: flex;
-            flex-direction: column; /* Stack Total Revenue and Total Games vertically */
-            gap: 15px;
+            flex-direction: column-reverse; /* Stack Total Revenue and Total Games vertically */
+            gap: 0px;
             justify-content: center;
         }
 
         .total-revenue, .total-games, .perr {
             background: #ff9800;
-            padding: 8px;
+            padding: 4px;
             border-radius: 8px;
-            font-size: 14px; /* Reduced font size */
+            font-size: 10px; /* Reduced font size */
             font-weight: bold;
             width: 180px;
             margin: 5px;
@@ -150,6 +150,8 @@
             counter.classList.add("counter");
             counter.innerHTML = `
                 <h3>🕹️ PS ${psNumber}</h3>
+                
+                
                 <h2>ጨዋታ:</h2> <span id="count_${psNumber}">${count}</span></p>
                 <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1<br> </button><br>
                 <button class="decrease" onclick="updateCount(${psNumber}, -1)">-1<br></button><br>
@@ -159,6 +161,9 @@
 
             countersDiv.appendChild(counter);
         }
+
+
+
 
         function updateCount(psNumber, change) {
             let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
