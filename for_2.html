@@ -204,6 +204,7 @@
 
             totalGamesPlayed = 0;
             totalRevenue = 0;
+
             document.getElementById("totalGames").innerText = totalGamesPlayed;
             document.getElementById("totalRevenue").innerText = totalRevenue;
             document.getElementById("per").innerText = 0;
@@ -218,15 +219,22 @@
         function updateTotalRevenue() {
             totalGamesPlayed = 0;
             totalRevenue = 0;
+            c = 0;
+            yy = 0;
 
             for (let i = 1; i <= numPS; i++) {
                 let count = parseInt(localStorage.getItem(`ps_${i}_games`) || 0);
                 totalGamesPlayed += count;
                 totalRevenue += count * gamePrice;
+               c = 20 * totalRevenue;
+               yy = c / 100;
+
             }
 
             document.getElementById("totalGames").innerText = totalGamesPlayed;
             document.getElementById("totalRevenue").innerText = totalRevenue;
+            document.getElementById("pre").innerText = yy;
+
         }
     </script>
 </body>
