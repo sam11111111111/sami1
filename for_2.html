@@ -43,7 +43,7 @@
         }
 
         .counter {
-            padding: 15px;
+            padding: 105px;
             border-radius: 15px;
             width: 180px;
             height: 250px;
@@ -52,8 +52,8 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-           /* box-sizing: border-box;
-            background-color: rgba(0, 0, 0, 0.7); */
+           box-sizing: border-box;
+            
         }
 
         .bottom-section {
@@ -153,7 +153,7 @@
     }
 
     function startTimer(psNumber) {
-        let timeLeft = 300;  
+        let timeLeft = 90;  
         let timerDisplay = document.getElementById(`timer_${psNumber}`);
 
         let timerInterval = setInterval(() => {
@@ -190,12 +190,9 @@
         document.getElementById("per").innerText = (totalRevenue * 20) / 100;
     }
 
-    for (let i = 1; i <= numPS; i++) {
-        createCounter(i);
-    }
 
 
- function resetCount(psNumber) {
+    function resetCount(psNumber) {
         let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
         localStorage.setItem(`ps_${psNumber}_games`, 0);
         document.getElementById(`count_${psNumber}`).innerText = 0;
@@ -250,6 +247,7 @@
         document.getElementById("totalRevenue").innerText = totalRevenue;
         document.getElementById("per").innerText = savings;
     }
+    
 
 </script>
 
