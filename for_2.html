@@ -20,7 +20,6 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
             align-items: center;
             overflow: hidden;
         }
@@ -30,6 +29,38 @@
             margin-top: 10px;
         }
 
+        /* Top Section Styling */
+        .top-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            background: rgba(30, 30, 46, 0.9);
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+        }
+
+        .total-box {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .total-revenue, .total-games, .perr {
+            background: #ff9800;
+            padding: 6px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            width: 200px;
+            text-align: center;
+        }
+
+        /* Container for PS Counters */
         .container {
             display: flex;
             flex-direction: row;
@@ -39,7 +70,7 @@
             width: 100%;
             max-width: 1500px;
             padding: 10px;
-            margin-top: 20px;
+            margin-top: 100px; /* Adjust for fixed top-section */
         }
 
         .counter {
@@ -52,43 +83,20 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-           box-sizing: border-box;
-            
+            box-sizing: border-box;
         }
 
-
-
-
-.bottom-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    position: fixed;
-    bottom: 20px; /* Increased from 10px */
-    background: rgba(30, 30, 46, 0.9); /* Optional: Add slight background to improve visibility */
-    padding: 10px 0; /* Adds space inside */
-}
-
-.total-box {
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 8px; /* Increased spacing */
-    justify-content: center;
-    align-items: center;
-}
-
-.total-revenue, .total-games, .perr {
-    background: #ff9800;
-    padding: 6px; /* Increased padding */
-    border-radius: 8px;
-    font-size: 12px; /* Slightly increased */
-    font-weight: bold;
-    width: 200px; /* Increased width */
-    text-align: center;
-}
-
-
+        /* Bottom Section */
+        .bottom-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            bottom: 10px;
+            background: rgba(30, 30, 46, 0.9);
+            padding: 10px 0;
+        }
 
         button {
             font-size: 14px;
@@ -111,11 +119,11 @@
     </style>
 </head>
 <body>
-    <h2>🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
+  
 
-    <div class="container" id="counters"></div>
-
-    <div class="bottom-section">
+    <!-- Top Section -->
+    <div class="top-section">
+          <h2>🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
         <div class="total-box">
             <div class="total-revenue">
                 💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> ብር
@@ -127,15 +135,22 @@
                 🏦 ቁጠባ: <span id="per">0</span> ብር
             </div>
         </div>
+    </div>
+
+    <!-- Game Counters -->
+    <div class="container" id="counters"></div>
+
+    <!-- Bottom Section -->
+    <div class="bottom-section">
         <button class="reset reset-bottom" onclick="confirmReset()">Reset All</button>
     </div>
 
 <script>
     window.addEventListener("resize", () => {
-    document.querySelector(".bottom-section").style.bottom = "20px";
-});
+        document.querySelector(".bottom-section").style.bottom = "10px";
+    });
 
-     const numPS = 3;
+    const numPS = 3;
     const gamePrice = 7;
     const adminPIN = "1234";
     let timers = {};
@@ -165,40 +180,6 @@
 
         countersDiv.appendChild(counter);
     }
-
-    function startTimer(psNumber) {
-        if (timers[psNumber]) return;  
-
-        let timeLeft = 300;  
-        let timerDisplay = document.getElementById(`timer_${psNumber}`);
-
-        timers[psNumber] = setInterval(() => {
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            
-            if (timeLeft === 0) {
-                clearInterval(timers[psNumber]);
-                timers[psNumber] = null;
-                alert(`⏳ Time's up for PS ${psNumber}!`);
-                if (navigator.vibrate) {
-                    navigator.vibrate([500, 300, 500]);  
-                }
-            }
-            timeLeft--;
-        }, 1000);
-    }
-
-    function stopTimer(psNumber) {
-        clearInterval(timers[psNumber]);
-        timers[psNumber] = null;
-    }
-
-    function resetTimer(psNumber) {
-        stopTimer(psNumber);
-        document.getElementById(`timer_${psNumber}`).innerText = "05:00";
-    }
-
 
     function updateCount(psNumber, change) {
         let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
@@ -277,6 +258,50 @@
     }
     
 
+
+
+
+
+
+
+
+function startTimer(psNumber) {
+        if (timers[psNumber]) return;  
+
+        let timeLeft = 300;  
+        let timerDisplay = document.getElementById(`timer_${psNumber}`);
+
+        timers[psNumber] = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            if (timeLeft === 0) {
+                clearInterval(timers[psNumber]);
+                timers[psNumber] = null;
+                alert(`⏳ Time's up for PS ${psNumber}!`);
+                if (navigator.vibrate) {
+                    navigator.vibrate([500, 300, 500]);  
+                }
+            }
+            timeLeft--;
+        }, 1000);
+    }
+
+    function stopTimer(psNumber) {
+        clearInterval(timers[psNumber]);
+        timers[psNumber] = null;
+    }
+
+    function resetTimer(psNumber) {
+        stopTimer(psNumber);
+        document.getElementById(`timer_${psNumber}`).innerText = "05:00";
+    }
+
+
+
+
+    
 </script>
 
 </body>
