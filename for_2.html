@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             background-color: #1e1e2e;
-            background-image: url('ps5.png');
+            background-image: url('ps6.png');
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -52,8 +52,8 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            box-sizing: border-box;
-            background-color: rgba(0, 0, 0, 0.7);
+           /* box-sizing: border-box;
+            background-color: rgba(0, 0, 0, 0.7); */
         }
 
         .bottom-section {
@@ -95,7 +95,7 @@
         .increase { background-color: #4CAF50; color: white; }
         .decrease { background-color: #f44336; color: white; }
         .reset { background-color: #008CBA; color: white; }
-        .timer { background-color: #FFC107; color: black; font-weight: bold; }
+        .timer { background-color: #FDFAF6; color: black; font-weight: bold; }
 
         .reset-bottom {
             width: 180px;
@@ -145,7 +145,7 @@
             <button class="decrease" onclick="updateCount(${psNumber}, -1)"> -1 </button><br>
             <button class="reset" onclick="resetCount(${psNumber})"> Reset </button>
             <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
-            <button class="timer" onclick="startTimer(${psNumber})">⏳ Start Timer</button>
+            <button class="timer" onclick="startTimer(${psNumber})">⏳ Start</button>
             <h4>⏱️ Time: <span id="timer_${psNumber}">00:00</span></h4>
         `;
 
@@ -193,6 +193,64 @@
     for (let i = 1; i <= numPS; i++) {
         createCounter(i);
     }
+
+
+ function resetCount(psNumber) {
+        let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+        localStorage.setItem(`ps_${psNumber}_games`, 0);
+        document.getElementById(`count_${psNumber}`).innerText = 0;
+        updatePrice(psNumber, count, 0);
+    }
+
+    function updatePrice(psNumber, oldCount, count) {
+        let totalPrice = count * gamePrice;
+        document.getElementById(`totalPrice_${psNumber}`).innerText = totalPrice;
+    }
+
+    function confirmReset() {
+        let userPIN = prompt("🔐 Enter Admin PIN to Reset:");
+        if (userPIN === adminPIN) {
+            resetAll();
+            alert("✅ All data has been reset!");
+        } else {
+            alert("❌ Incorrect PIN! Reset Canceled.");
+        }
+    }
+
+    function resetAll() {
+        for (let i = 1; i <= numPS; i++) {
+            localStorage.setItem(`ps_${i}_games`, 0);
+            document.getElementById(`count_${i}`).innerText = 0;
+            document.getElementById(`totalPrice_${i}`).innerText = 0;
+        }
+
+        totalGamesPlayed = 0;
+        totalRevenue = 0;
+        localStorage.setItem("totalGamesPlayed", totalGamesPlayed);
+        localStorage.setItem("totalRevenue", totalRevenue);
+
+        document.getElementById("totalGames").innerText = totalGamesPlayed;
+        document.getElementById("totalRevenue").innerText = totalRevenue;
+        document.getElementById("per").innerText = 0;
+    }
+
+    for (let i = 1; i <= numPS; i++) {
+        createCounter(i);
+    }
+
+    updateTotalRevenue();
+
+    function updateTotalRevenue() {
+        totalGamesPlayed = parseInt(localStorage.getItem("totalGamesPlayed")) || 0;
+        totalRevenue = parseInt(localStorage.getItem("totalRevenue")) || 0;
+
+        let savings = (totalRevenue * 20) / 100;
+
+        document.getElementById("totalGames").innerText = totalGamesPlayed;
+        document.getElementById("totalRevenue").innerText = totalRevenue;
+        document.getElementById("per").innerText = savings;
+    }
+
 </script>
 
 </body>
