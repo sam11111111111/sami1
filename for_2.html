@@ -43,7 +43,7 @@
         }
 
         .counter {
-            padding: 10px;
+            padding: 5px;
             border-radius: 15px;
             width: 180px;
             height: 250px;
@@ -124,9 +124,10 @@
     </div>
 
 <script>
-    const numPS = 3;
+     const numPS = 3;
     const gamePrice = 7;
     const adminPIN = "1234";
+    let timers = {};
 
     const countersDiv = document.getElementById("counters");
 
@@ -145,24 +146,29 @@
             <button class="decrease" onclick="updateCount(${psNumber}, -1)"> -1 </button><br>
             <button class="reset" onclick="resetCount(${psNumber})"> Reset </button>
             <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
-            <button class="timer" onclick="startTimer(${psNumber})">⏳ Start</button>
-            <h4>⏱️ Time: <span id="timer_${psNumber}">00:00</span></h4>
+            <h4>⏱️ Time: <span id="timer_${psNumber}">05:00</span></h4>
+            <button class="timer" onclick="startTimer(${psNumber})">⏳ Start Timer</button>
+            <button class="stop-timer" onclick="stopTimer(${psNumber})">⏹ Stop Timer</button>
+            <button class="reset-timer" onclick="resetTimer(${psNumber})">🔄 Reset Timer</button>
         `;
 
         countersDiv.appendChild(counter);
     }
 
     function startTimer(psNumber) {
-        let timeLeft = 90;  
+        if (timers[psNumber]) return;  
+
+        let timeLeft = 300;  
         let timerDisplay = document.getElementById(`timer_${psNumber}`);
 
-        let timerInterval = setInterval(() => {
+        timers[psNumber] = setInterval(() => {
             let minutes = Math.floor(timeLeft / 60);
             let seconds = timeLeft % 60;
             timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
             
             if (timeLeft === 0) {
-                clearInterval(timerInterval);
+                clearInterval(timers[psNumber]);
+                timers[psNumber] = null;
                 alert(`⏳ Time's up for PS ${psNumber}!`);
                 if (navigator.vibrate) {
                     navigator.vibrate([500, 300, 500]);  
@@ -171,6 +177,17 @@
             timeLeft--;
         }, 1000);
     }
+
+    function stopTimer(psNumber) {
+        clearInterval(timers[psNumber]);
+        timers[psNumber] = null;
+    }
+
+    function resetTimer(psNumber) {
+        stopTimer(psNumber);
+        document.getElementById(`timer_${psNumber}`).innerText = "05:00";
+    }
+
 
     function updateCount(psNumber, change) {
         let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
