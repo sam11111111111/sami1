@@ -3,75 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction History</title>
+    <title>PS Game Counter</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 0;
             background-color: #1e1e2e;
-            color: white;
+            background-image: url('ps42.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            overflow: hidden;
         }
-        .history-container {
-            margin-top: 20px;
-        }
+
         h2 {
             font-size: 22px;
-            margin-bottom: 20px;
+            margin-top: 10px;
+            padding-bottom: 5px;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            background: rgba(255, 255, 255, 0.1);
-            margin: 5px;
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 10px;
+            width: 100%;
+            max-width: 1500px;
             padding: 10px;
-            border-radius: 10px;
+            margin-top: 0px;
+        }
+
+        .counter {
+            padding: 15px;
+            border-radius: 15px;
+            width: 200px;
+            height: 320px;
             font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            background-color: rgba(0, 0, 0, 0.7);
         }
+
+        .bottom-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            bottom: 10px;
+        }
+
+        .total-box {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .total-revenue, .total-games, .perr {
+            background: #ff9800;
+            padding: 5px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            width: 200px;
+            text-align: center;
+        }
+
         button {
-            background-color: #008CBA;
-            color: white;
-            padding: 10px;
-            font-size: 16px;
+            font-size: 14px;
+            padding: 6px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            width: 100%;
+        }
+
+        .increase { background-color: #4CAF50; color: white; }
+        .decrease { background-color: #f44336; color: white; }
+        .reset { background-color: #008CBA; color: white; }
+        .timer { background-color: #FFC107; color: black; font-weight: bold; }
+        .stop-timer { background-color: #FF5722; color: white; }
+        .reset-timer { background-color: #9C27B0; color: white; }
+
+        .reset-bottom {
+            width: 200px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h2>Transaction History</h2>
-    <div class="history-container">
-        <ul id="historyList"></ul>
+    <h2>🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
+
+    <div class="container" id="counters"></div>
+
+    <div class="bottom-section">
+        <div class="total-box">
+            <div class="total-revenue">
+                💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> ብር
+            </div>
+            <div class="total-games">
+                🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span>
+            </div>
+            <div class="perr"> 
+                🏦 ቁጠባ: <span id="per">0</span> ብር
+            </div>
+        </div>
+        <button class="reset reset-bottom" onclick="confirmReset()">Reset All</button>
     </div>
 
-    <button onclick="goBack()">Back to Main</button>
+<script>
+    const numPS = 3;
+    const gamePrice = 7;
+    const adminPIN = "1234";
+    let timers = {};
 
-    <script>
-        // Display transaction history
-        function displayTransactionHistory() {
-            const historyList = document.getElementById("historyList");
-            let transactionHistory = JSON.parse(localStorage.getItem('transactionHistory')) || [];
+    const countersDiv = document.getElementById("counters");
 
-            if (transactionHistory.length === 0) {
-                historyList.innerHTML = "<li>No transaction history found.</li>";
-            } else {
-                historyList.innerHTML = "";
-                transactionHistory.forEach(transaction => {
-                    let li = document.createElement('li');
-                    li.innerText = transaction;
-                    historyList.appendChild(li);
-                });
+    let totalGamesPlayed = parseInt(localStorage.getItem("totalGamesPlayed")) || 0;
+    let totalRevenue = parseInt(localStorage.getItem("totalRevenue")) || 0;
+
+    function createCounter(psNumber) {
+        let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+
+        const counter = document.createElement("div");
+        counter.classList.add("counter");
+        counter.innerHTML = `
+            <h3>🕹️ PS ${psNumber}</h3>
+            <h2>ጨዋታ:</h2> <span id="count_${psNumber}">${count}</span>
+            <button class="increase" onclick="updateCount(${psNumber}, 1)"> +1 </button><br>
+            <button class="decrease" onclick="updateCount(${psNumber}, -1)"> -1 </button><br>
+            <button class="reset" onclick="resetCount(${psNumber})"> Reset </button>
+            <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
+            <h4>⏱️ Time: <span id="timer_${psNumber}">05:00</span></h4>
+            <button class="timer" onclick="startTimer(${psNumber})">⏳ Start Timer</button>
+            <button class="stop-timer" onclick="stopTimer(${psNumber})">⏹ Stop Timer</button>
+            <button class="reset-timer" onclick="resetTimer(${psNumber})">🔄 Reset Timer</button>
+        `;
+
+        countersDiv.appendChild(counter);
+    }
+
+    function startTimer(psNumber) {
+        if (timers[psNumber]) return;  
+
+        let timeLeft = 300;  
+        let timerDisplay = document.getElementById(`timer_${psNumber}`);
+
+        timers[psNumber] = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            if (timeLeft === 0) {
+                clearInterval(timers[psNumber]);
+                timers[psNumber] = null;
+                alert(`⏳ Time's up for PS ${psNumber}!`);
+                if (navigator.vibrate) {
+                    navigator.vibrate([500, 300, 500]);  
+                }
             }
-        }
+            timeLeft--;
+        }, 1000);
+    }
 
-        function goBack() {
-            window.location.href = 'for_2.html';  // Redirect to the main page
-        }
+    function stopTimer(psNumber) {
+        clearInterval(timers[psNumber]);
+        timers[psNumber] = null;
+    }
 
-        // Display the transaction history when the page is loaded
-        displayTransactionHistory();
-    </script>
+    function resetTimer(psNumber) {
+        stopTimer(psNumber);
+        document.getElementById(`timer_${psNumber}`).innerText = "05:00";
+    }
+
+    function updateCount(psNumber, change) {
+        let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+        count = Math.max(0, count + change);
+        localStorage.setItem(`ps_${psNumber}_games`, count);
+        document.getElementById(`count_${psNumber}`).innerText = count;
+        document.getElementById(`totalPrice_${psNumber}`).innerText = count * gamePrice;
+    }
+
+    for (let i = 1; i <= numPS; i++) {
+        createCounter(i);
+    }
+</script>
+
 </body>
 </html>
