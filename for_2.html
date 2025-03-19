@@ -32,7 +32,7 @@
 
         .container {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
             gap: 10px;
@@ -45,8 +45,8 @@
         .counter {
             padding: 15px;
             border-radius: 15px;
-            width: 200px;
-            height: 270px;
+            width: 180px;
+            height: 250px;
             font-size: 14px;
             display: flex;
             flex-direction: column;
@@ -76,9 +76,9 @@
             background: #ff9800;
             padding: 4px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: bold;
-            width: 200px;
+            width: 180px;
             margin: 5px;
             text-align: center;
         }
@@ -98,7 +98,7 @@
         .timer { background-color: #FFC107; color: black; font-weight: bold; }
 
         .reset-bottom {
-            width: 200px;
+            width: 180px;
             margin-top: 10px;
         }
     </style>
@@ -126,7 +126,7 @@
 <script>
     const numPS = 3;
     const gamePrice = 7;
-    const adminPIN = "1234";  // Change this PIN for security
+    const adminPIN = "1234";
 
     const countersDiv = document.getElementById("counters");
 
@@ -153,7 +153,7 @@
     }
 
     function startTimer(psNumber) {
-        let timeLeft = 300;  // 5 minutes (300 seconds)
+        let timeLeft = 300;  
         let timerDisplay = document.getElementById(`timer_${psNumber}`);
 
         let timerInterval = setInterval(() => {
@@ -165,7 +165,7 @@
                 clearInterval(timerInterval);
                 alert(`⏳ Time's up for PS ${psNumber}!`);
                 if (navigator.vibrate) {
-                    navigator.vibrate([500, 300, 500]);  // Vibrate for 500ms, pause, then vibrate again
+                    navigator.vibrate([500, 300, 500]);  
                 }
             }
             timeLeft--;
