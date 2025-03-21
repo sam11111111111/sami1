@@ -113,16 +113,25 @@
 
         .increase { background-color: #4CAF50; color: white; }
         .decrease { background-color: #f44336; color: white; }
-        .reset { background-color: #008CBA; color: white; }
-        .timer { background-color: #CCD5AE; color: black; border-radius:50px; }
+        .reset {
+            background-color: #008CBA; 
+            color: white; 
 
+
+
+        }
+        .timer { background-color: #CCD5AE; color: black; border-radius:50px; }
+.tim{
+position: fixed;
+bottom: 33px;
+}
         .reset-bottom {
             background: #ff5722;
             color: white;
             padding: 10px;
             border-radius: 5px;
             position: fixed;
-            bottom: 5px;
+            bottom: 2px;
         }
     
     </style>
@@ -175,10 +184,13 @@
             <button class="decrease" onclick="updateCount(${psNumber}, -1)"> -1 </button><br>
             <button class="reset" onclick="resetCount(${psNumber})"> Reset </button>
             <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
+
+            <div class="tim" >
             <h4>⏱️ Time: <span id="timer_${psNumber}">05:00</span></h4>
             <button class="timer" onclick="startTimer(${psNumber})">⏳</button>
             <button class="stop-timer" onclick="stopTimer(${psNumber})">⏹</button>
             <button class="reset-timer" onclick="resetTimer(${psNumber})">🔄</button>
+            </div>
         `;
 
         countersDiv.appendChild(counter);
