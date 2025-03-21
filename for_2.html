@@ -120,7 +120,7 @@
 
 
         }
-        .timer {  color: black; }
+        .timer {  color: black; border-radius:50px }
 .tim{
 position: fixed;
 bottom: 35px;
@@ -188,8 +188,8 @@ bottom: 35px;
             <div class="tim" >
             <h4>⏱️  <span id="timer_${psNumber}">05:00</span></h4>
             <button class="timer" onclick="startTimer(${psNumber})">⏳</button>
-            <button class="stop-timer" onclick="stopTimer(${psNumber})">⏹</button>
-            <button class="reset-timer" onclick="resetTimer(${psNumber})">🔄</button>
+            <button class="stop-timer timer" onclick="stopTimer(${psNumber})">⏹</button>
+            <button class="reset-timer timer" onclick="resetTimer(${psNumber})">🔄</button>
             </div>
         `;
 
