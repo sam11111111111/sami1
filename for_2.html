@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
             background-color: #1e1e2e;
-            background-image: url('ps6.png');
+            background-image: url('ps5.png');
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -71,7 +71,7 @@
             width: 100%;
             max-width: 1500px;
             padding: 10px;
-            margin-top: 105px; /* Adjust for fixed top-section */
+            margin-top: 99px; /* Adjust for fixed top-section */
         }
 
         .counter {
@@ -94,8 +94,8 @@
             align-items: center;
             width: 100%;
             position: fixed;
-            margin-top: 50px;
-            background: rgba(30, 30, 46, 0.9);
+            margin-top: 30px;
+           /* background: rgba(30, 30, 46, 0.9); */
             padding: 10px 0;
         }
 
@@ -111,7 +111,7 @@
         .increase { background-color: #4CAF50; color: white; }
         .decrease { background-color: #f44336; color: white; }
         .reset { background-color: #008CBA; color: white; }
-        .timer { background-color: #FDFAF6; color: black; font-weight: bold; }
+        .timer { background-color: #CCD5AE; color: black;  }
 
         .reset-bottom {
             display: flex;
@@ -124,7 +124,7 @@
             padding: 10px 0;
 
             /* width: 180px; */
-            bottom: 10px;
+            bottom: 5px;
         }
     
     </style>
@@ -178,9 +178,9 @@
             <button class="reset" onclick="resetCount(${psNumber})"> Reset </button>
             <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
             <h4>⏱️ Time: <span id="timer_${psNumber}">05:00</span></h4>
-            <button class="timer" onclick="startTimer(${psNumber})">⏳ Start Timer</button>
-            <button class="stop-timer" onclick="stopTimer(${psNumber})">⏹ Stop Timer</button>
-            <button class="reset-timer" onclick="resetTimer(${psNumber})">🔄 Reset Timer</button>
+            <button class="timer" onclick="startTimer(${psNumber})">⏳</button>
+            <button class="stop-timer" onclick="stopTimer(${psNumber})">⏹</button>
+            <button class="reset-timer" onclick="resetTimer(${psNumber})">🔄</button>
         `;
 
         countersDiv.appendChild(counter);
