@@ -120,10 +120,10 @@
 
 
         }
-        .timer { background-color: #CCD5AE; color: black; border-radius:50px; }
+        .timer {  color: black; }
 .tim{
 position: fixed;
-bottom: 33px;
+bottom: 35px;
 }
         .reset-bottom {
             background: #ff5722;
@@ -186,7 +186,7 @@ bottom: 33px;
             <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> Birr</h4>
 
             <div class="tim" >
-            <h4>⏱️ Time: <span id="timer_${psNumber}">05:00</span></h4>
+            <h4>⏱️  <span id="timer_${psNumber}">05:00</span></h4>
             <button class="timer" onclick="startTimer(${psNumber})">⏳</button>
             <button class="stop-timer" onclick="stopTimer(${psNumber})">⏹</button>
             <button class="reset-timer" onclick="resetTimer(${psNumber})">🔄</button>
