@@ -208,9 +208,10 @@ function startTimer(psNumber) {
             clearInterval(timers[psNumber]);
             timers[psNumber] = null;
                if (navigator.vibrate) {
-                        navigator.vibrate(1000); // Vibrate for 500 milliseconds
+                        navigator.vibrate(10000); // Vibrate for 500 milliseconds
+                        alert(`⏳ Time's up for PS ${psNumber}!`);
                     }
-            alert(`⏳ Time's up for PS ${psNumber}!`);
+            
             return;
         }
         localStorage.setItem(`timer_${psNumber}`, timeLeft);
