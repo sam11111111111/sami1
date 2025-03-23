@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Player Stats</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #1e1e2e; color: white; }
+        body { font-family: Arial, sans-serif; 
+            text-align: center;
+         background-color: #1e1e2e;
+         color: white; 
+            background-image:url('ps1.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+             }
         .container { width: 300px; margin: 0 auto; padding: 20px; background-color: #333; border-radius: 8px; }
         .player-box { background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
         button { padding: 10px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
@@ -16,8 +23,8 @@
     </style>
 </head>
 <body>
-    <h2>🏆 Player Stats</h2>
-    <button onclick="window.location.href='register.html'">⬅️ Back to Registration</button>
+    <h2>🏆 ክለቦች 🏆</h2>
+    <button onclick="window.location.href='register.html'">⬅️ ወደ ምዝገባ መመለስ</button>
 
     <div id="playersContainer" class="container"></div>
 
@@ -25,9 +32,25 @@
         const clubs = {
             "Barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
             "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
-            "Manchester United": "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg",
-            "Chelsea": "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg",
-            "Bayern Munich": "https://upload.wikimedia.org/wikipedia/en/1/1b/FC_Bayern_München_logo_%282017%29.svg"
+            "Liverpool_FC": "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
+
+            "Manchester City": "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg",
+            
+
+            "Aston Villa": "https://upload.wikimedia.org/wikipedia/en/4/47/Aston_Villa_FC_crest.svg",
+            "Borussia Dortmund": "https://upload.wikimedia.org/wikipedia/commons/0/02/Borussia_Dortmund_logo.svg",
+
+            "Inter Milan": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Inter_Milan_2021_logo.svg",
+
+            "AC Milan": "https://upload.wikimedia.org/wikipedia/commons/0/0a/AC_Milan_logo.svg",
+            "Juventus": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Juventus_FC_2017_logo.svg",
+
+
+            "Bayer": "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg",
+            
+            "newcastle": "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg",
+
+            "Atlanta": "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg",
         };
 
         function updatePlayerStats() {
