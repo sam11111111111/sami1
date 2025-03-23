@@ -7,28 +7,35 @@
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background-color: #1e1e2e; color: white; }
         .container { width: 300px; margin: 0 auto; padding: 20px; background-color: #333; border-radius: 8px; }
-        label, input, select, button { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-        button { background-color: #007BFF; color: white; border: none; cursor: pointer; }
+        input, select, button { padding: 10px; width: 100%; margin: 10px 0; border-radius: 5px; }
+        button { cursor: pointer; background-color: #007BFF; color: white; border: none; }
+        .message { background-color: #ff5722; color: white; padding: 10px; margin-top: 20px; border-radius: 5px; }
+        .count { margin-top: 20px; }
     </style>
 </head>
 <body>
-    <h2>🏆 Register Player</h2>
+    <h2>JO የተጫዋች መመዝገቢያ</h2>
     <div class="container">
-        <label for="playerName">Player Name</label>
-        <input type="text" id="playerName" placeholder="Enter player name" required>
+        <form id="registerForm">
+            <label for="playerName">የተጫዋች ስም</label>
+            <input type="text" id="playerName" required>
 
-        <label for="clubSelect">Select Club</label>
-        <select id="clubSelect" required>
-            <option value="">-- Select a Club --</option>
-            <option value="Barcelona">Barcelona</option>
-            <option value="Real Madrid">Real Madrid</option>
-            <option value="Manchester United">Manchester United</option>
-            <option value="Chelsea">Chelsea</option>
-            <option value="Bayern Munich">Bayern Munich</option>
-        </select>
+            <label for="club">ክለብ</label>
+            <select id="club" required>
+                <option value="" disabled selected>ክለብ ይምረጡ</option>
+                <!-- Club options will be populated here dynamically -->
+            </select>
 
-        <button onclick="registerPlayer()">Register Player</button>
-       <a href="stats.html"> <button >View</button> </a>
+            <button type="submit">ትመዘገባለህ</button>
+        </form>
+        <a href="stats.html"> <button> ልየው </button> </a>
+
+        <div id="message" class="message" style="display: none;"></div>
+
+        <div class="count">
+            <p><span id="playerCount">0</span> : ተጫዋቾች ተመዝግበዋል </p>
+            <p>ጠቅላላ ብር: <span id="totalAmount">0</span> ብር</p>
+        </div>
     </div>
 
     <script>
@@ -40,49 +47,65 @@
             "Bayern Munich": "https://upload.wikimedia.org/wikipedia/en/1/1b/FC_Bayern_München_logo_%282017%29.svg"
         };
 
-        function registerPlayer() {
+        let players = JSON.parse(localStorage.getItem("players")) || [];
+
+        // Function to update the club options based on already registered players
+        function updateClubOptions() {
+            const clubSelect = document.getElementById("club");
+            clubSelect.innerHTML = '<option value="" disabled selected>Select Club</option>'; // Reset options
+
+            // Get clubs that have not been registered yet
+            const registeredClubs = players.map(player => player.club);
+            Object.keys(clubs).forEach(club => {
+                if (!registeredClubs.includes(club)) {
+                    const option = document.createElement("option");
+                    option.value = club;
+                    option.textContent = club;
+                    clubSelect.appendChild(option);
+                }
+            });
+        }
+
+        function updatePlayerCount() {
+            const playerCount = players.length;
+            const totalAmount = playerCount * 100;
+            document.getElementById("playerCount").innerText = playerCount;
+            document.getElementById("totalAmount").innerText = totalAmount;
+        }
+
+        document.getElementById("registerForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
             const playerName = document.getElementById("playerName").value;
-            const club = document.getElementById("clubSelect").value;
+            const club = document.getElementById("club").value;
 
             if (playerName && club) {
-                let players = JSON.parse(localStorage.getItem("players")) || [];
+                // Add new player to the players array
                 players.push({ name: playerName, club: club, wins: 0, losses: 0 });
+
+                // Save players to localStorage
                 localStorage.setItem("players", JSON.stringify(players));
 
-                // Remove the selected club from the dropdown
-                let clubSelect = document.getElementById("clubSelect");
-                for (let i = 0; i < clubSelect.options.length; i++) {
-                    if (clubSelect.options[i].value === club) {
-                        clubSelect.remove(i);
-                        break;
-                    }
-                }
+                // Show success message
+                const message = document.getElementById("message");
+                message.style.display = "block";
+                message.innerText = `Player ${playerName} from ${club} has been registered successfully!`;
 
-                alert("Player registered successfully!");
-                window.location.href = "stats.html"; // Redirect to the stats page
-            } else {
-                alert("Please fill in both fields!");
+                // Clear the form fields
+                document.getElementById("playerName").value = "";
+                document.getElementById("club").value = "";
+
+                // Update player count and total amount
+                updatePlayerCount();
+
+                // Update the club options (hide the selected club)
+                updateClubOptions();
             }
-        }
+        });
 
-        // Call this function to initialize the registration page with clubs that are not yet registered
-        function initClubs() {
-            const registeredClubs = JSON.parse(localStorage.getItem("players")) || [];
-            const clubSelect = document.getElementById("clubSelect");
-
-            // Get a list of registered clubs
-            const registeredClubNames = registeredClubs.map(player => player.club);
-
-            // Remove the registered clubs from the dropdown
-            for (let i = clubSelect.options.length - 1; i >= 0; i--) {
-                if (registeredClubNames.includes(clubSelect.options[i].value)) {
-                    clubSelect.remove(i);
-                }
-            }
-        }
-
-        // Initialize the clubs options when the page loads
-        initClubs();
+        // Initialize the page with current club options and player count
+        updateClubOptions();
+        updatePlayerCount();
     </script>
 </body>
 </html>
