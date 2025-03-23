@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Stats</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #1e1e2e; color: white; }
+        .container { width: 300px; margin: 0 auto; padding: 20px; background-color: #333; border-radius: 8px; }
+        .player-box { background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        button { padding: 10px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        .remove { background-color: #FF5722; color: white; border: none; }
+        .win { background-color: #4CAF50; color: white; }
+        .lose { background-color: #ff5722; color: white; }
+        .club-logo { width: 50px; height: 50px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <h2>🏆 Player Stats</h2>
+    <button onclick="window.location.href='register.html'">⬅️ Back to Registration</button>
+
+    <div id="playersContainer" class="container"></div>
+
+    <script>
+        const clubs = {
+            "Barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
+            "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
+            "Manchester United": "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg",
+            "Chelsea": "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg",
+            "Bayern Munich": "https://upload.wikimedia.org/wikipedia/en/1/1b/FC_Bayern_München_logo_%282017%29.svg"
+        };
+
+        function updatePlayerStats() {
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            let playersContainer = document.getElementById("playersContainer");
+            playersContainer.innerHTML = ""; // Clear the container before displaying updated data
+
+            // Loop through each player and display their stats
+            players.forEach((player, index) => {
+                let playerDiv = document.createElement("div");
+                playerDiv.classList.add("player-box");
+
+                playerDiv.innerHTML = `
+                    <h3><img src="${clubs[player.club]}" class="club-logo">${player.name} - ${player.club}</h3>
+                    <p>🏅 Wins: <span id="wins-${index}">${player.wins}</span></p>
+                    <p>❌ Losses: <span id="losses-${index}">${player.losses}</span></p>
+                    <button class="win" onclick="updateWin(${index})">✅ Win</button>
+                    <button class="lose" onclick="updateLoss(${index})">❌ Lose</button>
+                    <button class="remove" onclick="removePlayer(${index})">🗑️ Remove Club</button>
+                `;
+                playersContainer.appendChild(playerDiv);
+            });
+        }
+
+        function updateWin(playerIndex) {
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            players[playerIndex].wins++;
+            localStorage.setItem("players", JSON.stringify(players));
+            updatePlayerStats();
+        }
+
+        function updateLoss(playerIndex) {
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            players[playerIndex].losses++;
+            localStorage.setItem("players", JSON.stringify(players));
+            updatePlayerStats();
+        }
+
+        function removePlayer(playerIndex) {
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            players.splice(playerIndex, 1); // Remove the player at the given index
+            localStorage.setItem("players", JSON.stringify(players));
+            updatePlayerStats();
+        }
+
+        // Call updatePlayerStats to initialize and display the current player stats
+        updatePlayerStats();
+    </script>
+</body>
+</html>
