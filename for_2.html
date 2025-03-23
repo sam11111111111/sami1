@@ -142,7 +142,7 @@ bottom: 35px;
     <div class="container" id="counters"></div>
 
     <div class="bottom-section">
-        <a href="register.html">CUP</a>
+        <a href="register.html">🏆 CUP 🏆</a>
         <div class="total-box">
             <div class="total-revenue">
                 💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> ብር
@@ -207,6 +207,9 @@ function startTimer(psNumber) {
         if (timeLeft <= 0) {
             clearInterval(timers[psNumber]);
             timers[psNumber] = null;
+               if (navigator.vibrate) {
+                        navigator.vibrate(1000); // Vibrate for 500 milliseconds
+                    }
             alert(`⏳ Time's up for PS ${psNumber}!`);
             return;
         }
