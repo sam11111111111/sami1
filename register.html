@@ -56,6 +56,11 @@
             <label for="playerName">የተጫዋች ስም</label>
             <input type="text" id="playerName" placeholder="ስሙ ማን ነው?" required>
 
+
+            <label for="playerPrice">መላው (ብር)</label>
+            <input type="number" id="playerPrice" placeholder="ብር ያስገቡ" min="1" required>
+
+
             <label for="club">ክለብ</label>
             <select id="club" required>
                 <option value="" disabled selected>ክለብ ይምረጡ</option>
@@ -122,7 +127,8 @@
 
         function updatePlayerCount() {
             const playerCount = players.length;
-            const totalAmount = playerCount * 100;
+            const totalAmount = players.reduce((sum, player) => sum + player.price, 0);
+
             document.getElementById("playerCount").innerText = playerCount;
             document.getElementById("totalAmount").innerText = totalAmount;
         }
@@ -147,6 +153,7 @@
 
                 // Clear the form fields
                 document.getElementById("playerName").value = "";
+                 document.getElementById("playerPrice").value = "";
                 document.getElementById("club").value = "";
 
                 // Update player count and total amount
