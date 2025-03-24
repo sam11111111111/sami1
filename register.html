@@ -75,7 +75,7 @@
 
         <div class="count">
             <p><span id="playerCount">0</span> : ተጫዋቾች ተመዝግበዋል </p>
-            <p>ጠቅላላ ብር: <span id="totalAmount">0</span> ብር</p>
+            <p>ጠቅላላ ብር: <span id="totalAmount"></span> ብር</p>
         </div>
     
         <a href="for_2.html"><i class="bi bi-skip-backward" id="ll"></i></a>
@@ -105,15 +105,12 @@
             "Atalanta": "AtalantaBC.svg"
 };
 
+let players = JSON.parse(localStorage.getItem("players")) || [];
 
-        let players = JSON.parse(localStorage.getItem("players")) || [];
-
-        // Function to update the club options based on already registered players
         function updateClubOptions() {
             const clubSelect = document.getElementById("club");
-            clubSelect.innerHTML = '<option value="" disabled selected>ክለብ ምረጥ</option>'; // Reset options
+            clubSelect.innerHTML = '<option value="" disabled selected>ክለብ ምረጥ</option>';
 
-            // Get clubs that have not been registered yet
             const registeredClubs = players.map(player => player.club);
             Object.keys(clubs).forEach(club => {
                 if (!registeredClubs.includes(club)) {
@@ -128,7 +125,6 @@
         function updatePlayerCount() {
             const playerCount = players.length;
             const totalAmount = players.reduce((sum, player) => sum + player.price, 0);
-
             document.getElementById("playerCount").innerText = playerCount;
             document.getElementById("totalAmount").innerText = totalAmount;
         }
@@ -140,35 +136,27 @@
             const club = document.getElementById("club").value;
             const playerPrice = parseFloat(document.getElementById("playerPrice").value);
 
+            if (playerName && club && playerPrice > 0) {
+                players.push({ name: playerName, club: club, price: playerPrice, wins: 0, losses: 0 });
 
-            if (playerName && club) {
-                // Add new player to the players array
-                players.push({ name: playerName, club: club, wins: 0, losses: 0 });
-
-                // Save players to localStorage
                 localStorage.setItem("players", JSON.stringify(players));
 
-                // Show success message
                 const message = document.getElementById("message");
                 message.style.display = "block";
                 message.innerText = `${playerName} ለ ${club} ፈርሟል!`;
 
-                // Clear the form fields
                 document.getElementById("playerName").value = "";
-                 document.getElementById("playerPrice").value = "";
+                document.getElementById("playerPrice").value = "";
                 document.getElementById("club").value = "";
 
-                // Update player count and total amount
                 updatePlayerCount();
-
-                // Update the club options (hide the selected club)
                 updateClubOptions();
             }
         });
 
-        // Initialize the page with current club options and player count
         updateClubOptions();
         updatePlayerCount();
     </script>
+
 </body>
 </html>
