@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cup Game - Club Wins/Losses</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #1e1e2e; color: white; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .club-box { background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; width: 300px; text-align: center; }
+        button { padding: 8px; border: none; border-radius: 5px; cursor: pointer; }
+        .win { background-color: #4CAF50; color: white; }
+        .lose { background-color: #ff5722; color: white; }
+        .reset { background-color: #007BFF; color: white; margin-top: 5px; }
+        .club-logo { width: 50px; height: 50px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h2>🏆 Club Wins & Losses Tracker</h2>
+    <button onclick="window.location.href='index.html'">⬅️ Back to PS</button>
+
+    <div id="clubsContainer" class="container"></div>
+
+    <script>
+        const clubs = {
+            "Barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
+            "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
+            "Manchester United": "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg",
+            "Chelsea": "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg",
+            "Bayern Munich": "https://upload.wikimedia.org/wikipedia/en/1/1b/FC_Bayern_München_logo_%282017%29.svg"
+        };
+
+        let clubStats = JSON.parse(localStorage.getItem("clubStats")) || {};
+
+        function initClubStats() {
+            Object.keys(clubs).forEach(club => {
+                if (!clubStats[club]) {
+                    clubStats[club] = { wins: 0, losses: 0 };
+                }
+            });
+            localStorage.setItem("clubStats", JSON.stringify(clubStats));
+        }
+
+        function updateClubUI() {
+            let container = document.getElementById("clubsContainer");
+            container.innerHTML = "";
+
+            Object.keys(clubs).forEach(club => {
+                let { wins, losses } = clubStats[club];
+
+                let clubDiv = document.createElement("div");
+                clubDiv.classList.add("club-box");
+                clubDiv.innerHTML = `
+                    <img src="${clubs[club]}" class="club-logo">
+                    <h3>${club}</h3>
+                    <p>🏅 Wins: <span id="${club}-wins">${wins}</span></p>
+                    <p>❌ Losses: <span id="${club}-losses">${losses}</span></p>
+                    <button class="win" onclick="updateWin('${club}')">✅ Win</button>
+                    <button class="lose" onclick="updateLoss('${club}')">❌ Lose</button>
+                    <button class="reset" onclick="resetClub('${club}')">🔄 Reset</button>
+                `;
+                container.appendChild(clubDiv);
+            });
+        }
+
+        function updateWin(club) {
+            clubStats[club].wins++;
+            saveAndUpdateUI();
+        }
+
+        function updateLoss(club) {
+            clubStats[club].losses++;
+            saveAndUpdateUI();
+        }
+
+        function resetClub(club) {
+            clubStats[club] = { wins: 0, losses: 0 };
+            saveAndUpdateUI();
+        }
+
+        function saveAndUpdateUI() {
+            localStorage.setItem("clubStats", JSON.stringify(clubStats));
+            updateClubUI();
+        }
+
+        initClubStats();
+        updateClubUI();
+    </script>
+</body>
+</html>

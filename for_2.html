@@ -146,7 +146,7 @@ bottom: 35px;
 
 @keyframes jo {
   from {top: 250px;}
-  to {top: 0px; background-color: blue;}
+  to {top: 0px; background-color: #BE7B72;}
   
 }
 
@@ -195,7 +195,11 @@ bottom: 35px;
   .sidenav a {font-size: 18px;}
 }
 
-
+#menu{
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
 
     </style>
 </head>
@@ -217,19 +221,20 @@ bottom: 35px;
                 🏦 ቁጠባ: <span id="per">0</span> ብር
             </div>
         </div>
-    </div>
-    <button class="reset reset-bottom" onclick="confirmReset()" >Reset All</button>
-    
-<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+
+<span style="font-size:30px;cursor:pointer" onclick="openNav()" id="menu">&#9776; </span>
 
 
 <div id="mySidenav" class="sidenav">
+    Menu
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="background.html">Wallepaper</a>
-  <a href="background.html">Services</a>
-  <a href="background.html">Clients</a>
+ <button> <a href="background.html">Wallepaper</a>
+</button>
   <a href="background.html">Contact</a>
 </div>
+    </div>
+    <button class="reset reset-bottom" onclick="confirmReset()" >Reset All</button>
+
 
    <script>
         // Apply saved background
