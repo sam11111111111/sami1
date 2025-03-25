@@ -134,10 +134,41 @@ bottom: 35px;
             bottom: 2px;
         }
     
+
+#bun {
+
+
+  position: relative;
+  animation-name: jo;
+  animation-duration: 3s;  
+  animation-fill-mode: forwards;
+}
+
+@keyframes jo {
+  from {top: 250px;}
+  to {top: 0px; background-color: blue;}
+  
+}
+
+#bun1 {
+
+
+  position: relative;
+  animation-name: res;
+  animation-duration: 3s;  
+  animation-fill-mode: forwards;
+}
+
+@keyframes res {
+  from {top: 10px;}
+  to {top: 460px;}
+  
+}
+
     </style>
 </head>
 <body>
-    <h2>🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
+    <h2 id="bun">🎮 JO PS የጨዋታ ቆጣሪ 🎮</h2>
 
     <div class="container" id="counters"></div>
 
@@ -155,7 +186,7 @@ bottom: 35px;
             </div>
         </div>
     </div>
-    <button class="reset reset-bottom" onclick="confirmReset()">Reset All</button>
+    <button class="reset reset-bottom" onclick="confirmReset()" id="bun1">Reset All</button>
     
 
 <script>
