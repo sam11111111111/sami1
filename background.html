@@ -15,12 +15,10 @@
             justify-content: center;
             background-repeat: no-repeat;
             background-size: cover;
+               transition: background 0.5s ease-in-out;
+            padding: 20px;
         }
-        .image-container {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
+ 
         .thumbnail {
             width: 150px;
             height: 100px;
@@ -43,51 +41,24 @@
         }
 
 
-.header {
-  text-align: center;
-  padding: 32px;
-}
 
-.row {
-  display: -ms-flexbox; /* IE10 */
-  display: flex;
-  -ms-flex-wrap: wrap; /* IE10 */
-  flex-wrap: wrap;
-  padding: 0 4px;
-}
 
-/* Create four equal columns that sits next to each other */
-.column {
-  -ms-flex: 25%; /* IE10 */
-  flex: 25%;
-  max-width: 25%;
-  padding: 0 4px;
-}
-
-.column img {
-  margin-top: 8px;
-  vertical-align: middle;
-  width: 100%;
-}
-
-/* Responsive layout - makes a two column-layout instead of four columns */
-@media screen and (max-width: 800px) {
-  .column {
-    -ms-flex: 50%;
-    flex: 50%;
-    max-width: 50%;
-  }
-}
-
-/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
-  .column {
-    -ms-flex: 100%;
-    flex: 100%;
-    max-width: 100%;
-  }
-}
-
+    .container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            max-width: 800px;
+            width: 100%;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            max-width: 700px;
+            justify-content: center;
+        }
 
 
 
@@ -98,25 +69,19 @@
     <h1>Choose a Background Image</h1>
     </div>
 
-    <div class="image-container">
+   <div class="container">
+        <h1>Select a Background</h1>
+
+        <div class="grid-container">
 
 
-<div class="row"> 
-     <div class="column">
-        <h1>Choose a Background Image</h1>
         <img src="images (1).jpg" class="thumbnail" onclick="changeBackground('images (1).jpg')">
         <img src="ps5.png" class="thumbnail" onclick="changeBackground('ps5.png')">
         <img src="ps6.png" class="thumbnail" onclick="changeBackground('ps6.png')">
         <img src="ps41.png" class="thumbnail" onclick="changeBackground('ps41.png')">
         <img src="wall/wa1.png" class="thumbnail" onclick="changeBackground('wall/wa1.png')">
 
-    </div>
-
-
-
-    <div class="column">
-
-
+ 
         <img src="wall/wa2.jpg" class="thumbnail" onclick="changeBackground('wall/wa2.jpg')">
         <img src="wall/wa3.jpg" class="thumbnail" onclick="changeBackground('wall/wa3.jpg')">
         <img src="wall/wa4.jpg" class="thumbnail" onclick="changeBackground('wall/wa4.jpg')">
@@ -132,9 +97,6 @@
         <img src="wall/wa11.jpg" class="thumbnail" onclick="changeBackground('wall/wa11.jpg')">
 
 
-    </div>
-
-</div>
 
 
 </div>
