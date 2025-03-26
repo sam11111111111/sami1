@@ -238,6 +238,10 @@ bottom: 35px;
     <a href="background.html">Wallepaper</a>
 </button>
 
+ <button> 
+    <a href="seting.html">Settings</a>
+</button>
+
 </div>
     </div>
     <button class="reset reset-bottom" onclick="confirmReset()" >Reset All</button>
@@ -262,10 +266,22 @@ function closeNav() {
 
     window.addEventListener("resize", () => {
     document.querySelector(".bottom-section").style.bottom = "20px";
+
+
+});
+ 
+// Retrieve settings from localStorage
+let gamePrice = parseFloat(localStorage.getItem("gamePrice")) || 7;
+let timerDuration = parseInt(localStorage.getItem("timerDuration")) || 5;
+let savingPercentage = parseInt(localStorage.getItem("savingPercentage")) || 20;
+
+// Ensure UI reflects the stored values
+document.addEventListener("DOMContentLoaded", function() {
+    updateTotalRevenue();
 });
 
      const numPS = 3;
-    const gamePrice = 7;
+    //const gamePrice = 7;
     const adminPIN = "1234";
     let timers = {};
 
@@ -288,7 +304,7 @@ function closeNav() {
             <h4>💰 PS ${psNumber}: <span id="totalPrice_${psNumber}">${count * gamePrice}</span> ብር</h4>
 
             <div class="tim" >
-            <h4>⏱️  <span id="timer_${psNumber}">05:00</span></h4>
+            <h4>⏱️  <span id="timer_${psNumber}">00:00</span></h4>
             <button class="timer" onclick="startTimer(${psNumber})">⏳</button>
             <button class="stop-timer timer" onclick="stopTimer(${psNumber})">⏹</button>
             <button class="reset-timer timer" onclick="resetTimer(${psNumber})">🔄</button>
@@ -301,24 +317,19 @@ function closeNav() {
 function startTimer(psNumber) {
     if (timers[psNumber]) return;
 
-    let timeLeft = parseInt(localStorage.getItem(`timer_${psNumber}`)) || 300;
+    let timeLeft = timerDuration * 60; // Convert minutes to seconds
     let timerDisplay = document.getElementById(`timer_${psNumber}`);
 
     timers[psNumber] = setInterval(() => {
         if (timeLeft <= 0) {
             clearInterval(timers[psNumber]);
             timers[psNumber] = null;
-              if (navigator.vibrate) {
-                        navigator.vibrate(1500); // Vibrate for 1200 milliseconds (1.2 seconds)
-                    }
-
-                    // Wait until vibration finishes, then show the alert
-                    setTimeout(() => {
-                        alert(`⏳ Time's up for PS ${psNumber}!`);
-                    }, 1200);
+            if (navigator.vibrate) navigator.vibrate(1500);
+            setTimeout(() => {
+                alert(`⏳ Time's up for PS ${psNumber}!`);
+            }, 1200);
             return;
         }
-        localStorage.setItem(`timer_${psNumber}`, timeLeft);
         let minutes = Math.floor(timeLeft / 60);
         let seconds = timeLeft % 60;
         timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
@@ -340,25 +351,23 @@ function resetTimer(psNumber) {
 
 
 
+function updateCount(psNumber, change) {
+    let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+    count = Math.max(0, count + change);
+    localStorage.setItem(`ps_${psNumber}_games`, count);
+    document.getElementById(`count_${psNumber}`).innerText = count;
 
-    function updateCount(psNumber, change) {
-        let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
-        count = Math.max(0, count + change);
-        localStorage.setItem(`ps_${psNumber}_games`, count);
-        document.getElementById(`count_${psNumber}`).innerText = count;
+    let totalPrice = count * gamePrice;
+    document.getElementById(`totalPrice_${psNumber}`).innerText = totalPrice;
 
-        document.getElementById(`totalPrice_${psNumber}`).innerText = count * gamePrice;
-        totalGamesPlayed += (change === 1 ? 1 : 0);
-        totalRevenue += (change === 1 ? gamePrice : 0);
+    totalGamesPlayed += (change === 1 ? 1 : 0);
+    totalRevenue += (change === 1 ? gamePrice : 0);
 
-        localStorage.setItem("totalGamesPlayed", totalGamesPlayed);
-        localStorage.setItem("totalRevenue", totalRevenue);
+    localStorage.setItem("totalGamesPlayed", totalGamesPlayed);
+    localStorage.setItem("totalRevenue", totalRevenue);
 
-        document.getElementById("totalGames").innerText = totalGamesPlayed;
-        document.getElementById("totalRevenue").innerText = totalRevenue;
-        document.getElementById("per").innerText = (totalRevenue * 20) / 100;
-    }
-
+    updateTotalRevenue();
+}
 
 
     function resetCount(psNumber) {
@@ -406,17 +415,16 @@ function resetTimer(psNumber) {
 
     updateTotalRevenue();
 
-    function updateTotalRevenue() {
-        totalGamesPlayed = parseInt(localStorage.getItem("totalGamesPlayed")) || 0;
-        totalRevenue = parseInt(localStorage.getItem("totalRevenue")) || 0;
+function updateTotalRevenue() {
+    totalGamesPlayed = parseInt(localStorage.getItem("totalGamesPlayed")) || 0;
+    totalRevenue = parseInt(localStorage.getItem("totalRevenue")) || 0;
 
-        let savings = (totalRevenue * 20) / 100;
+    let savings = (totalRevenue * savingPercentage) / 100;
 
-        document.getElementById("totalGames").innerText = totalGamesPlayed;
-        document.getElementById("totalRevenue").innerText = totalRevenue;
-        document.getElementById("per").innerText = savings;
-    }
-    
+    document.getElementById("totalGames").innerText = totalGamesPlayed;
+    document.getElementById("totalRevenue").innerText = totalRevenue;
+    document.getElementById("per").innerText = savings;
+} 
 
 </script>
 

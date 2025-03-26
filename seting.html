@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        body {
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e2e;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            background: rgba(30, 30, 46, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        label, input {
+            display: block;
+            margin: 10px 0;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Game Settings</h2>
+        <label for="gamePrice">Game Price (per play):</label>
+        <input type="number" id="gamePrice" placeholder="Enter price">
+
+        <label for="timerDuration">Timer Duration (minutes):</label>
+        <input type="number" id="timerDuration" placeholder="Enter duration">
+
+        <label for="savingPercentage">Saving Percentage:</label>
+        <input type="number" id="savingPercentage" placeholder="Enter saving %">
+
+        <button onclick="saveSettings()">Save Settings</button><br>
+        <a href="for_2.html"><button> Home </button></a>
+    </div>
+
+
+   <script>
+        // Apply saved background
+        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") || 'https://source.unsplash.com/1920x1080?nature'})`;
+    </script>
+
+
+
+
+    <script>
+        function saveSettings() {
+            const gamePrice = document.getElementById("gamePrice").value;
+            const timerDuration = document.getElementById("timerDuration").value;
+            const savingPercentage = document.getElementById("savingPercentage").value;
+            
+            localStorage.setItem("gamePrice", gamePrice);
+            localStorage.setItem("timerDuration", timerDuration);
+            localStorage.setItem("savingPercentage", savingPercentage);
+            
+            alert("Settings saved successfully!");
+        }
+
+        // Load saved settings
+        window.onload = function() {
+            document.getElementById("gamePrice").value = localStorage.getItem("gamePrice") || "";
+            document.getElementById("timerDuration").value = localStorage.getItem("timerDuration") || "";
+            document.getElementById("savingPercentage").value = localStorage.getItem("savingPercentage") || "";
+        }
+    </script>
+</body>
+</html>
