@@ -106,6 +106,15 @@
             document.body.style.backgroundSize = "cover";
             document.body.style.backgroundPosition = "center";
         }
+
+        
+        // Apply saved background when the page loads
+        window.onload = function() {
+            const savedImage = localStorage.getItem("bgImage");
+            if (savedImage) {
+                document.body.style.backgroundImage = `url(${savedImage})`;
+            }
+        };
     </script>
 
 </body>
