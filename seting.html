@@ -22,6 +22,8 @@
         }
         .container {
             background: rgba(30, 30, 46, 0.9);
+            background: url('set.png');
+
             padding: 20px;
             border-radius: 10px;
         }
@@ -47,10 +49,10 @@
         <input type="number" id="gamePrice" placeholder="Enter price">
 
         <label for="timerDuration">Timer Duration (minutes):</label>
-        <input type="number" id="timerDuration" placeholder="Enter duration">
+        <input type="number" id="timerDuration" min="1" placeholder="Enter duration">
 
         <label for="savingPercentage">Saving Percentage:</label>
-        <input type="number" id="savingPercentage" placeholder="Enter saving %">
+        <input type="number" id="savingPercentage" min="1" placeholder="Enter saving %">
 
         <button onclick="saveSettings()">Save Settings</button><br>
         <a href="for_2.html"><button> Home </button></a>

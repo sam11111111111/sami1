@@ -8,6 +8,7 @@
     
  body {
             font-family: 'Poppins', sans-serif;
+            font-size: 40px;
             text-align: center;
             margin: 0;
             padding: 0;
@@ -49,6 +50,9 @@
             gap: 8px;
             justify-content: center;
             align-items: center;
+            font-weight: bold;
+
+
         }
 
         .total-revenue, .total-games, .perr {
@@ -214,7 +218,7 @@ bottom: 35px;
         
         <div class="total-box">
             <div class="total-revenue">
-                💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> ብር
+              <b>  💰 አጠቃላይ ገቢ: <span id="totalRevenue">0</span> ብር </b>
             </div>
             <div class="total-games">
                 🎮 አጠቃላይ ጨዋታዎች: <span id="totalGames">0</span>
@@ -249,7 +253,7 @@ bottom: 35px;
 
    <script>
         // Apply saved background
-        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") || 'https://source.unsplash.com/1920x1080?nature'})`;
+        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") })`;
     </script>
 
 
@@ -334,13 +338,13 @@ function startTimer(psNumber) {
         let seconds = timeLeft % 60;
         timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         timeLeft--;
-    }, 1000);
+    }, 1200);
 }
 
 function resetTimer(psNumber) {
     stopTimer(psNumber);
     localStorage.setItem(`timer_${psNumber}`, 300);
-    document.getElementById(`timer_${psNumber}`).innerText = "05:00";
+    document.getElementById(`timer_${psNumber}`).innerText = "00:00";
 }
 
 
