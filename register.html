@@ -12,18 +12,13 @@
          text-align: center;
          background-color: #1e1e2e; 
         color: white;
-          background-image: url(ps3.png);
+         
         background-repeat: no-repeat; 
         background-size: cover;
 
 
         }
-        .container { width: 300px; margin: 0 auto; padding: 20px; background-color: #333; border-radius: 8px; 
-
-  background-image: url(ps3.png);
-        background-repeat: no-repeat; 
-        background-size: cover;
-        }
+      
 
         input{padding: 10px; width: auto; margin: 10px 0; border-radius: 5px;}
         select, button { padding: 10px; width: 100%; margin: 10px 0; border-radius: 5px; }
@@ -51,7 +46,7 @@
 </head>
 <body>
     <h2>JO የተጫዋች መመዝገቢያ</h2>
-    <div class="container">
+   
         <form id="registerForm">
             <label for="playerName">የተጫዋች ስም</label>
             <input type="text" id="playerName" placeholder="ስሙ ማን ነው?" required>
@@ -79,7 +74,7 @@
         </div>
     
         <a href="for_2.html"><i class="bi bi-skip-backward" id="ll"></i></a>
-    </div>
+   
    <script>
         // Apply saved background
         document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") || 'https://source.unsplash.com/1920x1080?nature'})`;
