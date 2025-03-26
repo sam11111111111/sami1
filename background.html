@@ -5,112 +5,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Background Changer</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+            font-family: 'Poppins', sans-serif;
             text-align: center;
-            transition: background 0.5s ease;
-            height: 100vh;
+            background-color: #121212;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-               transition: background 0.5s ease-in-out;
-            padding: 20px;
-        }
- 
-        .thumbnail {
-            width: 150px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .thumbnail:hover {
-            transform: scale(1.1);
-        }
-        a {
-            margin-top: 20px;
-            text-decoration: none;
-            font-size: 20px;
-            padding: 10px 20px;
-            background: #007BFF;
-            color: white;
-            border-radius: 5px;
+            min-height: 100vh;
+            transition: background 0.5s ease-in-out;
         }
 
-
-
-
-    .container {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 20px;
-            border-radius: 10px;
-            color: white;
-            max-width: 800px;
+        .header {
             width: 100%;
+            padding: 15px;
+            background: rgba(30, 30, 46, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-            max-width: 700px;
-            justify-content: center;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
         }
 
+        .thumbnail {
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
+        .thumbnail:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.2);
+        }
 
+        @media (max-width: 480px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
-<div class="header">
-    <h1>Choose a Background Image</h1>
+
+    <div class="header">
+        <h1>Choose a Background</h1>
     </div>
 
-   <div class="container">
-        <h1>Select a Background</h1>
-
+    <div class="container">
+        <h2>Select a Background</h2>
         <div class="grid-container">
-
-
-        <img src="images (1).jpg" class="thumbnail" onclick="changeBackground('images (1).jpg')">
-        <img src="ps5.png" class="thumbnail" onclick="changeBackground('ps5.png')">
-        <img src="ps6.png" class="thumbnail" onclick="changeBackground('ps6.png')">
-        <img src="ps41.png" class="thumbnail" onclick="changeBackground('ps41.png')">
-        <img src="wall/wa1.png" class="thumbnail" onclick="changeBackground('wall/wa1.png')">
-
- 
-        <img src="wall/wa2.jpg" class="thumbnail" onclick="changeBackground('wall/wa2.jpg')">
-        <img src="wall/wa3.jpg" class="thumbnail" onclick="changeBackground('wall/wa3.jpg')">
-        <img src="wall/wa4.jpg" class="thumbnail" onclick="changeBackground('wall/wa4.jpg')">
-        <img src="wall/wa5.jpg" class="thumbnail" onclick="changeBackground('wall/wa5.jpg')">
-
-        <img src="wall/wa6.jpg" class="thumbnail" onclick="changeBackground('wall/wa6.jpg')">
-        <img src="wall/wa7.jpg" class="thumbnail" onclick="changeBackground('wall/wa7.jpg')">
-        <img src="wall/wa8.jpg" class="thumbnail" onclick="changeBackground('wall/wa8.jpg')">
-
-
-        <img src="wall/wa9.jpg" class="thumbnail" onclick="changeBackground('wall/wa9.jpg')">
-        <img src="wall/wa10.jpg" class="thumbnail" onclick="changeBackground('wall/wa10.jpg')">
-        <img src="wall/wa11.jpg" class="thumbnail" onclick="changeBackground('wall/wa11.jpg')">
-
-
-
-
-</div>
-
-    <a href="for_2.html">Apply and Back</a>
+            <img src="images (1).jpg" class="thumbnail" onclick="changeBackground('images (1).jpg')">
+            <img src="ps5.png" class="thumbnail" onclick="changeBackground('ps5.png')">
+            <img src="ps6.png" class="thumbnail" onclick="changeBackground('ps6.png')">
+            <img src="ps41.png" class="thumbnail" onclick="changeBackground('ps41.png')">
+            <img src="wall/wa1.png" class="thumbnail" onclick="changeBackground('wall/wa1.png')">
+            <img src="wall/wa2.jpg" class="thumbnail" onclick="changeBackground('wall/wa2.jpg')">
+            <img src="wall/wa3.jpg" class="thumbnail" onclick="changeBackground('wall/wa3.jpg')">
+            <img src="wall/wa4.jpg" class="thumbnail" onclick="changeBackground('wall/wa4.jpg')">
+            <img src="wall/wa5.jpg" class="thumbnail" onclick="changeBackground('wall/wa5.jpg')">
+            <img src="wall/wa6.jpg" class="thumbnail" onclick="changeBackground('wall/wa6.jpg')">
+            <img src="wall/wa7.jpg" class="thumbnail" onclick="changeBackground('wall/wa7.jpg')">
+            <img src="wall/wa8.jpg" class="thumbnail" onclick="changeBackground('wall/wa8.jpg')">
+            <img src="wall/wa9.jpg" class="thumbnail" onclick="changeBackground('wall/wa9.jpg')">
+            <img src="wall/wa10.jpg" class="thumbnail" onclick="changeBackground('wall/wa10.jpg')">
+            <img src="wall/wa11.jpg" class="thumbnail" onclick="changeBackground('wall/wa11.jpg')">
+            <img src="wall/wa16.png" class="thumbnail" onclick="changeBackground('wall/wa16.png')">
+        </div>
+    </div>
 
     <script>
-        function changeBackground(imageUrl) {
-            localStorage.setItem("bgImage", imageUrl);
-            document.body.style.backgroundImage = `url(${imageUrl})`;
+        function changeBackground(image) {
+            document.body.style.backgroundImage = `url(${image})`;
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundPosition = "center";
         }
-
-        // Apply saved background
-        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") || 'https://source.unsplash.com/1920x1080?nature'})`;
     </script>
 
 </body>
