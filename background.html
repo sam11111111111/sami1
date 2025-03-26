@@ -101,13 +101,12 @@
     </div>
 
     <script>
+        // Function to change and save background image
         function changeBackground(image) {
             document.body.style.backgroundImage = `url(${image})`;
-            document.body.style.backgroundSize = "cover";
-            document.body.style.backgroundPosition = "center";
+            localStorage.setItem("bgImage", image);
         }
 
-        
         // Apply saved background when the page loads
         window.onload = function() {
             const savedImage = localStorage.getItem("bgImage");
