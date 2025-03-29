@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mobile PS4 Controller</title>
+    <title>Flappy Bird with PS4 Controller</title>
     <style>
         * {
             touch-action: manipulation;
@@ -22,48 +22,29 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
         }
 
-        .orientation-warning {
-            display: none;
-            position: fixed;
+        .game-container {
+            position: relative;
+            width: 100%;
+            flex-grow: 1;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 100%);
+        }
+
+        #game-canvas {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            color: white;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            z-index: 100;
-            padding: 20px;
-            font-size: 1.5rem;
-        }
-
-        .game-area {
-            position: relative;
-            width: 100%;
-            height: 40vh;
-            background-color: #333;
-            border-bottom: 2px solid #444;
-        }
-
-        .controlled-box {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: #0066cc;
-            border-radius: 5px;
-            transition: all 0.08s ease-out;
-            will-change: transform;
         }
 
         .controller {
             position: relative;
             width: 100%;
-            height: 60vh;
+            height: 30vh;
+            min-height: 200px;
             background-color: #333;
             border-radius: 20px 20px 0 0;
             box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
@@ -93,30 +74,18 @@
             border-radius: 4px;
         }
 
-        /* Touchpad */
-        .touchpad {
-            position: absolute;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30%;
-            height: 12vh;
-            background-color: #111;
-            border-radius: 5px;
-        }
-
         /* Left joystick */
         .joystick-left {
             position: absolute;
-            top: 45%;
-            left: 15%;
+            bottom: 30%;
+            left: 20%;
             width: 12vw;
             height: 12vw;
             max-width: 80px;
             max-height: 80px;
             background-color: #111;
             border-radius: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, 50%);
             touch-action: none;
             will-change: transform;
             transition: transform 0.05s linear;
@@ -133,83 +102,11 @@
             border-radius: 50%;
         }
 
-        /* Right joystick */
-        .joystick-right {
-            position: absolute;
-            top: 45%;
-            right: 15%;
-            width: 12vw;
-            height: 12vw;
-            max-width: 80px;
-            max-height: 80px;
-            background-color: #111;
-            border-radius: 50%;
-            transform: translate(50%, -50%);
-            touch-action: none;
-            will-change: transform;
-            transition: transform 0.05s linear;
-        }
-
-        .joystick-right:before {
-            content: '';
-            position: absolute;
-            top: 25%;
-            left: 25%;
-            width: 50%;
-            height: 50%;
-            background-color: #444;
-            border-radius: 50%;
-        }
-
-        /* D-pad */
-        .dpad {
-            position: absolute;
-            bottom: 20%;
-            left: 15%;
-            width: 20vw;
-            height: 20vw;
-            max-width: 100px;
-            max-height: 100px;
-            transform: translateX(-50%);
-        }
-
-        .dpad-up, .dpad-down, .dpad-left, .dpad-right {
-            position: absolute;
-            width: 40%;
-            height: 40%;
-            background-color: #111;
-            transition: background-color 0.1s;
-        }
-
-        .dpad-up {
-            top: 0;
-            left: 30%;
-            border-radius: 5px 5px 0 0;
-        }
-
-        .dpad-down {
-            bottom: 0;
-            left: 30%;
-            border-radius: 0 0 5px 5px;
-        }
-
-        .dpad-left {
-            top: 30%;
-            left: 0;
-            border-radius: 5px 0 0 5px;
-        }
-
-        .dpad-right {
-            top: 30%;
-            right: 0;
-            border-radius: 0 5px 5px 0;
-        }
-
         /* Action buttons */
         .action-buttons {
             position: absolute;
-            bottom: 20%;
-            right: 15%;
+            bottom: 30%;
+            right: 20%;
             width: 20vw;
             height: 20vw;
             max-width: 100px;
@@ -231,31 +128,10 @@
             will-change: transform;
         }
 
-        .button-triangle {
-            top: 0;
-            left: 30%;
-            background-color: #ff3333;
-            font-size: 4vw;
-        }
-
-        .button-circle {
-            top: 30%;
-            right: 0;
-            background-color: #33aa33;
-            font-size: 4vw;
-        }
-
         .button-cross {
             bottom: 0;
             left: 30%;
             background-color: #3333ff;
-            font-size: 4vw;
-        }
-
-        .button-square {
-            top: 30%;
-            left: 0;
-            background-color: #ffcc00;
             font-size: 4vw;
         }
 
@@ -279,51 +155,10 @@
             right: 15%;
         }
 
-        /* Triggers */
-        .trigger-left, .trigger-right {
-            position: absolute;
-            width: 20%;
-            height: 6vh;
-            background-color: #111;
-            border-radius: 0 0 10px 10px;
-            transition: all 0.1s;
-        }
-
-        .trigger-left {
-            top: 5vh;
-            left: 17%;
-        }
-
-        .trigger-right {
-            top: 5vh;
-            right: 17%;
-        }
-
-        /* Options and Share buttons */
-        .options-button, .share-button {
-            position: absolute;
-            width: 10vw;
-            height: 3vh;
-            max-width: 50px;
-            background-color: #444;
-            border-radius: 5px;
-            transition: all 0.1s;
-        }
-
-        .options-button {
-            top: 30%;
-            right: 25%;
-        }
-
-        .share-button {
-            top: 30%;
-            left: 25%;
-        }
-
         /* PS button */
         .ps-button {
             position: absolute;
-            bottom: 5vh;
+            bottom: 15%;
             left: 50%;
             transform: translateX(-50%);
             width: 8vw;
@@ -342,376 +177,473 @@
         }
 
         /* Active state for buttons */
-        .button:active, .dpad-up:active, .dpad-down:active, 
-        .dpad-left:active, .dpad-right:active, .shoulder-left:active, 
-        .shoulder-right:active, .trigger-left:active, .trigger-right:active,
-        .options-button:active, .share-button:active, .ps-button:active,
-        .touchpad:active {
+        .button:active, .shoulder-left:active, 
+        .shoulder-right:active, .ps-button:active {
             background-color: #0066cc;
             transform: translateY(2px);
         }
 
-        .output {
+        .score-display {
             position: absolute;
-            bottom: 2vh;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             color: white;
-            text-align: center;
-            width: 90%;
-            font-size: 2.5vw;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            z-index: 10;
         }
 
-        .instructions {
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0,0,0,0.8);
             color: white;
-            padding: 10px;
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            font-size: 3vw;
+            display: none;
+            z-index: 100;
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 100;
+        }
+
+        .start-button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        @media (orientation: landscape) {
+            body {
+                flex-direction: row;
+            }
+            
+            .game-container {
+                width: 70%;
+                height: 100vh;
+            }
+            
+            .controller {
+                width: 30%;
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .controller:before {
+                top: -10px;
+                left: 30px;
+                width: calc(100% - 60px);
+                height: calc(100% + 20px);
+                border-radius: 0 0 50px 50px;
+            }
+            
+            .joystick-left {
+                bottom: 20%;
+                left: 50%;
+                transform: translate(-50%, 50%);
+            }
+            
+            .action-buttons {
+                bottom: 20%;
+                right: 20%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="orientation-warning" id="orientation-warning">
-        <div>
-            <h2>Please rotate your device to portrait mode</h2>
-            <p>This controller works best in portrait orientation</p>
+    <div class="game-container">
+        <canvas id="game-canvas"></canvas>
+        <div class="score-display" id="score-display">0</div>
+        <div class="game-over" id="game-over">
+            <h2>Game Over!</h2>
+            <p>Your score: <span id="final-score">0</span></p>
+            <button id="restart-button">Play Again</button>
         </div>
-    </div>
-
-    <div class="game-area">
-        <div class="controlled-box" id="box"></div>
+        <div class="start-screen" id="start-screen">
+            <h1>Flappy Bird</h1>
+            <p>Use the left joystick to control the bird</p>
+            <p>Press X to jump</p>
+            <button class="start-button" id="start-button">Start Game</button>
+        </div>
     </div>
 
     <div class="controller">
         <div class="light-bar"></div>
-        <div class="touchpad" id="touchpad"></div>
         
         <div class="joystick-left" id="joystick-left"></div>
-        <div class="joystick-right" id="joystick-right"></div>
-        
-        <div class="dpad">
-            <div class="dpad-up" id="dpad-up"></div>
-            <div class="dpad-down" id="dpad-down"></div>
-            <div class="dpad-left" id="dpad-left"></div>
-            <div class="dpad-right" id="dpad-right"></div>
-        </div>
         
         <div class="action-buttons">
-            <div class="button button-triangle" id="triangle">△</div>
-            <div class="button button-circle" id="circle">○</div>
             <div class="button button-cross" id="cross">✕</div>
-            <div class="button button-square" id="square">□</div>
         </div>
         
         <div class="shoulder-left" id="l1"></div>
         <div class="shoulder-right" id="r1"></div>
         
-        <div class="trigger-left" id="l2"></div>
-        <div class="trigger-right" id="r2"></div>
-        
-        <div class="options-button" id="options"></div>
-        <div class="share-button" id="share"></div>
-        
         <div class="ps-button" id="ps-button">PS</div>
-        
-        <div class="output" id="output">Touch and drag the left joystick to move</div>
     </div>
 
     <script>
-        // Mobile detection
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        if (!isMobile) {
-            document.body.innerHTML = `
-                <div style="color: white; text-align: center; padding: 20px;">
-                    <h1>This is a mobile-only experience</h1>
-                    <p>Please open this page on a smartphone or tablet</p>
-                </div>
-            `;
-        }
-
-        // Orientation check
-        const orientationWarning = document.getElementById('orientation-warning');
-        function checkOrientation() {
-            if (window.innerHeight < window.innerWidth) {
-                orientationWarning.style.display = 'flex';
-            } else {
-                orientationWarning.style.display = 'none';
-            }
-        }
+        // Game variables
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score-display');
+        const gameOverScreen = document.getElementById('game-over');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const restartButton = document.getElementById('restart-button');
+        const startScreen = document.getElementById('start-screen');
+        const startButton = document.getElementById('start-button');
         
-        // Initial check
-        checkOrientation();
+        // Game state
+        let gameRunning = false;
+        let score = 0;
+        let highScore = 0;
+        let lastFrameTime = 0;
+        let gameSpeed = 2;
         
-        // Add event listener
-        window.addEventListener('resize', checkOrientation);
-        window.addEventListener('orientationchange', checkOrientation);
-
-        // Get all button elements
-        const buttons = {
-            triangle: document.getElementById('triangle'),
-            circle: document.getElementById('circle'),
-            cross: document.getElementById('cross'),
-            square: document.getElementById('square'),
-            dpadUp: document.getElementById('dpad-up'),
-            dpadDown: document.getElementById('dpad-down'),
-            dpadLeft: document.getElementById('dpad-left'),
-            dpadRight: document.getElementById('dpad-right'),
-            l1: document.getElementById('l1'),
-            r1: document.getElementById('r1'),
-            l2: document.getElementById('l2'),
-            r2: document.getElementById('r2'),
-            options: document.getElementById('options'),
-            share: document.getElementById('share'),
-            psButton: document.getElementById('ps-button'),
-            touchpad: document.getElementById('touchpad')
+        // Bird properties
+        const bird = {
+            x: 100,
+            y: canvas.height / 2,
+            width: 40,
+            height: 30,
+            velocity: 0,
+            gravity: 0.5,
+            jumpForce: -10,
+            color: '#FFD700'
         };
-
-        const output = document.getElementById('output');
-        const joystickLeft = document.getElementById('joystick-left');
-        const joystickRight = document.getElementById('joystick-right');
-        const box = document.getElementById('box');
-        const gameArea = document.querySelector('.game-area');
-
-        // Box properties
-        let boxX = gameArea.offsetWidth / 2 - 25;
-        let boxY = gameArea.offsetHeight / 2 - 25;
-        let boxSize = 50;
-        let boxColor = '#0066cc';
-        let boxSpeed = 5;
-        let boxRotation = 0;
-        let boxVelocityX = 0;
-        let boxVelocityY = 0;
-        const friction = 0.9; // Friction coefficient for smooth stopping
-
-        // Animation frame for smooth movement
-        let lastTime = 0;
-        function gameLoop(timestamp) {
-            const deltaTime = timestamp - lastTime;
-            lastTime = timestamp;
+        
+        // Pipes
+        let pipes = [];
+        const pipeWidth = 80;
+        const pipeGap = 200;
+        let pipeTimer = 0;
+        const pipeInterval = 1500; // ms
+        
+        // Resize canvas to fit container
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
             
-            // Apply velocity with time correction
-            if (Math.abs(boxVelocityX) > 0.1 || Math.abs(boxVelocityY) > 0.1) {
-                boxX += boxVelocityX * (deltaTime / 16); // Normalize to 60fps
-                boxY += boxVelocityY * (deltaTime / 16);
-                
-                // Apply friction
-                boxVelocityX *= friction;
-                boxVelocityY *= friction;
-                
-                // Boundary checking
-                boxX = Math.max(0, Math.min(gameArea.offsetWidth - boxSize, boxX));
-                boxY = Math.max(0, Math.min(gameArea.offsetHeight - boxSize, boxY));
-                
-                updateBoxPosition();
+            // Reset bird position on resize
+            if (gameRunning) {
+                bird.y = canvas.height / 2;
             }
+        }
+        
+        // Initialize game
+        function initGame() {
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            bird.y = canvas.height / 2;
+            bird.velocity = 0;
+            pipes = [];
+            score = 0;
+            pipeTimer = 0;
+            gameSpeed = 2;
+            scoreDisplay.textContent = '0';
+            gameOverScreen.style.display = 'none';
+            gameRunning = true;
+            
+            // Start game loop
+            lastFrameTime = performance.now();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Game loop
+        function gameLoop(timestamp) {
+            if (!gameRunning) return;
+            
+            const deltaTime = timestamp - lastFrameTime;
+            lastFrameTime = timestamp;
+            
+            update(deltaTime);
+            render();
             
             requestAnimationFrame(gameLoop);
         }
-        requestAnimationFrame(gameLoop);
-
-        // Update box position
-        function updateBoxPosition() {
-            box.style.left = `${boxX}px`;
-            box.style.top = `${boxY}px`;
-            box.style.width = `${boxSize}px`;
-            box.style.height = `${boxSize}px`;
-            box.style.backgroundColor = boxColor;
-            box.style.transform = `rotate(${boxRotation}deg)`;
-        }
-
-        // Initialize box position
-        updateBoxPosition();
-
-        // Add touch event listeners to all buttons
-        Object.keys(buttons).forEach(button => {
-            buttons[button].addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                buttons[button].style.transform = 'translateY(2px)';
-                buttons[button].style.backgroundColor = '#0066cc';
-                output.textContent = `Button pressed: ${button.toUpperCase()}`;
-                
-                // Button actions
-                switch(button) {
-                    case 'triangle':
-                        boxSize = Math.min(100, boxSize + 10);
-                        break;
-                    case 'circle':
-                        boxSize = Math.max(20, boxSize - 10);
-                        break;
-                    case 'cross':
-                        boxColor = `hsl(${Math.random() * 360}, 70%, 50%)`;
-                        break;
-                    case 'square':
-                        boxX = gameArea.offsetWidth / 2 - boxSize / 2;
-                        boxY = gameArea.offsetHeight / 2 - boxSize / 2;
-                        boxRotation = 0;
-                        boxVelocityX = 0;
-                        boxVelocityY = 0;
-                        break;
-                    case 'dpadUp':
-                        boxVelocityY = -boxSpeed * 2;
-                        break;
-                    case 'dpadDown':
-                        boxVelocityY = boxSpeed * 2;
-                        break;
-                    case 'dpadLeft':
-                        boxVelocityX = -boxSpeed * 2;
-                        break;
-                    case 'dpadRight':
-                        boxVelocityX = boxSpeed * 2;
-                        break;
-                    case 'l1':
-                        boxSpeed = Math.max(1, boxSpeed - 1);
-                        output.textContent += ` | Speed: ${boxSpeed}`;
-                        break;
-                    case 'r1':
-                        boxSpeed = Math.min(10, boxSpeed + 1);
-                        output.textContent += ` | Speed: ${boxSpeed}`;
-                        break;
-                    case 'psButton':
-                        boxColor = '#0066cc';
-                        boxSize = 50;
-                        boxSpeed = 5;
-                        boxRotation = 0;
-                        boxVelocityX = 0;
-                        boxVelocityY = 0;
-                        output.textContent += ` | Reset to defaults`;
-                        break;
-                    case 'touchpad':
-                        boxRotation = (boxRotation + 45) % 360;
-                        break;
-                }
-                
-                updateBoxPosition();
-            });
+        
+        // Update game state
+        function update(deltaTime) {
+            // Update bird
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
             
-            buttons[button].addEventListener('touchend', (e) => {
-                e.preventDefault();
-                buttons[button].style.transform = '';
-                buttons[button].style.backgroundColor = '';
-                output.textContent = `Button released: ${button.toUpperCase()}`;
-                setTimeout(() => {
-                    output.textContent = 'Touch and drag the left joystick to move';
-                }, 1000);
-            });
-        });
-
-        // Enhanced Joystick simulation for box control (mobile touch version)
-        function setupMobileJoystick(joystick, name) {
-            let touchId = null;
-            const joystickRect = joystick.getBoundingClientRect();
-            const centerX = joystickRect.left + joystickRect.width / 2;
-            const centerY = joystickRect.top + joystickRect.height / 2;
-            const maxDistance = joystickRect.width / 2;
-            let moveX = 0;
-            let moveY = 0;
-            let lastMoveTime = 0;
-
-            function updateJoystickPosition(touch) {
-                const deltaX = touch.clientX - centerX;
-                const deltaY = touch.clientY - centerY;
+            // Check boundaries
+            if (bird.y < 0) {
+                bird.y = 0;
+                bird.velocity = 0;
+            }
+            
+            if (bird.y + bird.height > canvas.height) {
+                gameOver();
+                return;
+            }
+            
+            // Update pipes
+            pipeTimer += deltaTime;
+            if (pipeTimer > pipeInterval) {
+                createPipe();
+                pipeTimer = 0;
+            }
+            
+            // Move pipes and check collisions
+            for (let i = pipes.length - 1; i >= 0; i--) {
+                pipes[i].x -= gameSpeed;
                 
-                // Calculate distance from center
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const angle = Math.atan2(deltaY, deltaX);
-                
-                // Limit movement with smooth curve
-                const normalizedDistance = Math.min(distance, maxDistance) / maxDistance;
-                const easedDistance = normalizedDistance * normalizedDistance; // Quadratic easing
-                const moveDistance = easedDistance * maxDistance;
-                
-                moveX = moveDistance * Math.cos(angle);
-                moveY = moveDistance * Math.sin(angle);
-                
-                // Update joystick position with smooth transition
-                joystick.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
-                
-                // Update output
-                const xPercent = Math.round((moveX / maxDistance) * 100);
-                const yPercent = Math.round((moveY / maxDistance) * 100);
-                
-                // Only control box with left joystick
-                if (name === 'Left') {
-                    // Calculate velocity based on joystick position
-                    const now = performance.now();
-                    const deltaTime = now - lastMoveTime;
-                    lastMoveTime = now;
+                // Check if bird passed the pipe
+                if (!pipes[i].passed && pipes[i].x + pipeWidth < bird.x) {
+                    pipes[i].passed = true;
+                    score++;
+                    scoreDisplay.textContent = score;
                     
-                    // Apply acceleration for smoother movement
-                    const targetVelocityX = (moveX / maxDistance) * boxSpeed * 2;
-                    const targetVelocityY = (moveY / maxDistance) * boxSpeed * 2;
-                    
-                    // Smooth transition to target velocity
-                    boxVelocityX += (targetVelocityX - boxVelocityX) * 0.2;
-                    boxVelocityY += (targetVelocityY - boxVelocityY) * 0.2;
+                    // Increase difficulty
+                    if (score % 5 === 0) {
+                        gameSpeed += 0.5;
+                    }
                 }
                 
-                output.textContent = `${name} joystick: X=${xPercent}%, Y=${yPercent}% | Box: ${Math.round(boxX)}, ${Math.round(boxY)}`;
+                // Check collision
+                if (
+                    bird.x < pipes[i].x + pipeWidth &&
+                    bird.x + bird.width > pipes[i].x &&
+                    (bird.y < pipes[i].topHeight || bird.y + bird.height > pipes[i].topHeight + pipeGap)
+                ) {
+                    gameOver();
+                    return;
+                }
+                
+                // Remove off-screen pipes
+                if (pipes[i].x + pipeWidth < 0) {
+                    pipes.splice(i, 1);
+                }
             }
-
-            joystick.addEventListener('touchstart', (e) => {
+        }
+        
+        // Render game
+        function render() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw background
+            ctx.fillStyle = '#87CEEB';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw ground
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+            
+            // Draw bird
+            ctx.fillStyle = bird.color;
+            ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
+            
+            // Draw eye
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(bird.x + 30, bird.y + 10, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(bird.x + 30, bird.y + 10, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw beak
+            ctx.fillStyle = '#FFA500';
+            ctx.beginPath();
+            ctx.moveTo(bird.x + 40, bird.y + 15);
+            ctx.lineTo(bird.x + 50, bird.y + 15);
+            ctx.lineTo(bird.x + 40, bird.y + 20);
+            ctx.fill();
+            
+            // Draw pipes
+            ctx.fillStyle = '#2E8B57';
+            pipes.forEach(pipe => {
+                // Top pipe
+                ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+                
+                // Bottom pipe
+                ctx.fillRect(pipe.x, pipe.topHeight + pipeGap, pipeWidth, canvas.height - pipe.topHeight - pipeGap);
+            });
+        }
+        
+        // Create new pipe
+        function createPipe() {
+            const minHeight = 50;
+            const maxHeight = canvas.height - pipeGap - minHeight - 20; // 20 for ground
+            const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+            
+            pipes.push({
+                x: canvas.width,
+                topHeight,
+                passed: false
+            });
+        }
+        
+        // Game over
+        function gameOver() {
+            gameRunning = false;
+            finalScoreDisplay.textContent = score;
+            gameOverScreen.style.display = 'block';
+            
+            if (score > highScore) {
+                highScore = score;
+            }
+        }
+        
+        // Jump function
+        function jump() {
+            if (gameRunning) {
+                bird.velocity = bird.jumpForce;
+            }
+        }
+        
+        // Initialize controller
+        function initController() {
+            const joystickLeft = document.getElementById('joystick-left');
+            const crossButton = document.getElementById('cross');
+            const psButton = document.getElementById('ps-button');
+            
+            // Joystick control
+            let touchId = null;
+            let joystickActive = false;
+            
+            function handleJoystickMove(clientX, clientY) {
+                if (!joystickActive) return;
+                
+                const rect = joystickLeft.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const maxDistance = rect.width / 2;
+                
+                const deltaX = clientX - centerX;
+                const deltaY = clientY - centerY;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                
+                // Limit movement
+                const moveDistance = Math.min(distance, maxDistance);
+                const angle = Math.atan2(deltaY, deltaX);
+                const moveX = moveDistance * Math.cos(angle);
+                const moveY = moveDistance * Math.sin(angle);
+                
+                // Update joystick position
+                joystickLeft.style.transform = `translate(calc(-50% + ${moveX}px), calc(50% + ${moveY}px)`;
+                
+                // Control bird with vertical movement
+                if (gameRunning) {
+                    bird.velocity = (moveY / maxDistance) * 15; // Scale the effect
+                }
+            }
+            
+            joystickLeft.addEventListener('touchstart', (e) => {
                 if (touchId === null) {
                     const touch = e.changedTouches[0];
                     touchId = touch.identifier;
-                    output.textContent = `${name} joystick engaged`;
-                    updateJoystickPosition(touch);
+                    joystickActive = true;
+                    handleJoystickMove(touch.clientX, touch.clientY);
                     e.preventDefault();
                 }
             });
-
+            
             document.addEventListener('touchmove', (e) => {
                 if (touchId !== null) {
-                    // Find our touch
-                    let touch = null;
                     for (let i = 0; i < e.changedTouches.length; i++) {
                         if (e.changedTouches[i].identifier === touchId) {
-                            touch = e.changedTouches[i];
+                            handleJoystickMove(e.changedTouches[i].clientX, e.changedTouches[i].clientY);
+                            e.preventDefault();
                             break;
                         }
-                    }
-                    
-                    if (touch) {
-                        updateJoystickPosition(touch);
-                        e.preventDefault();
                     }
                 }
             }, { passive: false });
-
+            
             document.addEventListener('touchend', (e) => {
                 if (touchId !== null) {
-                    // Find our touch
-                    let touch = null;
                     for (let i = 0; i < e.changedTouches.length; i++) {
                         if (e.changedTouches[i].identifier === touchId) {
-                            touch = e.changedTouches[i];
+                            touchId = null;
+                            joystickActive = false;
+                            joystickLeft.style.transform = 'translate(-50%, 50%)';
+                            e.preventDefault();
                             break;
                         }
                     }
-                    
-                    if (touch) {
-                        touchId = null;
-                        moveX = 0;
-                        moveY = 0;
-                        joystick.style.transform = 'translate(-50%, -50%)';
-                        
-                        // Smooth stop for left joystick
-                        if (name === 'Left') {
-                            boxVelocityX *= 0.5;
-                            boxVelocityY *= 0.5;
-                        }
-                        
-                        output.textContent = `${name} joystick released`;
-                        setTimeout(() => {
-                            output.textContent = 'Touch and drag the left joystick to move';
-                        }, 1000);
-                        e.preventDefault();
-                    }
+                }
+            });
+            
+            // Button controls
+            crossButton.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                jump();
+                crossButton.style.transform = 'translateY(2px)';
+                crossButton.style.backgroundColor = '#0066cc';
+            });
+            
+            crossButton.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                crossButton.style.transform = '';
+                crossButton.style.backgroundColor = '#3333ff';
+            });
+            
+            psButton.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (!gameRunning) {
+                    initGame();
+                }
+                psButton.style.transform = 'translateY(2px)';
+                psButton.style.backgroundColor = '#0066cc';
+            });
+            
+            psButton.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                psButton.style.transform = '';
+                psButton.style.backgroundColor = '#444';
+            });
+            
+            // Keyboard fallback for testing
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    jump();
                 }
             });
         }
-
-        setupMobileJoystick(joystickLeft, 'Left');
-        setupMobileJoystick(joystickRight, 'Right');
+        
+        // Start game when button clicked
+        startButton.addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            initGame();
+        });
+        
+        restartButton.addEventListener('click', () => {
+            gameOverScreen.style.display = 'none';
+            initGame();
+        });
+        
+        // Initialize everything
+        resizeCanvas();
+        initController();
     </script>
 </body>
 </html>
