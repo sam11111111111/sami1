@@ -21,30 +21,13 @@
             overflow: hidden;
             height: 100vh;
             display: flex;
-            flex-direction: row;
-        }
-
-        .orientation-warning {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            color: white;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            z-index: 100;
-            padding: 20px;
-            font-size: 1.5rem;
+            flex-direction: column;
         }
 
         .game-container {
             position: relative;
-            width: 70%;
-            height: 100vh;
+            width: 100%;
+            flex-grow: 1;
             overflow: hidden;
             background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 100%);
         }
@@ -59,22 +42,24 @@
 
         .controller {
             position: relative;
-            width: 30%;
-            height: 100vh;
+            width: 100%;
+            height: 30vh;
+            min-height: 200px;
             background-color: #333;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
         }
 
         /* Controller body shape */
         .controller:before {
             content: '';
             position: absolute;
-            top: -10px;
-            left: 30px;
-            width: calc(100% - 60px);
-            height: calc(100% + 20px);
+            top: 30px;
+            left: -10px;
+            width: calc(100% + 20px);
+            height: calc(100% - 60px);
             background-color: #222;
-            border-radius: 0 0 50px 50px;
+            border-radius: 50px 50px 0 0;
         }
 
         /* Light bar */
@@ -95,7 +80,7 @@
             top: 30px;
             left: 50%;
             transform: translateX(-50%);
-            width: 60%;
+            width: 30%;
             height: 12vh;
             background-color: #111;
             border-radius: 5px;
@@ -104,16 +89,18 @@
         /* Left joystick */
         .joystick-left {
             position: absolute;
-            top: 25%;
-            left: 25%;
-            width: 10vw;
-            height: 10vw;
+            bottom: 30%;
+            left: 20%;
+            width: 12vw;
+            height: 12vw;
             max-width: 80px;
             max-height: 80px;
             background-color: #111;
             border-radius: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, 50%);
             touch-action: none;
+            will-change: transform;
+            transition: transform 0.05s linear;
         }
 
         .joystick-left:before {
@@ -130,16 +117,18 @@
         /* Right joystick */
         .joystick-right {
             position: absolute;
-            top: 25%;
-            right: 25%;
-            width: 10vw;
-            height: 10vw;
+            bottom: 30%;
+            right: 20%;
+            width: 12vw;
+            height: 12vw;
             max-width: 80px;
             max-height: 80px;
             background-color: #111;
             border-radius: 50%;
-            transform: translate(50%, -50%);
+            transform: translate(50%, 50%);
             touch-action: none;
+            will-change: transform;
+            transition: transform 0.05s linear;
         }
 
         .joystick-right:before {
@@ -156,13 +145,13 @@
         /* D-pad */
         .dpad {
             position: absolute;
-            top: 60%;
-            left: 20%;
+            bottom: 60%;
+            left: 15%;
             width: 15vw;
             height: 15vw;
             max-width: 100px;
             max-height: 100px;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
         }
 
         .dpad-up, .dpad-down, .dpad-left, .dpad-right {
@@ -200,13 +189,13 @@
         /* Action buttons */
         .action-buttons {
             position: absolute;
-            top: 60%;
-            right: 20%;
+            bottom: 60%;
+            right: 15%;
             width: 15vw;
             height: 15vw;
             max-width: 100px;
             max-height: 100px;
-            transform: translate(50%, -50%);
+            transform: translateX(50%);
         }
 
         .button {
@@ -220,6 +209,7 @@
             align-items: center;
             font-weight: bold;
             transition: all 0.1s;
+            will-change: transform;
         }
 
         .button-triangle {
@@ -314,7 +304,7 @@
         /* PS button */
         .ps-button {
             position: absolute;
-            bottom: 10%;
+            bottom: 15%;
             left: 50%;
             transform: translateX(-50%);
             width: 8vw;
@@ -393,16 +383,71 @@
             margin-top: 20px;
             cursor: pointer;
         }
+
+        @media (orientation: landscape) {
+            body {
+                flex-direction: row;
+            }
+            
+            .game-container {
+                width: 70%;
+                height: 100vh;
+            }
+            
+            .controller {
+                width: 30%;
+                height: 100vh;
+                min-height: auto;
+                border-radius: 0;
+            }
+            
+            .controller:before {
+                top: -10px;
+                left: 30px;
+                width: calc(100% - 60px);
+                height: calc(100% + 20px);
+                border-radius: 0 0 50px 50px;
+            }
+            
+            .joystick-left {
+                bottom: 20%;
+                left: 25%;
+                transform: translate(-50%, 50%);
+            }
+            
+            .joystick-right {
+                bottom: 20%;
+                right: 25%;
+                transform: translate(50%, 50%);
+            }
+            
+            .dpad {
+                bottom: 45%;
+                left: 20%;
+            }
+            
+            .action-buttons {
+                bottom: 45%;
+                right: 20%;
+            }
+            
+            .options-button {
+                top: 30%;
+                right: 20%;
+            }
+            
+            .share-button {
+                top: 30%;
+                left: 20%;
+            }
+            
+            .ps-button {
+                bottom: 10%;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="orientation-warning" id="orientation-warning">
-        <div>
-            <h2>Please rotate your device to landscape mode</h2>
-            <p>This game only works in landscape orientation</p>
-        </div>
-    </div>
-
     <div class="game-container">
         <canvas id="game-canvas"></canvas>
         <div class="score-display" id="score-display">0</div>
@@ -416,6 +461,7 @@
             <p>Use the controller to play</p>
             <p>Left Joystick: Move bird</p>
             <p>X Button: Jump</p>
+            <p>Triangle: Super Jump</p>
             <button class="start-button" id="start-button">Start Game</button>
         </div>
     </div>
@@ -454,20 +500,6 @@
     </div>
 
     <script>
-        // Check orientation
-        const orientationWarning = document.getElementById('orientation-warning');
-        function checkOrientation() {
-            if (window.innerHeight > window.innerWidth) {
-                orientationWarning.style.display = 'flex';
-            } else {
-                orientationWarning.style.display = 'none';
-            }
-        }
-        
-        // Initial check
-        checkOrientation();
-        window.addEventListener('resize', checkOrientation);
-        
         // Game variables
         const canvas = document.getElementById('game-canvas');
         const ctx = canvas.getContext('2d');
@@ -536,7 +568,7 @@
             requestAnimationFrame(gameLoop);
         }
         
-        // Game loop (optimized for performance)
+        // Optimized game loop
         function gameLoop(timestamp) {
             if (!gameRunning) return;
             
@@ -615,7 +647,7 @@
             }
         }
         
-        // Render game (optimized)
+        // Optimized render function
         function render() {
             // Clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -692,6 +724,13 @@
             }
         }
         
+        // Super jump function
+        function superJump() {
+            if (gameRunning) {
+                bird.velocity = bird.jumpForce * 1.5;
+            }
+        }
+        
         // Initialize controller with all buttons
         function initController() {
             const buttons = {
@@ -717,48 +756,34 @@
             const joystickLeft = document.getElementById('joystick-left');
             let touchId = null;
             let joystickActive = false;
-            let joystickCenterX = 0;
-            let joystickCenterY = 0;
-            let joystickMaxDistance = 0;
             
-            function updateJoystickPosition() {
-                const rect = joystickLeft.getBoundingClientRect();
-                joystickCenterX = rect.left + rect.width / 2;
-                joystickCenterY = rect.top + rect.height / 2;
-                joystickMaxDistance = rect.width / 2;
-            }
-            
-            // Initial position update
-            updateJoystickPosition();
-            
-            // Handle joystick movement with throttled updates
-            let lastJoystickUpdate = 0;
             function handleJoystickMove(clientX, clientY) {
                 if (!joystickActive || !gameRunning) return;
                 
-                const now = performance.now();
-                if (now - lastJoystickUpdate < 16) return; // Limit to ~60fps
-                lastJoystickUpdate = now;
+                const rect = joystickLeft.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const maxDistance = rect.width / 2;
                 
-                const deltaX = clientX - joystickCenterX;
-                const deltaY = clientY - joystickCenterY;
+                const deltaX = clientX - centerX;
+                const deltaY = clientY - centerY;
                 const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
                 
                 // Limit movement and apply easing
-                const moveDistance = Math.min(distance, joystickMaxDistance);
-                const normalized = moveDistance / joystickMaxDistance;
+                const moveDistance = Math.min(distance, maxDistance);
+                const normalized = moveDistance / maxDistance;
                 const eased = normalized * normalized; // Quadratic easing
-                const effectiveDistance = eased * joystickMaxDistance;
+                const effectiveDistance = eased * maxDistance;
                 
                 const angle = Math.atan2(deltaY, deltaX);
                 const moveX = effectiveDistance * Math.cos(angle);
                 const moveY = effectiveDistance * Math.sin(angle);
                 
                 // Update joystick position
-                joystickLeft.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px)`;
+                joystickLeft.style.transform = `translate(calc(-50% + ${moveX}px), calc(50% + ${moveY}px)`;
                 
                 // Control bird with vertical movement
-                bird.velocity = (moveY / joystickMaxDistance) * 15;
+                bird.velocity = (moveY / maxDistance) * 15;
             }
             
             // Touch event handlers
@@ -778,7 +803,6 @@
                     ) {
                         touchId = touch.identifier;
                         joystickActive = true;
-                        updateJoystickPosition();
                         handleJoystickMove(touchX, touchY);
                         e.preventDefault();
                     }
@@ -803,7 +827,7 @@
                         if (e.changedTouches[i].identifier === touchId) {
                             touchId = null;
                             joystickActive = false;
-                            joystickLeft.style.transform = 'translate(-50%, -50%)';
+                            joystickLeft.style.transform = 'translate(-50%, 50%)';
                             e.preventDefault();
                             return;
                         }
@@ -818,7 +842,7 @@
             document.addEventListener('touchcancel', handleTouchEnd, { passive: false });
             
             // Button controls
-            function setupButton(button, action) {
+            function setupButton(button, action, releaseAction = null) {
                 button.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     action();
@@ -828,6 +852,7 @@
                 
                 button.addEventListener('touchend', (e) => {
                     e.preventDefault();
+                    if (releaseAction) releaseAction();
                     button.style.transform = '';
                     if (button === buttons.cross) {
                         button.style.backgroundColor = '#3333ff';
@@ -845,39 +870,30 @@
             
             // Assign actions to buttons
             setupButton(buttons.cross, jump);
-            setupButton(buttons.triangle, () => {
-                if (gameRunning) bird.velocity = bird.jumpForce * 1.5; // Super jump
-            });
-            setupButton(buttons.psButton, () => {
-                if (!gameRunning) initGame();
-            });
-            
-            // D-pad controls
-            setupButton(buttons.dpadUp, () => {
-                if (gameRunning) bird.velocity = bird.jumpForce;
-            });
+            setupButton(buttons.triangle, superJump);
+            setupButton(buttons.dpadUp, jump);
             setupButton(buttons.dpadDown, () => {
                 if (gameRunning) bird.velocity = 5; // Fast drop
             });
             
-            // Shoulder buttons for restart
-            setupButton(buttons.l1, () => {
-                if (!gameRunning) initGame();
-            });
-            setupButton(buttons.r1, () => {
-                if (!gameRunning) initGame();
-            });
-            
-            // Touchpad for restart
-            buttons.touchpad.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (!gameRunning) initGame();
-                buttons.touchpad.style.backgroundColor = '#0066cc';
+            // Restart buttons
+            const restartActions = [buttons.psButton, buttons.l1, buttons.r1, buttons.touchpad];
+            restartActions.forEach(button => {
+                setupButton(button, () => {
+                    if (!gameRunning) initGame();
+                });
             });
             
-            buttons.touchpad.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                buttons.touchpad.style.backgroundColor = '#111';
+            // Other buttons
+            setupButton(buttons.square, () => {
+                if (gameRunning) bird.velocity = 0; // Stop vertical movement
+            });
+            
+            setupButton(buttons.circle, () => {
+                if (gameRunning) {
+                    // Toggle gravity (fun effect)
+                    bird.gravity = bird.gravity === 0.5 ? -0.5 : 0.5;
+                }
             });
         }
         
