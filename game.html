@@ -43,8 +43,8 @@
         .controller {
             position: relative;
             width: 100%;
-            height: 35vh;
-            min-height: 250px;
+            height: 30vh;
+            min-height: 220px;
             background-color: #333;
             border-radius: 20px 20px 0 0;
             box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
@@ -54,10 +54,10 @@
         .controller:before {
             content: '';
             position: absolute;
-            top: 30px;
+            top: 20px;
             left: -10px;
             width: calc(100% + 20px);
-            height: calc(100% - 60px);
+            height: calc(100% - 40px);
             background-color: #222;
             border-radius: 50px 50px 0 0;
         }
@@ -65,42 +65,42 @@
         /* Light bar */
         .light-bar {
             position: absolute;
-            top: 15px;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
             width: 40%;
-            height: 8px;
+            height: 6px;
             background-color: #0066cc;
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
-        /* Touchpad - now a start button */
+        /* Smaller touchpad */
         .touchpad {
             position: absolute;
-            top: 30px;
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
-            width: 40%;
-            height: 15vh;
+            width: 30%;
+            height: 10vh;
             background-color: #111;
             border-radius: 5px;
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
-            font-size: 4vw;
+            font-size: 3.5vw;
             font-weight: bold;
         }
 
-        /* Larger joysticks */
+        /* Joysticks */
         .joystick-left {
             position: absolute;
-            bottom: 30%;
+            bottom: 25%;
             left: 20%;
-            width: 16vw;
-            height: 16vw;
-            max-width: 100px;
-            max-height: 100px;
+            width: 18vw;
+            height: 18vw;
+            max-width: 90px;
+            max-height: 90px;
             background-color: #111;
             border-radius: 50%;
             transform: translate(-50%, 50%);
@@ -122,18 +122,16 @@
 
         .joystick-right {
             position: absolute;
-            bottom: 30%;
+            bottom: 25%;
             right: 20%;
-            width: 16vw;
-            height: 16vw;
-            max-width: 100px;
-            max-height: 100px;
+            width: 18vw;
+            height: 18vw;
+            max-width: 90px;
+            max-height: 90px;
             background-color: #111;
             border-radius: 50%;
             transform: translate(50%, 50%);
             touch-action: none;
-            will-change: transform;
-            transition: transform 0.05s linear;
         }
 
         .joystick-right:before {
@@ -152,10 +150,10 @@
             position: absolute;
             bottom: 60%;
             left: 15%;
-            width: 22vw;
-            height: 22vw;
-            max-width: 140px;
-            max-height: 140px;
+            width: 24vw;
+            height: 24vw;
+            max-width: 110px;
+            max-height: 110px;
             transform: translateX(-50%);
         }
 
@@ -196,10 +194,10 @@
             position: absolute;
             bottom: 60%;
             right: 15%;
-            width: 22vw;
-            height: 22vw;
-            max-width: 140px;
-            max-height: 140px;
+            width: 24vw;
+            height: 24vw;
+            max-width: 110px;
+            max-height: 110px;
             transform: translateX(50%);
         }
 
@@ -215,14 +213,13 @@
             font-weight: bold;
             transition: all 0.1s;
             will-change: transform;
-            font-size: 6vw;
         }
 
         .button-triangle {
             top: 0;
             left: 30%;
             background-color: #ff3333;
-            font-size: 7vw;
+            font-size: 8vw;
         }
 
         .button-circle {
@@ -236,7 +233,7 @@
             bottom: 0;
             left: 30%;
             background-color: #3333ff;
-            font-size: 6vw;
+            font-size: 7vw;
         }
 
         .button-square {
@@ -250,9 +247,9 @@
         .shoulder-left, .shoulder-right {
             position: absolute;
             width: 25%;
-            height: 4vh;
+            height: 3.5vh;
             background-color: #111;
-            border-radius: 10px 10px 0 0;
+            border-radius: 8px 8px 0 0;
             transition: all 0.1s;
         }
 
@@ -270,53 +267,53 @@
         .trigger-left, .trigger-right {
             position: absolute;
             width: 20%;
-            height: 5vh;
+            height: 4vh;
             background-color: #111;
-            border-radius: 0 0 10px 10px;
+            border-radius: 0 0 8px 8px;
             transition: all 0.1s;
         }
 
         .trigger-left {
-            top: 4vh;
+            top: 3.5vh;
             left: 17%;
         }
 
         .trigger-right {
-            top: 4vh;
+            top: 3.5vh;
             right: 17%;
         }
 
         /* Options and share buttons */
         .options-button, .share-button {
             position: absolute;
-            width: 12vw;
-            height: 4vh;
-            max-width: 70px;
+            width: 10vw;
+            height: 3vh;
+            max-width: 50px;
             background-color: #444;
-            border-radius: 5px;
+            border-radius: 4px;
             transition: all 0.1s;
         }
 
         .options-button {
-            top: 40%;
+            top: 35%;
             right: 15%;
         }
 
         .share-button {
-            top: 40%;
+            top: 35%;
             left: 15%;
         }
 
         /* PS button */
         .ps-button {
             position: absolute;
-            bottom: 15%;
+            bottom: 12%;
             left: 50%;
             transform: translateX(-50%);
-            width: 10vw;
-            height: 10vw;
-            max-width: 60px;
-            max-height: 60px;
+            width: 9vw;
+            height: 9vw;
+            max-width: 50px;
+            max-height: 50px;
             background-color: #444;
             border-radius: 50%;
             display: flex;
@@ -324,7 +321,7 @@
             align-items: center;
             color: white;
             font-weight: bold;
-            font-size: 4vw;
+            font-size: 3.5vw;
             transition: all 0.1s;
         }
 
@@ -340,11 +337,11 @@
 
         .score-display {
             position: absolute;
-            top: 20px;
+            top: 15px;
             left: 50%;
             transform: translateX(-50%);
             color: white;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             z-index: 10;
@@ -357,8 +354,8 @@
             transform: translate(-50%, -50%);
             background-color: rgba(0,0,0,0.8);
             color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 8px;
             text-align: center;
             display: none;
             z-index: 100;
@@ -377,16 +374,18 @@
             align-items: center;
             color: white;
             z-index: 100;
+            text-align: center;
+            padding: 15px;
         }
 
-        .start-button {
+        .restart-button {
             background-color: #0066cc;
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 8px;
+            margin-top: 15px;
             cursor: pointer;
         }
 
@@ -418,85 +417,75 @@
             .joystick-left {
                 bottom: 20%;
                 left: 25%;
-                transform: translate(-50%, 50%);
-                width: 12vh;
-                height: 12vh;
-                max-width: 120px;
-                max-height: 120px;
+                width: 14vh;
+                height: 14vh;
+                max-width: 100px;
+                max-height: 100px;
             }
             
             .joystick-right {
                 bottom: 20%;
                 right: 25%;
-                transform: translate(50%, 50%);
-                width: 12vh;
-                height: 12vh;
-                max-width: 120px;
-                max-height: 120px;
+                width: 14vh;
+                height: 14vh;
+                max-width: 100px;
+                max-height: 100px;
             }
             
             .dpad {
                 bottom: 45%;
                 left: 20%;
-                width: 18vh;
-                height: 18vh;
-                max-width: 160px;
-                max-height: 160px;
+                width: 16vh;
+                height: 16vh;
+                max-width: 120px;
+                max-height: 120px;
             }
             
             .action-buttons {
                 bottom: 45%;
                 right: 20%;
-                width: 18vh;
-                height: 18vh;
-                max-width: 160px;
-                max-height: 160px;
-            }
-            
-            .button {
-                font-size: 5vh;
+                width: 16vh;
+                height: 16vh;
+                max-width: 120px;
+                max-height: 120px;
             }
             
             .button-triangle {
                 font-size: 6vh;
             }
             
-            .options-button {
-                top: 30%;
-                right: 20%;
-                width: 10vh;
-                max-width: 80px;
+            .button-cross {
+                font-size: 5vh;
             }
             
-            .share-button {
-                top: 30%;
-                left: 20%;
-                width: 10vh;
-                max-width: 80px;
+            .button-circle, .button-square {
+                font-size: 4.5vh;
+            }
+            
+            .options-button, .share-button {
+                width: 8vh;
+                max-width: 60px;
             }
             
             .ps-button {
-                bottom: 10%;
-                width: 8vh;
-                height: 8vh;
-                max-width: 80px;
-                max-height: 80px;
+                width: 7vh;
+                height: 7vh;
+                max-width: 60px;
+                max-height: 60px;
                 font-size: 3vh;
             }
             
             .shoulder-left, .shoulder-right {
-                width: 25%;
-                height: 5vh;
+                height: 4vh;
             }
             
             .trigger-left, .trigger-right {
-                width: 20%;
-                height: 6vh;
+                height: 4.5vh;
             }
             
             .touchpad {
                 font-size: 3vh;
-                height: 12vh;
+                height: 10vh;
             }
         }
     </style>
@@ -508,20 +497,20 @@
         <div class="game-over" id="game-over">
             <h2>Game Over!</h2>
             <p>Your score: <span id="final-score">0</span></p>
-            <button id="restart-button">Play Again</button>
+            <button class="restart-button" id="restart-button">Play Again</button>
         </div>
         <div class="start-screen" id="start-screen">
             <h1>Flappy Bird</h1>
             <p>Use the controller to play</p>
-            <p>Move left joystick to start</p>
-            <p>X Button: Jump</p>
-            <p>Triangle: Super Jump</p>
+            <p>Move left joystick or touch any button to start</p>
+            <p>✕ Button: Jump</p>
+            <p>△ Button: Super Jump</p>
         </div>
     </div>
 
     <div class="controller">
         <div class="light-bar"></div>
-        <div class="touchpad" id="touchpad">Touch to Start</div>
+        <div class="touchpad" id="touchpad">START</div>
         
         <div class="joystick-left" id="joystick-left"></div>
         <div class="joystick-right" id="joystick-right"></div>
@@ -776,6 +765,8 @@
         function jump() {
             if (gameRunning) {
                 bird.velocity = bird.jumpForce;
+            } else {
+                initGame();
             }
         }
         
@@ -783,6 +774,8 @@
         function superJump() {
             if (gameRunning) {
                 bird.velocity = bird.jumpForce * 1.5;
+            } else {
+                initGame();
             }
         }
         
@@ -940,15 +933,23 @@
                 if (gameRunning) bird.velocity = 5; // Fast drop
             });
             
-            // Restart buttons
-            const restartActions = [buttons.psButton, buttons.l1, buttons.r1, buttons.touchpad];
-            restartActions.forEach(button => {
-                setupButton(button, () => {
-                    if (!gameRunning) initGame();
+            // All buttons can start the game
+            const allButtons = [
+                buttons.cross, buttons.triangle, buttons.circle, buttons.square,
+                buttons.dpadUp, buttons.dpadDown, buttons.dpadLeft, buttons.dpadRight,
+                buttons.l1, buttons.r1, buttons.l2, buttons.r2,
+                buttons.options, buttons.share, buttons.psButton, buttons.touchpad
+            ];
+            
+            allButtons.forEach(button => {
+                button.addEventListener('touchstart', () => {
+                    if (!gameRunning) {
+                        initGame();
+                    }
                 });
             });
             
-            // Other buttons
+            // Other button functions
             setupButton(buttons.square, () => {
                 if (gameRunning) bird.velocity = 0; // Stop vertical movement
             });
