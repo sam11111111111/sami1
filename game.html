@@ -43,8 +43,8 @@
         .controller {
             position: relative;
             width: 100%;
-            height: 35vh; /* Increased height for larger buttons */
-            min-height: 250px; /* Larger minimum height */
+            height: 35vh;
+            min-height: 250px;
             background-color: #333;
             border-radius: 20px 20px 0 0;
             box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
@@ -74,7 +74,7 @@
             border-radius: 4px;
         }
 
-        /* Touchpad - made larger */
+        /* Touchpad - now a start button */
         .touchpad {
             position: absolute;
             top: 30px;
@@ -84,6 +84,12 @@
             height: 15vh;
             background-color: #111;
             border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 4vw;
+            font-weight: bold;
         }
 
         /* Larger joysticks */
@@ -146,10 +152,10 @@
             position: absolute;
             bottom: 60%;
             left: 15%;
-            width: 20vw;
-            height: 20vw;
-            max-width: 120px;
-            max-height: 120px;
+            width: 22vw;
+            height: 22vw;
+            max-width: 140px;
+            max-height: 140px;
             transform: translateX(-50%);
         }
 
@@ -190,10 +196,10 @@
             position: absolute;
             bottom: 60%;
             right: 15%;
-            width: 20vw;
-            height: 20vw;
-            max-width: 120px;
-            max-height: 120px;
+            width: 22vw;
+            height: 22vw;
+            max-width: 140px;
+            max-height: 140px;
             transform: translateX(50%);
         }
 
@@ -209,38 +215,42 @@
             font-weight: bold;
             transition: all 0.1s;
             will-change: transform;
-            font-size: 5vw;
+            font-size: 6vw;
         }
 
         .button-triangle {
             top: 0;
             left: 30%;
             background-color: #ff3333;
+            font-size: 7vw;
         }
 
         .button-circle {
             top: 30%;
             right: 0;
             background-color: #33aa33;
+            font-size: 6vw;
         }
 
         .button-cross {
             bottom: 0;
             left: 30%;
             background-color: #3333ff;
+            font-size: 6vw;
         }
 
         .button-square {
             top: 30%;
             left: 0;
             background-color: #ffcc00;
+            font-size: 6vw;
         }
 
-        /* Larger shoulder buttons */
+        /* Smaller shoulder buttons */
         .shoulder-left, .shoulder-right {
             position: absolute;
-            width: 30%;
-            height: 6vh;
+            width: 25%;
+            height: 4vh;
             background-color: #111;
             border-radius: 10px 10px 0 0;
             transition: all 0.1s;
@@ -256,27 +266,27 @@
             right: 15%;
         }
 
-        /* Larger triggers */
+        /* Smaller triggers */
         .trigger-left, .trigger-right {
             position: absolute;
-            width: 25%;
-            height: 7vh;
+            width: 20%;
+            height: 5vh;
             background-color: #111;
             border-radius: 0 0 10px 10px;
             transition: all 0.1s;
         }
 
         .trigger-left {
-            top: 6vh;
+            top: 4vh;
             left: 17%;
         }
 
         .trigger-right {
-            top: 6vh;
+            top: 4vh;
             right: 17%;
         }
 
-        /* Larger options and share buttons */
+        /* Options and share buttons */
         .options-button, .share-button {
             position: absolute;
             width: 12vw;
@@ -297,7 +307,7 @@
             left: 15%;
         }
 
-        /* Larger PS button */
+        /* PS button */
         .ps-button {
             position: absolute;
             bottom: 15%;
@@ -428,23 +438,27 @@
             .dpad {
                 bottom: 45%;
                 left: 20%;
-                width: 15vh;
-                height: 15vh;
-                max-width: 150px;
-                max-height: 150px;
+                width: 18vh;
+                height: 18vh;
+                max-width: 160px;
+                max-height: 160px;
             }
             
             .action-buttons {
                 bottom: 45%;
                 right: 20%;
-                width: 15vh;
-                height: 15vh;
-                max-width: 150px;
-                max-height: 150px;
+                width: 18vh;
+                height: 18vh;
+                max-width: 160px;
+                max-height: 160px;
             }
             
             .button {
-                font-size: 4vh;
+                font-size: 5vh;
+            }
+            
+            .button-triangle {
+                font-size: 6vh;
             }
             
             .options-button {
@@ -472,12 +486,17 @@
             
             .shoulder-left, .shoulder-right {
                 width: 25%;
-                height: 7vh;
+                height: 5vh;
             }
             
             .trigger-left, .trigger-right {
                 width: 20%;
-                height: 8vh;
+                height: 6vh;
+            }
+            
+            .touchpad {
+                font-size: 3vh;
+                height: 12vh;
             }
         }
     </style>
@@ -494,16 +513,15 @@
         <div class="start-screen" id="start-screen">
             <h1>Flappy Bird</h1>
             <p>Use the controller to play</p>
-            <p>Left Joystick: Move bird</p>
+            <p>Move left joystick to start</p>
             <p>X Button: Jump</p>
             <p>Triangle: Super Jump</p>
-            <button class="start-button" id="start-button">Start Game</button>
         </div>
     </div>
 
     <div class="controller">
         <div class="light-bar"></div>
-        <div class="touchpad" id="touchpad"></div>
+        <div class="touchpad" id="touchpad">Touch to Start</div>
         
         <div class="joystick-left" id="joystick-left"></div>
         <div class="joystick-right" id="joystick-right"></div>
@@ -543,7 +561,7 @@
         const finalScoreDisplay = document.getElementById('final-score');
         const restartButton = document.getElementById('restart-button');
         const startScreen = document.getElementById('start-screen');
-        const startButton = document.getElementById('start-button');
+        const touchpad = document.getElementById('touchpad');
         
         // Game state
         let gameRunning = false;
@@ -551,6 +569,7 @@
         let highScore = 0;
         let lastFrameTime = 0;
         let gameSpeed = 2;
+        let joystickMoved = false;
         
         // Bird properties
         const bird = {
@@ -596,6 +615,7 @@
             gameSpeed = 2;
             scoreDisplay.textContent = '0';
             gameOverScreen.style.display = 'none';
+            startScreen.style.display = 'none';
             gameRunning = true;
             
             // Start game loop
@@ -793,7 +813,7 @@
             let joystickActive = false;
             
             function handleJoystickMove(clientX, clientY) {
-                if (!joystickActive || !gameRunning) return;
+                if (!joystickActive) return;
                 
                 const rect = joystickLeft.getBoundingClientRect();
                 const centerX = rect.left + rect.width / 2;
@@ -817,8 +837,17 @@
                 // Update joystick position
                 joystickLeft.style.transform = `translate(calc(-50% + ${moveX}px), calc(50% + ${moveY}px)`;
                 
+                // Start game if not running and joystick moved
+                if (!gameRunning && !joystickMoved && distance > 10) {
+                    joystickMoved = true;
+                    initGame();
+                    return;
+                }
+                
                 // Control bird with vertical movement
-                bird.velocity = (moveY / maxDistance) * 15;
+                if (gameRunning) {
+                    bird.velocity = (moveY / maxDistance) * 15;
+                }
             }
             
             // Touch event handlers
@@ -931,12 +960,6 @@
                 }
             });
         }
-        
-        // Start game when button clicked
-        startButton.addEventListener('click', () => {
-            startScreen.style.display = 'none';
-            initGame();
-        });
         
         restartButton.addEventListener('click', () => {
             gameOverScreen.style.display = 'none';
