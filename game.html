@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS4 Controller Simulator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .controller {
+            position: relative;
+            width: 500px;
+            height: 300px;
+            background-color: #333;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Controller body shape */
+        .controller:before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: -20px;
+            width: 540px;
+            height: 200px;
+            background-color: #222;
+            border-radius: 100px;
+        }
+
+        /* Light bar */
+        .light-bar {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 10px;
+            background-color: #0066cc;
+            border-radius: 5px;
+        }
+
+        /* Touchpad */
+        .touchpad {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 80px;
+            background-color: #111;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .touchpad:active {
+            background-color: #0066cc;
+        }
+
+        /* Left joystick */
+        .joystick-left {
+            position: absolute;
+            top: 120px;
+            left: 80px;
+            width: 60px;
+            height: 60px;
+            background-color: #111;
+            border-radius: 50%;
+        }
+
+        .joystick-left:before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 30px;
+            height: 30px;
+            background-color: #444;
+            border-radius: 50%;
+        }
+
+        /* Right joystick */
+        .joystick-right {
+            position: absolute;
+            top: 120px;
+            right: 80px;
+            width: 60px;
+            height: 60px;
+            background-color: #111;
+            border-radius: 50%;
+        }
+
+        .joystick-right:before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 30px;
+            height: 30px;
+            background-color: #444;
+            border-radius: 50%;
+        }
+
+        /* D-pad */
+        .dpad {
+            position: absolute;
+            top: 200px;
+            left: 60px;
+            width: 80px;
+            height: 80px;
+        }
+
+        .dpad-up, .dpad-down, .dpad-left, .dpad-right {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #111;
+        }
+
+        .dpad-up {
+            top: 0;
+            left: 25px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .dpad-down {
+            bottom: 0;
+            left: 25px;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .dpad-left {
+            top: 25px;
+            left: 0;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .dpad-right {
+            top: 25px;
+            right: 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            position: absolute;
+            top: 200px;
+            right: 60px;
+            width: 120px;
+            height: 120px;
+        }
+
+        .button {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .button-triangle {
+            top: 0;
+            left: 40px;
+            background-color: #ff3333;
+        }
+
+        .button-circle {
+            top: 40px;
+            right: 0;
+            background-color: #33aa33;
+        }
+
+        .button-cross {
+            bottom: 0;
+            left: 40px;
+            background-color: #3333ff;
+        }
+
+        .button-square {
+            top: 40px;
+            left: 0;
+            background-color: #ffcc00;
+        }
+
+        /* Shoulder buttons */
+        .shoulder-left, .shoulder-right {
+            position: absolute;
+            width: 100px;
+            height: 30px;
+            background-color: #111;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .shoulder-left {
+            top: 0;
+            left: 80px;
+        }
+
+        .shoulder-right {
+            top: 0;
+            right: 80px;
+        }
+
+        /* Triggers */
+        .trigger-left, .trigger-right {
+            position: absolute;
+            width: 60px;
+            height: 40px;
+            background-color: #111;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .trigger-left {
+            top: 30px;
+            left: 90px;
+        }
+
+        .trigger-right {
+            top: 30px;
+            right: 90px;
+        }
+
+        /* Options and Share buttons */
+        .options-button, .share-button {
+            position: absolute;
+            width: 30px;
+            height: 15px;
+            background-color: #444;
+            border-radius: 5px;
+        }
+
+        .options-button {
+            top: 120px;
+            right: 180px;
+        }
+
+        .share-button {
+            top: 120px;
+            left: 180px;
+        }
+
+        /* PS button */
+        .ps-button {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: #444;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        /* Active state for buttons */
+        .button:active, .dpad-up:active, .dpad-down:active, 
+        .dpad-left:active, .dpad-right:active, .shoulder-left:active, 
+        .shoulder-right:active, .trigger-left:active, .trigger-right:active,
+        .options-button:active, .share-button:active, .ps-button:active {
+            background-color: #0066cc;
+            transform: translateY(2px);
+        }
+
+        /* Output display */
+        .output {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="controller">
+        <div class="light-bar"></div>
+        <div class="touchpad" id="touchpad"></div>
+        
+        <div class="joystick-left" id="joystick-left"></div>
+        <div class="joystick-right" id="joystick-right"></div>
+        
+        <div class="dpad">
+            <div class="dpad-up" id="dpad-up"></div>
+            <div class="dpad-down" id="dpad-down"></div>
+            <div class="dpad-left" id="dpad-left"></div>
+            <div class="dpad-right" id="dpad-right"></div>
+        </div>
+        
+        <div class="action-buttons">
+            <div class="button button-triangle" id="triangle">△</div>
+            <div class="button button-circle" id="circle">○</div>
+            <div class="button button-cross" id="cross">✕</div>
+            <div class="button button-square" id="square">□</div>
+        </div>
+        
+        <div class="shoulder-left" id="l1"></div>
+        <div class="shoulder-right" id="r1"></div>
+        
+        <div class="trigger-left" id="l2"></div>
+        <div class="trigger-right" id="r2"></div>
+        
+        <div class="options-button" id="options"></div>
+        <div class="share-button" id="share"></div>
+        
+        <div class="ps-button" id="ps-button">PS</div>
+        
+        <div class="output" id="output">Press any button...</div>
+    </div>
+
+    <script>
+        // Get all button elements
+        const buttons = {
+            triangle: document.getElementById('triangle'),
+            circle: document.getElementById('circle'),
+            cross: document.getElementById('cross'),
+            square: document.getElementById('square'),
+            dpadUp: document.getElementById('dpad-up'),
+            dpadDown: document.getElementById('dpad-down'),
+            dpadLeft: document.getElementById('dpad-left'),
+            dpadRight: document.getElementById('dpad-right'),
+            l1: document.getElementById('l1'),
+            r1: document.getElementById('r1'),
+            l2: document.getElementById('l2'),
+            r2: document.getElementById('r2'),
+            options: document.getElementById('options'),
+            share: document.getElementById('share'),
+            psButton: document.getElementById('ps-button'),
+            touchpad: document.getElementById('touchpad')
+        };
+
+        const output = document.getElementById('output');
+        const joystickLeft = document.getElementById('joystick-left');
+        const joystickRight = document.getElementById('joystick-right');
+
+        // Add event listeners to all buttons
+        Object.keys(buttons).forEach(button => {
+            buttons[button].addEventListener('mousedown', () => {
+                output.textContent = `Button pressed: ${button.toUpperCase()}`;
+            });
+            
+            buttons[button].addEventListener('mouseup', () => {
+                output.textContent = `Button released: ${button.toUpperCase()}`;
+                setTimeout(() => {
+                    output.textContent = 'Press any button...';
+                }, 1000);
+            });
+        });
+
+        // Joystick simulation
+        function setupJoystick(joystick, name) {
+            let isDragging = false;
+            let startX, startY;
+            const centerX = joystick.offsetLeft + 30;
+            const centerY = joystick.offsetTop + 30;
+            const maxDistance = 20;
+
+            joystick.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                output.textContent = `${name} joystick engaged`;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const deltaX = e.clientX - startX;
+                    const deltaY = e.clientY - startY;
+                    
+                    // Calculate distance from center
+                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    const angle = Math.atan2(deltaY, deltaX);
+                    
+                    // Limit movement
+                    const moveDistance = Math.min(distance, maxDistance);
+                    const moveX = moveDistance * Math.cos(angle);
+                    const moveY = moveDistance * Math.sin(angle);
+                    
+                    // Update position
+                    joystick.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                    
+                    // Update output
+                    const x = Math.round((moveX / maxDistance) * 100);
+                    const y = Math.round((moveY / maxDistance) * 100);
+                    output.textContent = `${name} joystick: X=${x}%, Y=${y}%`;
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    joystick.style.transform = 'translate(0, 0)';
+                    output.textContent = `${name} joystick released`;
+                    setTimeout(() => {
+                        output.textContent = 'Press any button...';
+                    }, 1000);
+                }
+            });
+        }
+
+        setupJoystick(joystickLeft, 'Left');
+        setupJoystick(joystickRight, 'Right');
+    </script>
+</body>
+</html>
