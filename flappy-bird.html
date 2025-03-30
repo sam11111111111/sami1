@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flappy Bird - PS4 Controller</title>
+    <style>
+        * {
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            flex-grow: 1;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 100%);
+        }
+
+        #game-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .controller {
+            position: relative;
+            width: 100%;
+            height: 30vh;
+            min-height: 220px;
+            background-color: #333;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Controller body shape */
+        .controller:before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: -10px;
+            width: calc(100% + 20px);
+            height: calc(100% - 40px);
+            background-color: #222;
+            border-radius: 50px 50px 0 0;
+        }
+
+        /* Light bar */
+        .light-bar {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 6px;
+            background-color: #0066cc;
+            border-radius: 3px;
+        }
+
+        /* Smaller touchpad */
+        .touchpad {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30%;
+            height: 10vh;
+            background-color: #111;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 3.5vw;
+            font-weight: bold;
+        }
+
+        /* Joysticks */
+        .joystick-left {
+            position: absolute;
+            bottom: 25%;
+            left: 20%;
+            width: 18vw;
+            height: 18vw;
+            max-width: 90px;
+            max-height: 90px;
+            background-color: #111;
+            border-radius: 50%;
+            transform: translate(-50%, 50%);
+            touch-action: none;
+            will-change: transform;
+            transition: transform 0.05s linear;
+        }
+
+        .joystick-left:before {
+            content: '';
+            position: absolute;
+            top: 25%;
+            left: 25%;
+            width: 50%;
+            height: 50%;
+            background-color: #444;
+            border-radius: 50%;
+        }
+
+        .joystick-right {
+            position: absolute;
+            bottom: 25%;
+            right: 20%;
+            width: 18vw;
+            height: 18vw;
+            max-width: 90px;
+            max-height: 90px;
+            background-color: #111;
+            border-radius: 50%;
+            transform: translate(50%, 50%);
+            touch-action: none;
+        }
+
+        .joystick-right:before {
+            content: '';
+            position: absolute;
+            top: 25%;
+            left: 25%;
+            width: 50%;
+            height: 50%;
+            background-color: #444;
+            border-radius: 50%;
+        }
+
+        /* Larger D-pad */
+        .dpad {
+            position: absolute;
+            bottom: 60%;
+            left: 15%;
+            width: 24vw;
+            height: 24vw;
+            max-width: 110px;
+            max-height: 110px;
+            transform: translateX(-50%);
+        }
+
+        .dpad-up, .dpad-down, .dpad-left, .dpad-right {
+            position: absolute;
+            width: 40%;
+            height: 40%;
+            background-color: #111;
+            transition: background-color 0.1s;
+        }
+
+        .dpad-up {
+            top: 0;
+            left: 30%;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .dpad-down {
+            bottom: 0;
+            left: 30%;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .dpad-left {
+            top: 30%;
+            left: 0;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .dpad-right {
+            top: 30%;
+            right: 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        /* Larger action buttons */
+        .action-buttons {
+            position: absolute;
+            bottom: 60%;
+            right: 15%;
+            width: 24vw;
+            height: 24vw;
+            max-width: 110px;
+            max-height: 110px;
+            transform: translateX(50%);
+        }
+
+        .button {
+            position: absolute;
+            width: 45%;
+            height: 45%;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            transition: all 0.1s;
+            will-change: transform;
+        }
+
+        .button-triangle {
+            top: 0;
+            left: 30%;
+            background-color: #ff3333;
+            font-size: 8vw;
+        }
+
+        .button-circle {
+            top: 30%;
+            right: 0;
+            background-color: #33aa33;
+            font-size: 6vw;
+        }
+
+        .button-cross {
+            bottom: 0;
+            left: 30%;
+            background-color: #3333ff;
+            font-size: 7vw;
+        }
+
+        .button-square {
+            top: 30%;
+            left: 0;
+            background-color: #ffcc00;
+            font-size: 6vw;
+        }
+
+        /* Smaller triggers */
+        .trigger-left, .trigger-right {
+            position: absolute;
+            width: 20%;
+            height: 4vh;
+            background-color: #111;
+            border-radius: 0 0 8px 8px;
+            transition: all 0.1s;
+        }
+
+        .trigger-left {
+            top: 3.5vh;
+            left: 17%;
+        }
+
+        .trigger-right {
+            top: 3.5vh;
+            right: 17%;
+        }
+
+        /* Options and share buttons */
+        .options-button, .share-button {
+            position: absolute;
+            width: 10vw;
+            height: 3vh;
+            max-width: 50px;
+            background-color: #444;
+            border-radius: 4px;
+            transition: all 0.1s;
+        }
+
+        .options-button {
+            top: 40%;
+            right: 20%;
+        }
+
+        .share-button {
+            top: 40%;
+            left: 20%;
+        }
+
+        /* PS button */
+        .ps-button {
+            position: absolute;
+            bottom: 12%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 9vw;
+            height: 9vw;
+            max-width: 50px;
+            max-height: 50px;
+            background-color: #444;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 3.5vw;
+            transition: all 0.1s;
+        }
+
+        /* Active state for buttons */
+        .button:active, .dpad-up:active, .dpad-down:active, 
+        .dpad-left:active, .dpad-right:active, .trigger-left:active, 
+        .trigger-right:active, .options-button:active, .share-button:active, 
+        .ps-button:active, .touchpad:active {
+            background-color: #0066cc;
+            transform: translateY(2px);
+        }
+
+        .score-display {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            z-index: 100;
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 100;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .restart-button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 8px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        @media (orientation: landscape) {
+            body {
+                flex-direction: row;
+            }
+            
+            .game-container {
+                width: 70%;
+                height: 100vh;
+            }
+            
+            .controller {
+                width: 30%;
+                height: 100vh;
+                min-height: auto;
+                border-radius: 0;
+            }
+            
+            .controller:before {
+                top: -10px;
+                left: 30px;
+                width: calc(100% - 60px);
+                height: calc(100% + 20px);
+                border-radius: 0 0 50px 50px;
+            }
+            
+            .joystick-left {
+                bottom: 20%;
+                left: 25%;
+                width: 14vh;
+                height: 14vh;
+                max-width: 100px;
+                max-height: 100px;
+            }
+            
+            .joystick-right {
+                bottom: 20%;
+                right: 25%;
+                width: 14vh;
+                height: 14vh;
+                max-width: 100px;
+                max-height: 100px;
+            }
+            
+            .dpad {
+                bottom: 45%;
+                left: 20%;
+                width: 16vh;
+                height: 16vh;
+                max-width: 120px;
+                max-height: 120px;
+            }
+            
+            .action-buttons {
+                bottom: 45%;
+                right: 20%;
+                width: 16vh;
+                height: 16vh;
+                max-width: 120px;
+                max-height: 120px;
+            }
+            
+            .button-triangle {
+                font-size: 6vh;
+            }
+            
+            .button-cross {
+                font-size: 5.5vh;
+            }
+            
+            .button-circle, .button-square {
+                font-size: 5.5vh;
+            }
+            
+            .options-button, .share-button {
+                width: 8vh;
+                max-width: 60px;
+            }
+            
+            .ps-button {
+                width: 7vh;
+                height: 7vh;
+                max-width: 60px;
+                max-height: 60px;
+                font-size: 3vh;
+            }
+            
+            .trigger-left, .trigger-right {
+                height: 4.5vh;
+            }
+            
+            .touchpad {
+                font-size: 3vh;
+                height: 10vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <canvas id="game-canvas"></canvas>
+        <div class="score-display" id="score-display">0</div>
+        <div class="game-over" id="game-over">
+            <h2>Game Over!</h2>
+            <p>Your score: <span id="final-score">0</span></p>
+            <button class="restart-button" id="restart-button">Play Again</button>
+        </div>
+        <div class="start-screen" id="start-screen">
+            <h1>Flappy Bird</h1>
+            <p>Use the controller to play</p>
+            <p>Move left joystick or touch any button to start</p>
+            <p>✕ Button: Jump</p>
+            <p>△ Button: Super Jump</p>
+        </div>
+    </div>
+
+    <div class="controller">
+        <div class="light-bar"></div>
+        <div class="touchpad" id="touchpad">START</div>
+        
+        <div class="joystick-left" id="joystick-left"></div>
+        <div class="joystick-right" id="joystick-right"></div>
+        
+        <div class="dpad">
+            <div class="dpad-up" id="dpad-up"></div>
+            <div class="dpad-down" id="dpad-down"></div>
+            <div class="dpad-left" id="dpad-left"></div>
+            <div class="dpad-right" id="dpad-right"></div>
+        </div>
+        
+        <div class="action-buttons">
+            <div class="button button-triangle" id="triangle">△</div>
+            <div class="button button-circle" id="circle">○</div>
+            <div class="button button-cross" id="cross">✕</div>
+            <div class="button button-square" id="square">□</div>
+        </div>
+        
+        <div class="trigger-left" id="l2"></div>
+        <div class="trigger-right" id="r2"></div>
+        
+        <div class="options-button" id="options"></div>
+        <div class="share-button" id="share"></div>
+        
+        <div class="ps-button" id="ps-button">PS</div>
+    </div>
+
+    <script>
+        // Game variables
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score-display');
+        const gameOverScreen = document.getElementById('game-over');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const restartButton = document.getElementById('restart-button');
+        const startScreen = document.getElementById('start-screen');
+        const touchpad = document.getElementById('touchpad');
+        const psButton = document.getElementById('ps-button');
+        
+        // Game state
+        let gameRunning = false;
+        let score = 0;
+        let highScore = 0;
+        let lastFrameTime = 0;
+        let gameSpeed = 2;
+        let joystickMoved = false;
+        
+        // Bird properties
+        const bird = {
+            x: 100,
+            y: 0,
+            width: 40,
+            height: 30,
+            velocity: 0,
+            gravity: 0.5,
+            jumpForce: -10,
+            color: '#FFD700'
+        };
+        
+        // Pipes
+        let pipes = [];
+        const pipeWidth = 80;
+        const pipeGap = 200;
+        let pipeTimer = 0;
+        const pipeInterval = 1500; // ms
+        
+        // Resize canvas to fit container
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            
+            // Reset bird position on resize
+            if (gameRunning) {
+                bird.y = canvas.height / 2;
+            }
+        }
+        
+        // Initialize game
+        function initGame() {
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            bird.y = canvas.height / 2;
+            bird.velocity = 0;
+            pipes = [];
+            score = 0;
+            pipeTimer = 0;
+            gameSpeed = 2;
+            scoreDisplay.textContent = '0';
+            gameOverScreen.style.display = 'none';
+            startScreen.style.display = 'none';
+            gameRunning = true;
+            
+            // Start game loop
+            lastFrameTime = performance.now();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Optimized game loop
+        function gameLoop(timestamp) {
+            if (!gameRunning) return;
+            
+            const deltaTime = timestamp - lastFrameTime;
+            lastFrameTime = timestamp;
+            
+            // Update game state in fixed steps for consistency
+            const fixedTimeStep = 16; // Target 60fps
+            let accumulatedTime = deltaTime;
+            
+            while (accumulatedTime >= fixedTimeStep) {
+                update(fixedTimeStep);
+                accumulatedTime -= fixedTimeStep;
+            }
+            
+            // Render at full frame rate for smoothness
+            render();
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Update game state
+        function update(deltaTime) {
+            // Update bird
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+            
+            // Check boundaries
+            if (bird.y < 0) {
+                bird.y = 0;
+                bird.velocity = 0;
+            }
+            
+            if (bird.y + bird.height > canvas.height) {
+                gameOver();
+                return;
+            }
+            
+            // Update pipes
+            pipeTimer += deltaTime;
+            if (pipeTimer > pipeInterval) {
+                createPipe();
+                pipeTimer = 0;
+            }
+            
+            // Move pipes and check collisions (optimized loop)
+            for (let i = 0, len = pipes.length; i < len; i++) {
+                pipes[i].x -= gameSpeed;
+                
+                // Check if bird passed the pipe
+                if (!pipes[i].passed && pipes[i].x + pipeWidth < bird.x) {
+                    pipes[i].passed = true;
+                    score++;
+                    scoreDisplay.textContent = score;
+                    
+                    // Increase difficulty
+                    if (score % 5 === 0) {
+                        gameSpeed += 0.5;
+                    }
+                }
+                
+                // Check collision
+                if (
+                    bird.x < pipes[i].x + pipeWidth &&
+                    bird.x + bird.width > pipes[i].x &&
+                    (bird.y < pipes[i].topHeight || bird.y + bird.height > pipes[i].topHeight + pipeGap)
+                ) {
+                    gameOver();
+                    return;
+                }
+            }
+            
+            // Remove off-screen pipes
+            while (pipes.length > 0 && pipes[0].x + pipeWidth < 0) {
+                pipes.shift();
+            }
+        }
+        
+        // Optimized render function
+        function render() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw background
+            ctx.fillStyle = '#87CEEB';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw ground
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+            
+            // Draw pipes first (behind bird)
+            ctx.fillStyle = '#2E8B57';
+            for (let i = 0, len = pipes.length; i < len; i++) {
+                const pipe = pipes[i];
+                // Top pipe
+                ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+                // Bottom pipe
+                ctx.fillRect(pipe.x, pipe.topHeight + pipeGap, pipeWidth, canvas.height - pipe.topHeight - pipeGap);
+            }
+            
+            // Draw bird
+            ctx.fillStyle = bird.color;
+            ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
+            
+            // Draw eye
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(bird.x + 30, bird.y + 10, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(bird.x + 30, bird.y + 10, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw beak
+            ctx.fillStyle = '#FFA500';
+            ctx.beginPath();
+            ctx.moveTo(bird.x + 40, bird.y + 15);
+            ctx.lineTo(bird.x + 50, bird.y + 15);
+            ctx.lineTo(bird.x + 40, bird.y + 20);
+            ctx.fill();
+        }
+        
+        // Create new pipe
+        function createPipe() {
+            const minHeight = 50;
+            const maxHeight = canvas.height - pipeGap - minHeight - 20; // 20 for ground
+            const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+            
+            pipes.push({
+                x: canvas.width,
+                topHeight,
+                passed: false
+            });
+        }
+        
+        // Game over
+        function gameOver() {
+            gameRunning = false;
+            finalScoreDisplay.textContent = score;
+            gameOverScreen.style.display = 'block';
+            
+            if (score > highScore) {
+                highScore = score;
+            }
+        }
+        
+        // Jump function
+        function jump() {
+            if (gameRunning) {
+                bird.velocity = bird.jumpForce;
+            } else {
+                initGame();
+            }
+        }
+        
+        // Super jump function
+        function superJump() {
+            if (gameRunning) {
+                bird.velocity = bird.jumpForce * 1.5;
+            } else {
+                initGame();
+            }
+        }
+        
+        // Initialize controller with all buttons
+        function initController() {
+            const buttons = {
+                triangle: document.getElementById('triangle'),
+                circle: document.getElementById('circle'),
+                cross: document.getElementById('cross'),
+                square: document.getElementById('square'),
+                dpadUp: document.getElementById('dpad-up'),
+                dpadDown: document.getElementById('dpad-down'),
+                dpadLeft: document.getElementById('dpad-left'),
+                dpadRight: document.getElementById('dpad-right'),
+                l2: document.getElementById('l2'),
+                r2: document.getElementById('r2'),
+                options: document.getElementById('options'),
+                share: document.getElementById('share'),
+                psButton: document.getElementById('ps-button'),
+                touchpad: document.getElementById('touchpad')
+            };
+            
+            // Joystick control (optimized for performance)
+            const joystickLeft = document.getElementById('joystick-left');
+            let touchId = null;
+            let joystickActive = false;
+            
+            function handleJoystickMove(clientX, clientY) {
+                if (!joystickActive) return;
+                
+                const rect = joystickLeft.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const maxDistance = rect.width / 2;
+                
+                const deltaX = clientX - centerX;
+                const deltaY = clientY - centerY;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                
+                // Limit movement and apply easing
+                const moveDistance = Math.min(distance, maxDistance);
+                const normalized = moveDistance / maxDistance;
+                const eased = normalized * normalized; // Quadratic easing
+                const effectiveDistance = eased * maxDistance;
+                
+                const angle = Math.atan2(deltaY, deltaX);
+                const moveX = effectiveDistance * Math.cos(angle);
+                const moveY = effectiveDistance * Math.sin(angle);
+                
+                // Update joystick position
+                joystickLeft.style.transform = `translate(calc(-50% + ${moveX}px), calc(50% + ${moveY}px)`;
+                
+                // Start game if not running and joystick moved
+                if (!gameRunning && !joystickMoved && distance > 10) {
+                    joystickMoved = true;
+                    initGame();
+                    return;
+                }
+                
+                // Control bird with vertical movement
+                if (gameRunning) {
+                    bird.velocity = (moveY / maxDistance) * 15;
+                }
+            }
+            
+            // Touch event handlers
+            function handleTouchStart(e) {
+                if (touchId === null) {
+                    const touch = e.changedTouches[0];
+                    const rect = joystickLeft.getBoundingClientRect();
+                    const touchX = touch.clientX;
+                    const touchY = touch.clientY;
+                    
+                    // Check if touch is within joystick area
+                    if (
+                        touchX >= rect.left && 
+                        touchX <= rect.right && 
+                        touchY >= rect.top && 
+                        touchY <= rect.bottom
+                    ) {
+                        touchId = touch.identifier;
+                        joystickActive = true;
+                        handleJoystickMove(touchX, touchY);
+                        e.preventDefault();
+                    }
+                }
+            }
+            
+            function handleTouchMove(e) {
+                if (touchId !== null) {
+                    for (let i = 0; i < e.changedTouches.length; i++) {
+                        if (e.changedTouches[i].identifier === touchId) {
+                            handleJoystickMove(e.changedTouches[i].clientX, e.changedTouches[i].clientY);
+                            e.preventDefault();
+                            return;
+                        }
+                    }
+                }
+            }
+            
+            function handleTouchEnd(e) {
+                if (touchId !== null) {
+                    for (let i = 0; i < e.changedTouches.length; i++) {
+                        if (e.changedTouches[i].identifier === touchId) {
+                            touchId = null;
+                            joystickActive = false;
+                            joystickLeft.style.transform = 'translate(-50%, 50%)';
+                            e.preventDefault();
+                            return;
+                        }
+                    }
+                }
+            }
+            
+            // Add event listeners with passive:false for better performance
+            joystickLeft.addEventListener('touchstart', handleTouchStart, { passive: false });
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            document.addEventListener('touchend', handleTouchEnd, { passive: false });
+            document.addEventListener('touchcancel', handleTouchEnd, { passive: false });
+            
+            // Button controls
+            function setupButton(button, action, releaseAction = null) {
+                button.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    action();
+                    button.style.transform = 'translateY(2px)';
+                    button.style.backgroundColor = '#0066cc';
+                });
+                
+                button.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    if (releaseAction) releaseAction();
+                    button.style.transform = '';
+                    if (button === buttons.cross) {
+                        button.style.backgroundColor = '#3333ff';
+                    } else if (button === buttons.triangle) {
+                        button.style.backgroundColor = '#ff3333';
+                    } else if (button === buttons.circle) {
+                        button.style.backgroundColor = '#33aa33';
+                    } else if (button === buttons.square) {
+                        button.style.backgroundColor = '#ffcc00';
+                    } else {
+                        button.style.backgroundColor = '';
+                    }
+                });
+            }
+            
+            // Assign actions to buttons
+            setupButton(buttons.cross, jump);
+            setupButton(buttons.triangle, superJump);
+            setupButton(buttons.dpadUp, jump);
+            setupButton(buttons.dpadDown, () => {
+                if (gameRunning) bird.velocity = 5; // Fast drop
+            });
+            
+            // All buttons can start the game
+            const allButtons = [
+                buttons.cross, buttons.triangle, buttons.circle, buttons.square,
+                buttons.dpadUp, buttons.dpadDown, buttons.dpadLeft, buttons.dpadRight,
+                buttons.l2, buttons.r2, buttons.options, buttons.share,
+                buttons.psButton, buttons.touchpad
+            ];
+            
+            allButtons.forEach(button => {
+                button.addEventListener('touchstart', () => {
+                    if (!gameRunning) {
+                        initGame();
+                    }
+                });
+            });
+            
+            // Other button functions
+            setupButton(buttons.square, () => {
+                if (gameRunning) bird.velocity = 0; // Stop vertical movement
+            });
+            
+            setupButton(buttons.circle, () => {
+                if (gameRunning) {
+                    // Toggle gravity (fun effect)
+                    bird.gravity = bird.gravity === 0.5 ? -0.5 : 0.5;
+                }
+            });
+            
+            // PS button to return to menu
+            buttons.psButton.addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+            
+            buttons.psButton.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                buttons.psButton.style.transform = 'translateY(2px)';
+                buttons.psButton.style.backgroundColor = '#0066cc';
+            });
+            
+            buttons.psButton.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                buttons.psButton.style.transform = '';
+                buttons.psButton.style.backgroundColor = '#444';
+                window.location.href = 'index.html';
+            });
+        }
+        
+        restartButton.addEventListener('click', () => {
+            gameOverScreen.style.display = 'none';
+            initGame();
+        });
+        
+        // Initialize everything
+        resizeCanvas();
+        initController();
+    </script>
+</body>
+</html>
