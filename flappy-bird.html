@@ -253,15 +253,31 @@
             transition: all 0.1s;
         }
 
-        .trigger-left {
-            top: 3.5vh;
-            left: 17%;
-        }
+     .trigger-left {
+    top: 3.5vh;
+    left: 10%;  /* Adjusted from 17% */
+    width: 15%; /* Adjusted from 20% */
+}
 
-        .trigger-right {
-            top: 3.5vh;
-            right: 17%;
-        }
+.trigger-right {
+    top: 3.5vh;
+    right: 10%; /* Adjusted from 17% */
+    width: 15%; /* Adjusted from 20% */
+}
+
+
+@media (orientation: landscape) {
+    .trigger-left {
+        left: 12%;
+        width: 13%;
+    }
+    
+    .trigger-right {
+        right: 12%;
+        width: 13%;
+    }
+}
+
 
         /* Options and share buttons */
         .options-button, .share-button {
@@ -934,7 +950,7 @@
             
             // PS button to return to menu
             buttons.psButton.addEventListener('click', () => {
-                window.location.href = 'index.html';
+                window.location.href = 'for_2.html';
             });
             
             buttons.psButton.addEventListener('touchstart', (e) => {
@@ -947,7 +963,7 @@
                 e.preventDefault();
                 buttons.psButton.style.transform = '';
                 buttons.psButton.style.backgroundColor = '#444';
-                window.location.href = 'index.html';
+                window.location.href = 'for_2.html';
             });
         }
         

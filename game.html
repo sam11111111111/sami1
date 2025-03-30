@@ -76,6 +76,11 @@
     </style>
 </head>
 <body>
+       <script>
+        // Apply saved background
+        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") })`;
+    </script>
+
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/1200px-Playstation_logo_colour.svg.png" class="controller-image" alt="PS Controller">
     
     <div class="game-selection">
@@ -90,14 +95,26 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById('game1').addEventListener('click', () => {
-            window.location.href = 'flappy-bird.html';
-        });
+<script>
+    let currentGame = 1;
+    
+    function rotateGame() {
+        currentGame = currentGame === 1 ? 2 : 1;
+        document.getElementById('game1').style.display = currentGame === 1 ? 'block' : 'none';
+        document.getElementById('game2').style.display = currentGame === 2 ? 'block' : 'none';
+    }
 
-        document.getElementById('game2').addEventListener('click', () => {
-            window.location.href = 'for-2.html';
-        });
-    </script>
+    // Initial setup
+    document.getElementById('game1').addEventListener('click', () => {
+        window.location.href = 'flappy-bird.html';
+    });
+
+    document.getElementById('game2').addEventListener('click', () => {
+        window.location.href = 'for-2.html';
+    });
+
+    // Rotate games every 3 seconds
+    setInterval(rotateGame, 3000);
+</script>
 </body>
 </html>
