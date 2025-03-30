@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Option 1: Include in HTML -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <title>Settings</title>
     <style>
         body {
@@ -39,9 +41,22 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        #menu{
+
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 50px;
+
+    color: white;
+}
     </style>
 </head>
 <body>
+   <a href="for_2.html" id="menu">  <i class="bi bi-arrow-left-short fs-1" ></i> </a>
+
+
+
     <div class="container">
         <h2>ማስተካከያ</h2>
         <label for="gamePrice">የጨዋታ ዋጋ (በጨዋታ):</label>
@@ -54,7 +69,7 @@
         <input type="number" id="savingPercentage" min="1" placeholder="Enter saving %">
 
         <button onclick="saveSettings()">Save Settings</button><br>
-        <a href="for_2.html"><button> Home </button></a>
+       <!-- <a href="for_2.html"><button> Home </button></a> -->
     </div>
 
 
