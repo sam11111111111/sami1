@@ -719,6 +719,7 @@
             
             // Draw background
             ctx.fillStyle = '#87CEEB';
+
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             // Draw ground
@@ -774,7 +775,7 @@
 
 
         const pipeImage = new Image();
-        pipeImage.src = "PS.png";  // Replace with your custom image path
+        pipeImage.src = "ps1.png";  // Replace with your custom image path
 
         function createPipe() {
             const minHeight = 50;
@@ -1003,6 +1004,9 @@
                     // Toggle gravity (fun effect)
                     bird.gravity = bird.gravity === 0.5 ? -0.5 : 0.5;
                 }
+            });
+             buttons.options.addEventListener('click', () => {
+                window.location.href = 'game.html';
             });
             
             // PS button to return to menu
