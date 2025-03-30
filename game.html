@@ -95,26 +95,14 @@
         </div>
     </div>
 
-<script>
-    let currentGame = 1;
-    
-    function rotateGame() {
-        currentGame = currentGame === 1 ? 2 : 1;
-        document.getElementById('game1').style.display = currentGame === 1 ? 'block' : 'none';
-        document.getElementById('game2').style.display = currentGame === 2 ? 'block' : 'none';
-    }
+    <script>
+        document.getElementById('game1').addEventListener('click', () => {
+            window.location.href = 'flappy-bird.html';
+        });
 
-    // Initial setup
-    document.getElementById('game1').addEventListener('click', () => {
-        window.location.href = 'flappy-bird.html';
-    });
-
-    document.getElementById('game2').addEventListener('click', () => {
-        window.location.href = 'for-2.html';
-    });
-
-    // Rotate games every 3 seconds
-    setInterval(rotateGame, 3000);
-</script>
+        document.getElementById('game2').addEventListener('click', () => {
+            window.location.href = 'for-2.html';
+        });
+    </script>
 </body>
 </html>

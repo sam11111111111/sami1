@@ -190,33 +190,34 @@
         }
 
         /* Larger action buttons */
-        .action-buttons {
-            position: absolute;
-            bottom: 60%;
-            right: 15%;
-            width: 24vw;
-            height: 24vw;
-            max-width: 110px;
-            max-height: 110px;
-            transform: translateX(50%);
-        }
+  .action-buttons {
+    position: absolute;
+    bottom: 60%;
+    right: 15%;
+    width: 30vw;  /* Increased from 24vw */
+    height: 30vw; /* Increased from 24vw */
+    max-width: 140px; /* Increased from 110px */
+    max-height: 140px; /* Increased from 110px */
+    transform: translateX(50%);
+}
 
-        .button {
-            position: absolute;
-            width: 45%;
-            height: 45%;
-            border-radius: 50%;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            transition: all 0.1s;
-            will-change: transform;
-        }
+    .button {
+    position: absolute;
+    width: 40%;  /* Reduced from 45% */
+    height: 40%; /* Reduced from 45% */
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    transition: all 0.1s;
+    will-change: transform;
+}
+
 
         .button-triangle {
-            top: 0;
+            top: 5%;
             left: 30%;
             background-color: #ff3333;
             font-size: 8vw;
@@ -224,13 +225,13 @@
 
         .button-circle {
             top: 30%;
-            right: 0;
+            right: 5%;
             background-color: #33aa33;
             font-size: 6vw;
         }
 
         .button-cross {
-            bottom: 0;
+            bottom: 5%;
             left: 30%;
             background-color: #3333ff;
             font-size: 7vw;
@@ -238,7 +239,7 @@
 
         .button-square {
             top: 30%;
-            left: 0;
+            left: 5%;
             background-color: #ffcc00;
             font-size: 6vw;
         }
@@ -502,10 +503,10 @@
             <div class="button button-cross" id="cross">✕</div>
             <div class="button button-square" id="square">□</div>
         </div>
-        
+       <!-- 
         <div class="trigger-left" id="l2"></div>
         <div class="trigger-right" id="r2"></div>
-        
+      -->  
         <div class="options-button" id="options"></div>
         <div class="share-button" id="share"></div>
         
@@ -750,8 +751,8 @@
                 dpadDown: document.getElementById('dpad-down'),
                 dpadLeft: document.getElementById('dpad-left'),
                 dpadRight: document.getElementById('dpad-right'),
-                l2: document.getElementById('l2'),
-                r2: document.getElementById('r2'),
+               // l2: document.getElementById('l2'),
+               // r2: document.getElementById('r2'),
                 options: document.getElementById('options'),
                 share: document.getElementById('share'),
                 psButton: document.getElementById('ps-button'),

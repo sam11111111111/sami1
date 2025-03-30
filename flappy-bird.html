@@ -201,36 +201,36 @@
             transform: translateX(50%);
         }
 
-        .button {
-            position: absolute;
-            width: 45%;
-            height: 45%;
-            border-radius: 50%;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            transition: all 0.1s;
-            will-change: transform;
-        }
-
+     .button {
+    position: absolute;
+    width: 40%;  /* Reduced from 45% */
+    height: 40%; /* Reduced from 45% */
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    transition: all 0.1s;
+    will-change: transform;
+}
         .button-triangle {
-            top: 0;
-            left: 30%;
+            
+              top: 5%;
+    left: 30%;
             background-color: #ff3333;
             font-size: 8vw;
         }
 
         .button-circle {
             top: 30%;
-            right: 0;
+            right: 5%;
             background-color: #33aa33;
             font-size: 6vw;
         }
 
         .button-cross {
-            bottom: 0;
+            bottom: 5%;
             left: 30%;
             background-color: #3333ff;
             font-size: 7vw;
@@ -238,10 +238,42 @@
 
         .button-square {
             top: 30%;
-            left: 0;
+            left: 5%;
             background-color: #ffcc00;
             font-size: 6vw;
         }
+
+
+
+/* Landscape adjustments */
+@media (orientation: landscape) {
+    .action-buttons {
+        width: 20vh;  /* Increased from 16vh */
+        height: 20vh; /* Increased from 16vh */
+        max-width: 150px;
+        max-height: 150px;
+    }
+    
+    .button-triangle {
+        font-size: 5vh; /* Adjusted from 6vh */
+        top: 7%;
+    }
+    
+    .button-circle {
+        font-size: 4.5vh; /* Adjusted from 5.5vh */
+        right: 7%;
+    }
+    
+    .button-cross {
+        font-size: 5vh; /* Adjusted from 5.5vh */
+        bottom: 7%;
+    }
+    
+    .button-square {
+        font-size: 4.5vh; /* Adjusted from 5.5vh */
+        left: 7%;
+    }
+}
 
         /* Smaller triggers */
         .trigger-left, .trigger-right {
@@ -519,10 +551,10 @@
             <div class="button button-cross" id="cross">✕</div>
             <div class="button button-square" id="square">□</div>
         </div>
-        
+        <!--
         <div class="trigger-left" id="l2"></div>
         <div class="trigger-right" id="r2"></div>
-        
+        -->
         <div class="options-button" id="options"></div>
         <div class="share-button" id="share"></div>
         
@@ -779,8 +811,8 @@
                 dpadDown: document.getElementById('dpad-down'),
                 dpadLeft: document.getElementById('dpad-left'),
                 dpadRight: document.getElementById('dpad-right'),
-                l2: document.getElementById('l2'),
-                r2: document.getElementById('r2'),
+               // l2: document.getElementById('l2'),
+                //r2: document.getElementById('r2'),
                 options: document.getElementById('options'),
                 share: document.getElementById('share'),
                 psButton: document.getElementById('ps-button'),
