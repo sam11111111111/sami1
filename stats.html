@@ -20,17 +20,30 @@
         .win { background-color: #4CAF50; color: white; }
         .lose { background-color: #ff5722; color: white; }
         .club-logo { width: 50px; height: 50px; margin-right: 10px; }
+
+             #menu{
+
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 46px;
+
+    color: white;
+}
     </style>
 </head>
 <body>
-    <h2>🏆 ክለቦች 🏆</h2>
-    <button onclick="window.location.href='register.html'">⬅️ ወደ ምዝገባ መመለስ</button>
+         <a href="register.html" id="menu">  <i class="bi bi-arrow-left-short fs-1" ></i> </a>
 
+
+
+    <h2>🏆 ክለቦች 🏆</h2>
+   
     <div id="playersContainer" class="container"></div>
 
        <script>
         // Apply saved background
-        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") || 'https://source.unsplash.com/1920x1080?nature'})`;
+        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage"))`;
     
         const clubs = {
             "Barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",

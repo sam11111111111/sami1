@@ -29,11 +29,7 @@
             background-color: #F6F0F0;
             color: #854836;
         }
-        #ll{
-            color: #FBF8EF;
-
-           font-size: 33px;  
-       }
+   
        p{
         font-size: 18px;
         background-color: #C7DB9C;
@@ -41,7 +37,15 @@
         border-radius: 30px;
        }
 
+     #menu{
 
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 46px;
+
+    color: white;
+}
     </style>
 </head>
 <body>
@@ -62,7 +66,7 @@
                 <!-- Club options will be populated here dynamically -->
             </select>
 
-            <button type="submit">ትመዘገባለህ</button>
+            <button type="submit">መመዝገብ</button>
         </form>
         <a href="stats.html"> <button id="lyew"> ልየው </button> </a>
 
@@ -73,11 +77,11 @@
             <p>ጠቅላላ ብር: <span id="totalAmount"></span> ብር</p>
         </div>
     
-        <a href="for_2.html"><i class="bi bi-skip-backward" id="ll"></i></a>
-   
+        <a href="for_2.html" id="menu">  <i class="bi bi-arrow-left-short fs-1" ></i> </a>
+
    <script>
         // Apply saved background
-        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") || 'https://source.unsplash.com/1920x1080?nature'})`;
+        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") })`;
   
      const clubs = {
              "Barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
