@@ -259,6 +259,16 @@
         z-index: 3000;
         pointer-events: auto;
       }
+
+      /* Controller status */
+      #controller-status {
+        position: absolute;
+        top: 50px;
+        left: 10px;
+        color: white;
+        font-size: 12px;
+        z-index: 3000;
+      }
     </style>
   </head>
 
@@ -285,6 +295,7 @@
 
     <button id="start-btn">START</button>
     <button id="mute-btn">MUTE</button>
+    <div id="controller-status"></div>
     
     <div id="controls">
       <div class="control-row">
@@ -324,8 +335,8 @@
 
           CAR: {
             src: "https://assets.codepen.io/155629/car04.png",
-            width: 40,
-            height: 30,
+            width: 60,
+            height: 40,
           },
 
           FINISH: {
@@ -394,7 +405,7 @@
       }
 
       // ------------------------------------------------------------
-      // Touch controls
+      // Touch controls and PS4 controller support
       // ------------------------------------------------------------
       
       const KEYS = {
@@ -410,8 +421,12 @@
       const downBtn = document.getElementById('down-btn');
       const startBtn = document.getElementById('start-btn');
       const muteBtn = document.getElementById('mute-btn');
+      const controllerStatus = document.getElementById('controller-status');
       
-      function setupTouchControls() {
+      let gamepadConnected = false;
+      let gamepadIndex = null;
+      
+      function setupControls() {
         // Touch start handlers
         leftBtn.addEventListener('touchstart', (e) => {
           e.preventDefault();
@@ -528,6 +543,54 @@
           audio.volume = audio.volume === 0 ? 1 : 0;
           muteBtn.textContent = audio.volume === 0 ? "UNMUTE" : "MUTE";
         });
+        
+        // Gamepad connection events
+        window.addEventListener("gamepadconnected", (e) => {
+          gamepadConnected = true;
+          gamepadIndex = e.gamepad.index;
+          controllerStatus.textContent = "PS4 Controller Connected";
+          setTimeout(() => {
+            controllerStatus.textContent = "";
+          }, 2000);
+        });
+
+        window.addEventListener("gamepaddisconnected", (e) => {
+          gamepadConnected = false;
+          gamepadIndex = null;
+          controllerStatus.textContent = "PS4 Controller Disconnected";
+          setTimeout(() => {
+            controllerStatus.textContent = "";
+          }, 2000);
+        });
+      }
+      
+      function updateGamepadControls() {
+        if (!gamepadConnected) return;
+        
+        const gamepad = navigator.getGamepads()[gamepadIndex];
+        if (!gamepad) return;
+        
+        // PS4 Controller Mapping:
+        // Left Stick X-axis (left/right)
+        KEYS.ArrowLeft = gamepad.axes[0] < -0.5;
+        KEYS.ArrowRight = gamepad.axes[0] > 0.5;
+        
+        // Right Trigger (R2) for acceleration - removed as requested
+        // KEYS.ArrowUp = gamepad.buttons[7].value > 0.5;
+        
+        // Left Trigger (L2) for brake - removed as requested
+        // KEYS.ArrowDown = gamepad.buttons[6].value > 0.5;
+        
+        // Cross button (button 0) for acceleration
+        KEYS.ArrowUp = gamepad.buttons[0].pressed;
+        
+        // Square button (button 2) for brake
+        KEYS.ArrowDown = gamepad.buttons[2].pressed;
+        
+        // Options button (button 9) to start game
+        if (gamepad.buttons[9].pressed && !inGame) {
+          startBtn.click();
+        }
       }
 
       // ------------------------------------------------------------
@@ -691,7 +754,7 @@
 
       // loop
       let then = timestamp();
-      const targetFrameRate = 1000 / 25; // in ms
+      const targetFrameRate = 1000 / 60; // Increased to 60fps for smoother gameplay
 
       let audio;
 
@@ -772,6 +835,9 @@
       // ------------------------------------------------------------
 
       function update(step) {
+        // Update gamepad controls
+        updateGamepadControls();
+        
         // prepare this iteration
         pos += speed;
         while (pos >= N * segL) pos -= N * segL;
@@ -783,23 +849,29 @@
         scoreVal += speed * step;
         countDown -= step;
 
-        // left / right position
+        // left / right position - smoother movement
         playerX -= (lines[startPos].curve / 5000) * step * speed;
 
-        if (KEYS.ArrowRight)
-          (hero.style.backgroundPosition = "-160px 0"),
-            (playerX += 0.007 * step * speed);
-        else if (KEYS.ArrowLeft)
-          (hero.style.backgroundPosition = "0 0"),
-            (playerX -= 0.007 * step * speed);
-        else hero.style.backgroundPosition = "-80px 0";
+        if (KEYS.ArrowRight) {
+          hero.style.backgroundPosition = "-160px 0";
+          playerX += 0.007 * step * speed * (speed / maxSpeed); // Speed-sensitive steering
+        } else if (KEYS.ArrowLeft) {
+          hero.style.backgroundPosition = "0 0";
+          playerX -= 0.007 * step * speed * (speed / maxSpeed); // Speed-sensitive steering
+        } else {
+          hero.style.backgroundPosition = "-80px 0";
+        }
 
         playerX = playerX.clamp(-3, 3);
 
-        // speed
-        if (inGame && KEYS.ArrowUp) speed = accelerate(speed, accel, step);
-        else if (KEYS.ArrowDown) speed = accelerate(speed, breaking, step);
-        else speed = accelerate(speed, decel, step);
+        // speed - smoother acceleration
+        if (inGame && KEYS.ArrowUp) {
+          speed = accelerate(speed, accel * (1 - speed/maxSpeed), step); // Progressive acceleration
+        } else if (KEYS.ArrowDown) {
+          speed = accelerate(speed, breaking, step);
+        } else {
+          speed = accelerate(speed, decel * (speed/maxSpeed), step); // Progressive deceleration
+        }
 
         if (Math.abs(playerX) > 0.55 && speed >= maxOffSpeed) {
           speed = accelerate(speed, offDecel, step);
@@ -818,7 +890,6 @@
         if (current.to <= scoreVal) {
           mapIndex++;
           sectionProg = 0;
-
           lines[endPos].special = map[mapIndex].special;
         }
 
@@ -1046,13 +1117,12 @@
           audio.load(ASSETS.AUDIO[key], key, (_) => 0)
         );
 
+        // Improved cars with better spacing
         cars.push(new Car(0, ASSETS.IMAGE.CAR, LANE.C));
-        cars.push(new Car(10, ASSETS.IMAGE.CAR, LANE.B));
-        cars.push(new Car(20, ASSETS.IMAGE.CAR, LANE.C));
-        cars.push(new Car(35, ASSETS.IMAGE.CAR, LANE.C));
-        cars.push(new Car(50, ASSETS.IMAGE.CAR, LANE.A));
+        cars.push(new Car(15, ASSETS.IMAGE.CAR, LANE.B));
+        cars.push(new Car(30, ASSETS.IMAGE.CAR, LANE.A));
+        cars.push(new Car(45, ASSETS.IMAGE.CAR, LANE.C));
         cars.push(new Car(60, ASSETS.IMAGE.CAR, LANE.B));
-        cars.push(new Car(70, ASSETS.IMAGE.CAR, LANE.A));
 
         for (let i = 0; i < N; i++) {
           var line = new Line();
@@ -1073,8 +1143,8 @@
         }
         updateHighscore();
 
-        // Setup touch controls
-        setupTouchControls();
+        // Setup controls
+        setupControls();
 
         reset();
 
