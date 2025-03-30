@@ -759,7 +759,7 @@
         }
         
         // Create new pipe
-        function createPipe() {
+        function createPipeeee() {
             const minHeight = 50;
             const maxHeight = canvas.height - pipeGap - minHeight - 20; // 20 for ground
             const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
@@ -771,6 +771,31 @@
             });
         }
         
+
+
+        const pipeImage = new Image();
+        pipeImage.src = "PS.png";  // Replace with your custom image path
+
+        function createPipe() {
+            const minHeight = 50;
+            const maxHeight = canvas.height - pipeGap - minHeight - 20;
+            const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+
+            pipes.push({
+                x: canvas.width,
+                topHeight: topHeight,
+                bottomHeight: canvas.height - topHeight - pipeGap - 20,
+            });
+        }
+
+        function drawPipes() {
+            pipes.forEach(pipe => {
+                ctx.drawImage(pipeImage, pipe.x, 0, pipeWidth, pipe.topHeight); // Top pipe
+                ctx.drawImage(pipeImage, pipe.x, canvas.height - pipe.bottomHeight, pipeWidth, pipe.bottomHeight); // Bottom pipe
+            });
+        }
+
+
         // Game over
         function gameOver() {
             gameRunning = false;
@@ -922,7 +947,7 @@
                 button.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     action();
-                    button.style.transform = 'translateY(2px)';
+                    button.style.transform = 'translateY(1px)';
                     button.style.backgroundColor = '#0066cc';
                 });
                 
