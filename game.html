@@ -243,26 +243,6 @@
             font-size: 6vw;
         }
 
-        /* Smaller shoulder buttons */
-        .shoulder-left, .shoulder-right {
-            position: absolute;
-            width: 25%;
-            height: 3.5vh;
-            background-color: #111;
-            border-radius: 8px 8px 0 0;
-            transition: all 0.1s;
-        }
-
-        .shoulder-left {
-            top: 0;
-            left: 15%;
-        }
-
-        .shoulder-right {
-            top: 0;
-            right: 15%;
-        }
-
         /* Smaller triggers */
         .trigger-left, .trigger-right {
             position: absolute;
@@ -325,12 +305,28 @@
             transition: all 0.1s;
         }
 
+        /* Game link button */
+        .game-link {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20%;
+            height: 3.5vh;
+            background-color: #111;
+            border-radius: 0 8px 0 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2.5vw;
+            transition: all 0.1s;
+        }
+
         /* Active state for buttons */
         .button:active, .dpad-up:active, .dpad-down:active, 
-        .dpad-left:active, .dpad-right:active, .shoulder-left:active, 
-        .shoulder-right:active, .trigger-left:active, .trigger-right:active,
-        .options-button:active, .share-button:active, .ps-button:active,
-        .touchpad:active {
+        .dpad-left:active, .dpad-right:active, .trigger-left:active, 
+        .trigger-right:active, .options-button:active, .share-button:active, 
+        .ps-button:active, .touchpad:active, .game-link:active {
             background-color: #0066cc;
             transform: translateY(2px);
         }
@@ -475,10 +471,6 @@
                 font-size: 3vh;
             }
             
-            .shoulder-left, .shoulder-right {
-                height: 4vh;
-            }
-            
             .trigger-left, .trigger-right {
                 height: 4.5vh;
             }
@@ -486,6 +478,12 @@
             .touchpad {
                 font-size: 3vh;
                 height: 10vh;
+            }
+            
+            .game-link {
+                width: 15%;
+                height: 4vh;
+                font-size: 2vh;
             }
         }
     </style>
@@ -529,16 +527,14 @@
             <div class="button button-square" id="square">□</div>
         </div>
         
-        <div class="shoulder-left" id="l1"></div>
-        <div class="shoulder-right" id="r1"></div>
-        
         <div class="trigger-left" id="l2"></div>
         <div class="trigger-right" id="r2"></div>
         
         <div class="options-button" id="options"></div>
         <div class="share-button" id="share"></div>
         
-        <div class="ps-button" id="ps-button"><a href="for-2.html"> PS</a></div>
+        <div class="game-link" id="game-link">Game 2</div>
+        <div class="ps-button" id="ps-button">PS</div>
     </div>
 
     <script>
@@ -551,6 +547,7 @@
         const restartButton = document.getElementById('restart-button');
         const startScreen = document.getElementById('start-screen');
         const touchpad = document.getElementById('touchpad');
+        const gameLink = document.getElementById('game-link');
         
         // Game state
         let gameRunning = false;
@@ -601,7 +598,7 @@
             pipes = [];
             score = 0;
             pipeTimer = 0;
-            gameSpeed = 2;
+            gameSpeed = 1;
             scoreDisplay.textContent = '0';
             gameOverScreen.style.display = 'none';
             startScreen.style.display = 'none';
@@ -790,14 +787,13 @@
                 dpadDown: document.getElementById('dpad-down'),
                 dpadLeft: document.getElementById('dpad-left'),
                 dpadRight: document.getElementById('dpad-right'),
-                l1: document.getElementById('l1'),
-                r1: document.getElementById('r1'),
                 l2: document.getElementById('l2'),
                 r2: document.getElementById('r2'),
                 options: document.getElementById('options'),
                 share: document.getElementById('share'),
                 psButton: document.getElementById('ps-button'),
-                touchpad: document.getElementById('touchpad')
+                touchpad: document.getElementById('touchpad'),
+                gameLink: document.getElementById('game-link')
             };
             
             // Joystick control (optimized for performance)
@@ -937,8 +933,8 @@
             const allButtons = [
                 buttons.cross, buttons.triangle, buttons.circle, buttons.square,
                 buttons.dpadUp, buttons.dpadDown, buttons.dpadLeft, buttons.dpadRight,
-                buttons.l1, buttons.r1, buttons.l2, buttons.r2,
-                buttons.options, buttons.share, buttons.psButton, buttons.touchpad
+                buttons.l2, buttons.r2, buttons.options, buttons.share, 
+                buttons.psButton, buttons.touchpad
             ];
             
             allButtons.forEach(button => {
@@ -959,6 +955,24 @@
                     // Toggle gravity (fun effect)
                     bird.gravity = bird.gravity === 0.5 ? -0.5 : 0.5;
                 }
+            });
+            
+            // Game link button
+            buttons.gameLink.addEventListener('click', () => {
+                window.location.href = 'for_2.html';
+            });
+            
+            buttons.gameLink.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                buttons.gameLink.style.transform = 'translateY(2px)';
+                buttons.gameLink.style.backgroundColor = '#0066cc';
+            });
+            
+            buttons.gameLink.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                buttons.gameLink.style.transform = '';
+                buttons.gameLink.style.backgroundColor = '#111';
+                window.location.href = 'for_2.html';
             });
         }
         
