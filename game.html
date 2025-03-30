@@ -87,9 +87,21 @@
                 gap: 50px;
             }
         }
+         #menu{
+
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 46px;
+
+    color: white;
+}
     </style>
 </head>
 <body>
+     <a href="for_2.html" id="menu">  <i class="bi bi-arrow-left-short fs-1" ></i> </a>
+
+
        <script>
         // Apply saved background
         document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") })`;
@@ -113,10 +125,7 @@
             <p>Car Game</p>
         </div>
 
-          <div class="game-option" id="game4">
-            <h2>Home</h2>
-            
-        </div>
+        
     </div>
 
     <script>
@@ -131,9 +140,7 @@
           document.getElementById('game3').addEventListener('click', () => {
             window.location.href = 'car.html';
         });
-             document.getElementById('game4').addEventListener('click', () => {
-            window.location.href = 'for_2.html';
-        });
+         
     </script>
 </body>
 </html>
