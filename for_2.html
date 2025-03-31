@@ -290,9 +290,16 @@ let timerDuration = parseInt(localStorage.getItem("timerDuration")) || 5;
 let savingPercentage = parseInt(localStorage.getItem("savingPercentage")) || 20;
 
 // Ensure UI reflects the stored values
-document.addEventListener("DOMContentLoaded", function() {
-    updateTotalRevenue();
-});
+document.addEventListener("DOMContentLoaded", function () {
+            let numPS = parseInt(localStorage.getItem("numPS")) || 3; // Default: 3 counters
+            const countersDiv = document.getElementById("counters");
+            countersDiv.innerHTML = ""; // Clear previous counters
+
+            for (let i = 1; i <= numPS; i++) {
+                createCounter(i);
+            }
+        });
+
 
      const numPS = 3;
     //const gamePrice = 7;
@@ -304,11 +311,13 @@ document.addEventListener("DOMContentLoaded", function() {
     let totalGamesPlayed = parseInt(localStorage.getItem("totalGamesPlayed")) || 0;
     let totalRevenue = parseInt(localStorage.getItem("totalRevenue")) || 0;
 
-    function createCounter(psNumber) {
-        let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
 
-        const counter = document.createElement("div");
-        counter.classList.add("counter");
+        function createCounter(psNumber) {
+            let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
+            let gamePrice = parseFloat(localStorage.getItem("gamePrice")) || 7;
+
+            const counter = document.createElement("div");
+               counter.classList.add("counter");
         counter.innerHTML = `
             <h3>🕹️ PS ${psNumber}</h3>
             <h2>ጨዋታ:</h2> <span id="count_${psNumber}">${count}</span>
@@ -365,6 +374,7 @@ function resetTimer(psNumber) {
 
 
 
+   
 function updateCount(psNumber, change) {
     let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
     count = Math.max(0, count + change);
@@ -384,12 +394,15 @@ function updateCount(psNumber, change) {
 }
 
 
+
+
     function resetCount(psNumber) {
         let count = parseInt(localStorage.getItem(`ps_${psNumber}_games`) || 0);
         localStorage.setItem(`ps_${psNumber}_games`, 0);
         document.getElementById(`count_${psNumber}`).innerText = 0;
         updatePrice(psNumber, count, 0);
     }
+
 
     function updatePrice(psNumber, oldCount, count) {
         let totalPrice = count * gamePrice;

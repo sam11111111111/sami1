@@ -68,6 +68,9 @@
         <label for="savingPercentage"> ቁጠባ %:</label>
         <input type="number" id="savingPercentage" min="1" placeholder="Enter saving %">
 
+<label for="numPS">📌 Enter Number of PlayStations: </label>
+<input type="number" id="numPS" min="1" max="10" placeholder="Enter count" required>
+
         <button onclick="saveSettings()">Save Settings</button><br>
        <!-- <a href="for_2.html"><button> Home </button></a> -->
     </div>
@@ -82,7 +85,21 @@
 
 
     <script>
+        
+ 
         function saveSettings() {
+
+
+
+   let numPS = document.getElementById("numPS").value;
+    if (numPS < 1) {
+        alert("❌ Minimum 1 PlayStation required!");
+        return;
+   }
+    localStorage.setItem("numPS", numPS);
+    alert(`✅ PlayStation Counter set to ${numPS}`);
+
+
             const gamePrice = document.getElementById("gamePrice").value;
             const timerDuration = document.getElementById("timerDuration").value;
             const savingPercentage = document.getElementById("savingPercentage").value;
@@ -91,7 +108,7 @@
             localStorage.setItem("timerDuration", timerDuration);
             localStorage.setItem("savingPercentage", savingPercentage);
             
-            alert("Settings saved successfully!");
+           // alert("Settings saved successfully!");
         }
 
         // Load saved settings
