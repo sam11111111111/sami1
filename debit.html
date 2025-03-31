@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💸 Player Debt Tracking</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center;
+            background-color: #222;
+            color: white;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100hv;
+        }
+
+        #debtList {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+
+        .player {
+            border-bottom: 1px solid white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .player:last-child {
+            border-bottom: none;
+        }
+
+        button {
+            padding: 5px 10px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .pay-btn { background-color: green; }
+        .clear-btn { background-color: red; }
+
+        #totalDebt {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: yellow;
+        }
+
+        a {
+            color: cyan;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+  <script>
+        // Apply saved background
+        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") })`;
+    </script>
+    <h2>💸 የተጫዋች ዕዳ  💸</h2>
+
+    <input type="text" id="playerName" placeholder="Enter Player Name">
+    <input type="number" id="debtAmount" placeholder="Debt Amount">
+    <button onclick="addPlayer()">➕ ተጫዋች ጨምር</button>
+
+    <div id="debtList"></div>
+
+    <p id="totalDebt">📉 ጠቅላላ ዕዳ: 0 ብር</p>
+
+    <a href="for_2.html">⬅ ተመለስ</a>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", loadDebts);
+
+        function addPlayer() {
+            let name = document.getElementById("playerName").value.trim();
+            let debt = parseFloat(document.getElementById("debtAmount").value) || 0;
+            if (name === "") {
+                alert("❌ Enter a player name!");
+                return;
+            }
+
+            let players1 = JSON.parse(localStorage.getItem("players1")) || [];
+           
+            let newPlayer = { name, debt, paid: 0 };
+            players1.push(newPlayer);
+            localStorage.setItem("players1", JSON.stringify(players1));
+
+            document.getElementById("playerName").value = "";
+            document.getElementById("debtAmount").value = "";
+            loadDebts();
+        }
+
+        function loadDebts() {
+            let players1 = JSON.parse(localStorage.getItem("players1")) || [];
+            let debtList = document.getElementById("debtList");
+            debtList.innerHTML = "";
+
+            let totalDebt = 0;
+
+            players1.forEach(player => {
+                let remainingDebt = player.debt - (player.paid || 0);
+                if (remainingDebt > 0) {
+                    totalDebt += remainingDebt;
+
+                    let div = document.createElement("div");
+                    div.classList.add("player");
+
+                    div.innerHTML = `
+                        <strong>🕹️ ${player.name}</strong><br>
+                        🔴 ጠቅላላ ዕዳ: <span id="debt_${player.name}">${player.debt}</span> ብር <br>
+                        🟢 የተከፈለ: <span id="paid_${player.name}">${player.paid}</span> ብር <br>
+                        📉 የቀረው: <span id="remaining_${player.name}">${remainingDebt}</span> ብር <br>
+                        <button onclick="payDebt('${player.name}')" class="pay-btn">💵 ክፍያ</button>
+                        <button onclick="clearDebt('${player.name}')" class="clear-btn">🗑️ ቻው</button>
+                    `;
+
+                    debtList.appendChild(div);
+                }
+            });
+
+            document.getElementById("totalDebt").innerText = `📉 ጠቅላላ ዕዳ: ${totalDebt} ብር`;
+        }
+
+        function payDebt(playerName) {
+            let players1 = JSON.parse(localStorage.getItem("players1")) || [];
+            let player = players1.find(p => p.name === playerName);
+            if (!player) return;
+
+            let payment = parseFloat(prompt("Enter Payment Amount:")) || 0;
+            player.paid = (player.paid || 0) + payment;
+
+            localStorage.setItem("players1", JSON.stringify(players1));
+            loadDebts();
+        }
+
+        function clearDebt(playerName) {
+            let players1 = JSON.parse(localStorage.getItem("players1")) || [];
+            let player = players1.find(p => p.name === playerName);
+            if (!player) return;
+
+            let confirmDelete = confirm(`እርግጠኛ ነዎት ማጽዳት ይፈልጋሉ ${player.name} ዕዳ?`);
+            if (!confirmDelete) return;
+
+            players1 = players1.filter(p => p.name !== playerName);
+            localStorage.setItem("players1", JSON.stringify(players1));
+
+            loadDebts();
+        }
+    </script>
+
+</body>
+</html>
