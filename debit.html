@@ -67,7 +67,7 @@
     </script>
     <h2>💸 የተጫዋች ዕዳ  💸</h2>
 
-    <input type="text" id="playerName" placeholder="Enter Player Name">
+    <input type="text" id="playerName12" placeholder="Enter Player Name">
     <input type="number" id="debtAmount" placeholder="Debt Amount">
     <button onclick="addPlayer()">➕ ተጫዋች ጨምር</button>
 
@@ -81,7 +81,7 @@
         document.addEventListener("DOMContentLoaded", loadDebts);
 
         function addPlayer() {
-            let name = document.getElementById("playerName").value.trim();
+            let name = document.getElementById("playerName12").value.trim();
             let debt = parseFloat(document.getElementById("debtAmount").value) || 0;
             if (name === "") {
                 alert("❌ Enter a player name!");
@@ -94,7 +94,7 @@
             players1.push(newPlayer);
             localStorage.setItem("players1", JSON.stringify(players1));
 
-            document.getElementById("playerName").value = "";
+            document.getElementById("playerName12").value = "";
             document.getElementById("debtAmount").value = "";
             loadDebts();
         }
@@ -130,9 +130,9 @@
             document.getElementById("totalDebt").innerText = `📉 ጠቅላላ ዕዳ: ${totalDebt} ብር`;
         }
 
-        function payDebt(playerName) {
+        function payDebt(playerName12) {
             let players1 = JSON.parse(localStorage.getItem("players1")) || [];
-            let player = players1.find(p => p.name === playerName);
+            let player = players1.find(p => p.name === playerName12);
             if (!player) return;
 
             let payment = parseFloat(prompt("Enter Payment Amount:")) || 0;
@@ -142,15 +142,15 @@
             loadDebts();
         }
 
-        function clearDebt(playerName) {
+        function clearDebt(playerName12) {
             let players1 = JSON.parse(localStorage.getItem("players1")) || [];
-            let player = players1.find(p => p.name === playerName);
+            let player = players1.find(p => p.name === playerName12);
             if (!player) return;
 
             let confirmDelete = confirm(`እርግጠኛ ነዎት ማጽዳት ይፈልጋሉ ${player.name} ዕዳ?`);
             if (!confirmDelete) return;
 
-            players1 = players1.filter(p => p.name !== playerName);
+            players1 = players1.filter(p => p.name !== playerName12);
             localStorage.setItem("players1", JSON.stringify(players1));
 
             loadDebts();
