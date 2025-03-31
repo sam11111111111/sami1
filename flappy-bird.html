@@ -760,7 +760,7 @@
         }
         
         // Create new pipe
-        function createPipeeee() {
+        function createPipe() {
             const minHeight = 50;
             const maxHeight = canvas.height - pipeGap - minHeight - 20; // 20 for ground
             const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
@@ -776,18 +776,7 @@
 
         const pipeImage = new Image();
         pipeImage.src = "ps1.png";  // Replace with your custom image path
-
-        function createPipe() {
-            const minHeight = 50;
-            const maxHeight = canvas.height - pipeGap - minHeight - 20;
-            const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
-
-            pipes.push({
-                x: canvas.width,
-                topHeight: topHeight,
-                bottomHeight: canvas.height - topHeight - pipeGap - 20,
-            });
-        }
+ 
 
         function drawPipes() {
             pipes.forEach(pipe => {
@@ -948,7 +937,7 @@
                 button.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     action();
-                    button.style.transform = 'translateY(1px)';
+                   // button.style.transform = 'translateY(1px)';
                     button.style.backgroundColor = '#0066cc';
                 });
                 
