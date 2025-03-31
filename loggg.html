@@ -91,18 +91,18 @@ button:hover {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    const validUsername = "jo";
-    const validPassword = "jo";
+    const validUsername = "J";
+   // const validPassword = "jo";
 
     console.log("Username:", username); // Debugging: check entered username
     console.log("Password:", password); // Debugging: check entered password
 
-    if (username === validUsername && password === validPassword) {
+    if (username === validUsername) {
         //alert("Login successful!");
         // Redirect to another page after successful login
         window.location.href = "for_2.html"; // Ensure this file exists
     } else {
-        document.getElementById("errorMessage").textContent = "Mayhonewn ";
+        document.getElementById("errorMessage").textContent = "ማይሆነውን 👮‍♂️🚔 ";
     }
 });
 
