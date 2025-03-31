@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Player Counter</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+
+        #playerName {
+            padding: 8px;
+            font-size: 14px;
+            width: 60%;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 4px;
+            margin: 5px;
+        }
+
+        #counters {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+            width: 300px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background-color: #333; 
+            border-radius: 8px; 
+            background-image: url('ps.png');}
+        }
+
+        .counter {
+            width: 200px; 
+            border: 2px solid #000; 
+            padding: 8px; 
+            margin: 6px; 
+            background-color: #f9f9f9;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        h3 { margin: 5px 0; font-size: 16px; }
+        h2 { font-size: 14px; }
+        span { font-weight: bold; font-size: 16px; }
+
+        .total-price {
+            font-size: 14px;
+            color: green;
+        }
+          .increase { background-color: #4CAF50; color: white; }
+        .decrease { background-color: #f44336; color: white; }
+        .reset {
+            background-color: #008CBA; 
+            color: white; 
+
+
+
+        }
+
+        .remove-btn {
+            color: red;
+            cursor: pointer;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+        #si{
+       position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    color: whitesmoke;
+}
+    </style>
+</head>
+<body>
+  <script>
+        // Apply saved background
+        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") })`;
+    </script>
+
+
+    <h2>🎮 hየብቻ Jo ps መመዝገቢያ 🎮</h2>
+<a href="for_2.html" id="si"> <i class="bi bi-arrow-repeat"></i> </a>
+    <input type="text" id="playerName" placeholder="የተጫዋች ስም">
+    <button onclick="addPlayer()">➕ ጨምር</button>
+
+    <div id="counters"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", loadPlayers);
+
+        let gamePrice = parseFloat(localStorage.getItem("gamePrice")) || 7; // Default price = 7 per game
+
+        function addPlayer() {
+            let name = document.getElementById("playerName").value.trim();
+            if (name === "") {
+                alert("❌ የተጫዋች ስም");
+                return;
+            }
+
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            if (players.some(player => player.name === name)) {
+                alert("⚠️ ተጫዋቹ እኮ አለ!");
+                return;
+            }
+
+            let newPlayer = { name, count: 0 };
+            players.push(newPlayer);
+            localStorage.setItem("players", JSON.stringify(players));
+
+            createCounter(newPlayer);
+            document.getElementById("playerName").value = "";
+        }
+
+        function loadPlayers() {
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            players.forEach(createCounter);
+        }
+
+        function createCounter(player) {
+            let counter = document.createElement("div");
+            counter.classList.add("counter");
+            counter.id = `player_${player.name}`;
+
+
+      
+
+
+            counter.innerHTML = `
+                <h3>🕹️ ${player.name}</h3>
+                <h2>ጨዋታ:</h2> <span id="count_${player.name}"> ${player.count}</span><br>
+                <button onclick="updateCount('${player.name}', 1)" class="increase"> +1 </button>
+                <button onclick="updateCount('${player.name}', -1)" class="decrease"> -1 </button>
+                <button onclick="resetCount('${player.name}')" class="reset"> Reset </button>
+
+                <p class="total-price">💰 ጠቅላላ ዋጋ: <span id="price_${player.name}">${player.count * gamePrice}</span> ብር</p>
+
+                <span class="remove-btn" onclick="removePlayer('${player.name}')">🗑️ ቻው</span>
+            `;
+
+            document.getElementById("counters").appendChild(counter);
+        }
+
+        function updateCount(playerName, change) {
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            let player = players.find(p => p.name === playerName);
+            if (!player) return;
+
+            player.count = Math.max(0, player.count + change);
+            localStorage.setItem("players", JSON.stringify(players));
+
+            document.getElementById(`count_${playerName}`).innerText = player.count;
+            document.getElementById(`price_${playerName}`).innerText = player.count * gamePrice;
+        }
+
+        function resetCount(playerName) {
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            let player = players.find(p => p.name === playerName);
+            if (!player) return;
+
+            player.count = 0;
+            localStorage.setItem("players", JSON.stringify(players));
+
+            document.getElementById(`count_${playerName}`).innerText = 0;
+            document.getElementById(`price_${playerName}`).innerText = 0;
+        }
+
+        function removePlayer(playerName) {
+            let confirmDelete = confirm(`እርግጠኛ ነዎት ላስወግደው ${playerName}?`);
+            if (!confirmDelete) return;
+
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            players = players.filter(p => p.name !== playerName);
+            localStorage.setItem("players", JSON.stringify(players));
+
+            document.getElementById(`player_${playerName}`).remove();
+        }
+    </script>
+
+</body>
+</html>
