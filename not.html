@@ -43,23 +43,33 @@
             padding: 20px; 
             background-color: #333; 
             border-radius: 8px; 
-            background-image: url('ps.png');}
+            background-image: url('ps.png');
+            
         }
+        
 
-        .counter {
-            width: 200px; 
-            border: 2px solid #000; 
-            padding: 8px; 
-            margin: 6px; 
-            background-color: #f9f9f9;
-            text-align: center;
-            border-radius: 5px;
-        }
+       .counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+    border: 1px solid #000;
+    padding: 8px;
+    margin: 6px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;  /* Prevents text from breaking */
+}
 
-        h3 { margin: 5px 0; font-size: 16px; }
+.counter button {
+    margin-left: 5px;
+}
+
+       /* h3 { margin: 5px 0; font-size: 16px; }
         h2 { font-size: 14px; }
-        span { font-weight: bold; font-size: 16px; }
 
+        span { font-weight: bold; font-size: 16px; }
+*/
         .total-price {
             font-size: 14px;
             color: green;
@@ -77,9 +87,7 @@
         .remove-btn {
             color: red;
             cursor: pointer;
-            font-size: 12px;
-            display: block;
-            margin-top: 5px;
+           
         }
         #si{
        position: fixed;
@@ -102,8 +110,7 @@
     <input type="text" id="playerName" placeholder="የተጫዋች ስም">
     <button onclick="addPlayer()">➕ ጨምር</button>
 
-    <div id="counters"></div>
-
+<div id="counters"></div>
     <script>
         document.addEventListener("DOMContentLoaded", loadPlayers);
 
@@ -143,20 +150,17 @@
 
       
 
+    counter.innerHTML = `
+        <span class="total-price">🕹️ ${player.name}</span> |
+        ጨዋታ: <span id="count_${player.name}">${player.count}</span> |
+        <button onclick="updateCount('${player.name}', 1)" class="increase"> +1 </button>
+        <button onclick="updateCount('${player.name}', -1)" class="decrease"> -1 </button>
+        <button onclick="resetCount('${player.name}')" class="reset"> Reset </button> |
+        💰 <span id="price_${player.name}" class="total-price">${player.count * gamePrice}</span> ብር |
+        <button class="remove-btn" onclick="removePlayer('${player.name}')">🗑️</button>
+    `;
 
-            counter.innerHTML = `
-                <h3>🕹️ ${player.name}</h3>
-                <h2>ጨዋታ:</h2> <span id="count_${player.name}"> ${player.count}</span><br>
-                <button onclick="updateCount('${player.name}', 1)" class="increase"> +1 </button>
-                <button onclick="updateCount('${player.name}', -1)" class="decrease"> -1 </button>
-                <button onclick="resetCount('${player.name}')" class="reset"> Reset </button>
-
-                <p class="total-price">💰 ጠቅላላ ዋጋ: <span id="price_${player.name}">${player.count * gamePrice}</span> ብር</p>
-
-                <span class="remove-btn" onclick="removePlayer('${player.name}')">🗑️ ቻው</span>
-            `;
-
-            document.getElementById("counters").appendChild(counter);
+    document.getElementById("counters").appendChild(counter);
         }
 
         function updateCount(playerName, change) {

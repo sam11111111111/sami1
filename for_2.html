@@ -301,9 +301,11 @@ let gamePrice = parseFloat(localStorage.getItem("gamePrice")) || 7;
 let timerDuration = parseInt(localStorage.getItem("timerDuration")) || 5;
 let savingPercentage = parseInt(localStorage.getItem("savingPercentage")) || 20;
 
+let numPS = parseInt(localStorage.getItem("numPS")) || 3;
+
 // Ensure UI reflects the stored values
 document.addEventListener("DOMContentLoaded", function () {
-            let numPS = parseInt(localStorage.getItem("numPS")) || 3; // Default: 3 counters
+           // let numPS = parseInt(localStorage.getItem("numPS")) || 3; // Default: 3 counters
             const countersDiv = document.getElementById("counters");
             countersDiv.innerHTML = ""; // Clear previous counters
 
@@ -313,7 +315,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
 
-     const numPS = 3;
+   //  let numPS = 3;
     //const gamePrice = 7;
     const adminPIN = "1234";
     let timers = {};
@@ -432,7 +434,9 @@ function updateCount(psNumber, change) {
     }
 
     function resetAll() {
+        
         for (let i = 1; i <= numPS; i++) {
+
             localStorage.setItem(`ps_${i}_games`, 0);
             document.getElementById(`count_${i}`).innerText = 0;
             document.getElementById(`totalPrice_${i}`).innerText = 0;
