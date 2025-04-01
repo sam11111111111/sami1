@@ -176,12 +176,12 @@ function addNote(playerName) {
     let note = prompt("Enter a note for " + playerName);
     if (note === null || note.trim() === "") return; // Cancel or empty note
 
-    let players222 = JSON.parse(localStorage.getItem("players222")) || [];
-    let playerIndex = players222.findIndex(p => p.name === playerName);
+    let players2 = JSON.parse(localStorage.getItem("players2")) || [];
+    let playerIndex = players2.findIndex(p => p.name === playerName);
     if (playerIndex === -1) return;
 
-    players222[playerIndex].note = note; // Save note to player object
-    localStorage.setItem("players222", JSON.stringify(players222)); // Save updated players list
+    players2[playerIndex].note = note; // Save note to player object
+    localStorage.setItem("players2", JSON.stringify(players2)); // Save updated players list
 
     document.getElementById(`note_${playerName}`).innerText = `📌 ${note}`; // Update UI
 }
