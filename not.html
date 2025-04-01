@@ -116,23 +116,23 @@
                 return;
             }
 
-            let players = JSON.parse(localStorage.getItem("players")) || [];
-            if (players.some(player => player.name === name)) {
+            let players2 = JSON.parse(localStorage.getItem("players2")) || [];
+            if (players2.some(player => player.name === name)) {
                 alert("⚠️ ተጫዋቹ እኮ አለ!");
                 return;
             }
 
             let newPlayer = { name, count: 0 };
-            players.push(newPlayer);
-            localStorage.setItem("players", JSON.stringify(players));
+            players2.push(newPlayer);
+            localStorage.setItem("players2", JSON.stringify(players2));
 
             createCounter(newPlayer);
             document.getElementById("playerName").value = "";
         }
 
         function loadPlayers() {
-            let players = JSON.parse(localStorage.getItem("players")) || [];
-            players.forEach(createCounter);
+            let players2 = JSON.parse(localStorage.getItem("players2")) || [];
+            players2.forEach(createCounter);
         }
 
         function createCounter(player) {
@@ -160,24 +160,24 @@
         }
 
         function updateCount(playerName, change) {
-            let players = JSON.parse(localStorage.getItem("players")) || [];
-            let player = players.find(p => p.name === playerName);
+            let players2 = JSON.parse(localStorage.getItem("players2")) || [];
+            let player = players2.find(p => p.name === playerName);
             if (!player) return;
 
             player.count = Math.max(0, player.count + change);
-            localStorage.setItem("players", JSON.stringify(players));
+            localStorage.setItem("players2", JSON.stringify(players2));
 
             document.getElementById(`count_${playerName}`).innerText = player.count;
             document.getElementById(`price_${playerName}`).innerText = player.count * gamePrice;
         }
 
         function resetCount(playerName) {
-            let players = JSON.parse(localStorage.getItem("players")) || [];
-            let player = players.find(p => p.name === playerName);
+            let players2 = JSON.parse(localStorage.getItem("players2")) || [];
+            let player = players2.find(p => p.name === playerName);
             if (!player) return;
 
             player.count = 0;
-            localStorage.setItem("players", JSON.stringify(players));
+            localStorage.setItem("players2", JSON.stringify(players2));
 
             document.getElementById(`count_${playerName}`).innerText = 0;
             document.getElementById(`price_${playerName}`).innerText = 0;
@@ -187,9 +187,9 @@
             let confirmDelete = confirm(`እርግጠኛ ነዎት ላስወግደው ${playerName}?`);
             if (!confirmDelete) return;
 
-            let players = JSON.parse(localStorage.getItem("players")) || [];
-            players = players.filter(p => p.name !== playerName);
-            localStorage.setItem("players", JSON.stringify(players));
+            let players2 = JSON.parse(localStorage.getItem("players2")) || [];
+            players2 = players2.filter(p => p.name !== playerName);
+            localStorage.setItem("players2", JSON.stringify(players2));
 
             document.getElementById(`player_${playerName}`).remove();
         }
