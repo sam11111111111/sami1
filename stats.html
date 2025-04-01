@@ -6,31 +6,96 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <title>Player Stats</title>
     <style>
-        body { font-family: Arial, sans-serif; 
+     body {
+            font-family: Arial, sans-serif;
             text-align: center;
-         background-color: #1e1e2e;
-         color: white; 
-            background-image:url('ps1.png');
+            background-color: #1e1e2e;
+            color: white;
+            background-image: url('ps1.png');
             background-repeat: no-repeat;
             background-size: cover;
-             }
-        .container { width: 300px; margin: 0 auto; padding: 20px; background-color: #333; border-radius: 8px; background-image: url('ps.png');}
-        .player-box { background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
-        button { padding: 10px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        .remove { background-color: #FF5722; color: white; border: none; }
-        .win { background-color: #4CAF50; color: white; }
-        .lose { background-color: #ff5722; color: white; }
-        .club-logo { width: 50px; height: 50px; margin-right: 10px; }
+            margin: 0;
+            padding: 0;
+        }
 
-             #menu{
+        .container {
+            width: 100%;
+            margin: 0 auto;
+            padding: 5px;
+            background-color: #333;
+            border-radius: 8px;
+            background-image: url('ps.png');
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px; /* Reduced gap between player boxes */
+        }
 
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    font-size: 46px;
+        .player-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px; /* Reduced padding */
+            border-radius: 8px; /* Slightly smaller border radius */
+            width: 40%; /* Reduce width to fit more players */
+            box-sizing: border-box;
+            margin-bottom: 5px; /* Reduced margin */
+            text-align: left;
+            font-size: 12px; /* Smaller font size */
+        }
 
-    color: white;
-}
+        button {
+            padding: 5px; /* Reduced button padding */
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px; /* Reduced margin */
+            font-size: 10px; /* Smaller font size */
+        }
+
+        .remove {
+            background-color: #FF5722;
+            color: white;
+            border: none;
+        }
+
+        .lose {
+            background-color: #FF5722;
+            color: white;
+            border: none;
+        }
+
+        .club-logo {
+            width: 25px; /* Smaller logo size */
+            height: 25px; /* Smaller logo size */
+            margin-right: 5px; /* Reduced margin */
+        }
+
+        #menu {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 30px; /* Smaller menu font size */
+            color: white;
+        }
+
+        /* Mobile Styles */
+        @media screen and (max-width: 600px) {
+            .player-box {
+                width: 90%; /* Full width on small screens */
+            }
+
+            button {
+                font-size: 10px;
+                padding: 5px;
+            }
+
+            .club-logo {
+                width: 20px; /* Even smaller logo size */
+                height: 20px; /* Even smaller logo size */
+            }
+
+            .container {
+                padding: 5px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -66,10 +131,15 @@
             "Bayer Leverkusen": "Bayer_04_Leverkusen_logo.svg",  // Corrected the name and logo
             "Newcastle United": "https://upload.wikimedia.org/wikipedia/hif/2/25/Newcastle_United_Logo.png",  // Corrected club and logo
             
-            "Atalanta": "AtalantaBC.svg"  // Corrected the name and logo
+            "Atalanta": "AtalantaBC.svg",
+
+            "Paris Saint-Germain FC": "wall/Paris_Saint-Germain_F.C.svg"
+
+
+              // Corrected the name and logo
         };
 
-        function updatePlayerStats() {
+          function updatePlayerStats() {
             let players = JSON.parse(localStorage.getItem("players")) || [];
             let playersContainer = document.getElementById("playersContainer");
             playersContainer.innerHTML = ""; // Clear the container before displaying updated data
@@ -80,12 +150,9 @@
                 playerDiv.classList.add("player-box");
 
                 playerDiv.innerHTML = `
-                    <h3><img src="${clubs[player.club]}" class="club-logo">${player.name} - ${player.club}</h3>
+                    <h3 style="font-size: 14px; margin: 0;"><img src="${clubs[player.club]}" class="club-logo">${player.name} - ${player.club}</h3>
                     <p>💰 ተከፈለ: <span>${player.price}</span> ብር</p>
                     <p>❌ Losses: <span id="losses-${index}">${player.losses}</span></p>
-                    
-                   
-
                     <button class="lose" onclick="updateLoss(${index})">❌ Lose</button>
                     <button class="remove" onclick="removePlayer(${index})">🗑️ ቻው</button>
                 `;

@@ -151,27 +151,40 @@
             let players2 = JSON.parse(localStorage.getItem("players2")) || [];
             players2.forEach(createCounter);
         }
-
-        function createCounter(player) {
-            let counter = document.createElement("div");
-            counter.classList.add("counter");
-            counter.id = `player_${player.name}`;
-
-
-      
+function createCounter(player) {
+    let counter = document.createElement("div");
+    counter.classList.add("counter");
+    counter.id = `player_${player.name}`;
 
     counter.innerHTML = `
         <span class="total-price">🕹️ ${player.name}</span> |
-         <span id="count_${player.name}">${player.count}</span> |
+        ጨዋታ: <span id="count_${player.name}">${player.count}</span> |
         <button onclick="updateCount('${player.name}', 1)" class="increase"> +1 </button>
         <button onclick="updateCount('${player.name}', -1)" class="decrease"> -1 </button>
         <button onclick="resetCount('${player.name}')" class="reset"> Reset </button> |
         💰 <span id="price_${player.name}" class="total-price">${player.count * gamePrice}</span> ብር |
-        <button class="remove-btn" onclick="removePlayer('${player.name}')">🗑️</button>
+        <button class="remove-btn" onclick="removePlayer('${player.name}')">🗑️</button> |
+        <button onclick="addNote('${player.name}')">📌 Add Note</button>
+        <p id="note_${player.name}" class="player-note">${player.note ? `📌 ${player.note}` : '📌 No Notes'}</p>
     `;
 
     document.getElementById("counters").appendChild(counter);
-        }
+}
+
+
+function addNote(playerName) {
+    let note = prompt("Enter a note for " + playerName);
+    if (note === null || note.trim() === "") return; // Cancel or empty note
+
+    let players222 = JSON.parse(localStorage.getItem("players222")) || [];
+    let playerIndex = players222.findIndex(p => p.name === playerName);
+    if (playerIndex === -1) return;
+
+    players222[playerIndex].note = note; // Save note to player object
+    localStorage.setItem("players222", JSON.stringify(players222)); // Save updated players list
+
+    document.getElementById(`note_${playerName}`).innerText = `📌 ${note}`; // Update UI
+}
 
         function updateCount(playerName, change) {
             let players2 = JSON.parse(localStorage.getItem("players2")) || [];
