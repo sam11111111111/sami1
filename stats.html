@@ -156,7 +156,7 @@
     
     <!-- Summary Panel -->
     <div class="summary-panel">
-        <div class="total-losses">❌ አጠቃላይ ኪሳራ: <span id="totalLosses">0</span></div>
+        <div class="total-losses">❌ ጠቅላላ: <span id="totalLosses">0</span></div>
         <div class="club-losses" id="clubLossesContainer"></div>
     </div>
    
@@ -176,9 +176,9 @@
             "Inter Milan": "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
             "AC Milan": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg",
             "Juventus": "https://upload.wikimedia.org/wikipedia/commons/d/da/Juventus_Logo.png",
-            "Bayer Leverkusen": "https://upload.wikimedia.org/wikipedia/commons/5/59/Bayer_04_Leverkusen_logo.svg",
+            "Bayer Leverkusen": "Bayer_04_Leverkusen_logo.svg",
             "Newcastle United": "https://upload.wikimedia.org/wikipedia/hif/2/25/Newcastle_United_Logo.png",
-            "Atalanta": "https://upload.wikimedia.org/wikipedia/commons/e/e5/AtalantaBC.svg",
+            "Atalanta": "AtalantaBC.svg",
             "Paris Saint-Germain FC": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg"
         };
 
@@ -243,13 +243,13 @@
                         <img src="${clubs[player.club]}" class="club-logo" onerror="this.src='https://via.placeholder.com/25'">
                         ${player.name} - ${player.club}
                     </h3>
-                    <p>💰 ተከፈለ: <span>${player.price}</span> ብር</p>
+                    <p>💰 የተከፈለ: <span>${player.price}</span> ብር</p>
                     <p>❌ Losses: <span id="losses-${index}">${player.losses || 0}</span></p>
                     <button class="lose" onclick="updateLoss(${index})">❌ Lose</button>
                     <button class="remove" onclick="removePlayer(${index})">🗑️ ቻው</button>
-                    <button class="note-btn" onclick="addNote('${player.name}')">📌 Add Note</button>
+                    <button class="note-btn" onclick="addNote('${player.name}')">📌 ማስታወሻ</button>
                     <div id="note_${player.name}" class="player-note">
-                        <span class="note-text">${player.note ? `📌 ${player.note}` : '📌 No Notes'}</span>
+                        <span class="note-text">${player.note ? `📌 ${player.note}` : '📌 ማስታወሻ የለም'}</span>
                         ${player.note ? `<button class="reset-note-btn" onclick="resetNote('${player.name}')">✕</button>` : ''}
                     </div>
                 `;
