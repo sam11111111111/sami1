@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <title>Player Stats</title>
     <style>
-     body {
+        body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #1e1e2e;
@@ -16,6 +16,35 @@
             background-size: cover;
             margin: 0;
             padding: 0;
+        }
+
+        .summary-panel {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            margin: 10px auto;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .club-losses {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .club-loss-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .total-losses {
+            font-size: 18px;
+            margin-bottom: 10px;
         }
 
         .container {
@@ -28,167 +57,194 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 5px; /* Reduced gap between player boxes */
+            gap: 5px;
         }
 
         .player-box {
             background: rgba(255, 255, 255, 0.1);
-            padding: 10px; /* Reduced padding */
-            border-radius: 8px; /* Slightly smaller border radius */
-            width: 40%; /* Reduce width to fit more players */
+            padding: 10px;
+            border-radius: 8px;
+            width: 40%;
             box-sizing: border-box;
-            margin-bottom: 5px; /* Reduced margin */
+            margin-bottom: 5px;
             text-align: left;
-            font-size: 12px; /* Smaller font size */
+            font-size: 12px;
         }
 
         button {
-            padding: 5px; /* Reduced button padding */
+            padding: 5px;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 5px; /* Reduced margin */
-            font-size: 10px; /* Smaller font size */
+            margin-top: 5px;
+            font-size: 10px;
+            border: none;
         }
 
         .remove {
             background-color: #FF5722;
             color: white;
-            border: none;
         }
 
         .lose {
-            background-color: #FF5722;
+            background-color: #f44336;
             color: white;
-            border: none;
         }
 
         .club-logo {
-            width: 25px; /* Smaller logo size */
-            height: 25px; /* Smaller logo size */
-            margin-right: 5px; /* Reduced margin */
+            width: 25px;
+            height: 25px;
+            margin-right: 5px;
+            vertical-align: middle;
         }
 
         #menu {
             position: fixed;
             top: 10px;
             left: 10px;
-            font-size: 30px; /* Smaller menu font size */
+            font-size: 30px;
             color: white;
+            text-decoration: none;
         }
 
-        /* Mobile Styles */
+        .player-note {
+            margin: 5px 0 0 0;
+            font-size: 11px;
+            color: #ccc;
+        }
+
         @media screen and (max-width: 600px) {
             .player-box {
-                width: 90%; /* Full width on small screens */
+                width: 90%;
             }
-
-            button {
+            .club-loss-item {
                 font-size: 10px;
-                padding: 5px;
-            }
-
-            .club-logo {
-                width: 20px; /* Even smaller logo size */
-                height: 20px; /* Even smaller logo size */
-            }
-
-            .container {
-                padding: 5px;
+                padding: 3px 6px;
             }
         }
     </style>
 </head>
 <body>
-         <a href="register.html" id="menu">  <i class="bi bi-arrow-left-short fs-1" ></i> </a>
-
-
+    <a href="register.html" id="menu"><i class="bi bi-arrow-left-short fs-1"></i></a>
 
     <h2>🏆 ክለቦች 🏆</h2>
+    
+    <!-- Summary Panel -->
+    <div class="summary-panel">
+        <div class="total-losses">❌ አጠቃላይ ኪሳራ: <span id="totalLosses">0</span></div>
+        <div class="club-losses" id="clubLossesContainer"></div>
+    </div>
    
     <div id="playersContainer" class="container"></div>
 
-       <script>
+    <script>
         // Apply saved background
-        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") })`;
+        document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage")})`;
     
         const clubs = {
             "Barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
             "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
             "Liverpool_FC": "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
-
-
-
             "Manchester City": "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg",
             "Aston Villa": "https://upload.wikimedia.org/wikipedia/en/9/9a/Aston_Villa_FC_new_crest.svg",
-
             "Borussia Dortmund": "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg",
-            "Inter Milan": "FC_Internazionale_Milano_2021.svg",
-
+            "Inter Milan": "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
             "AC Milan": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg",
             "Juventus": "https://upload.wikimedia.org/wikipedia/commons/d/da/Juventus_Logo.png",
-
-
-            "Bayer Leverkusen": "Bayer_04_Leverkusen_logo.svg",  // Corrected the name and logo
-            "Newcastle United": "https://upload.wikimedia.org/wikipedia/hif/2/25/Newcastle_United_Logo.png",  // Corrected club and logo
-            
-            "Atalanta": "AtalantaBC.svg",
-
-            "Paris Saint-Germain FC": "wall/Paris_Saint-Germain_F.C.svg"
-
-
-              // Corrected the name and logo
+            "Bayer Leverkusen": "https://upload.wikimedia.org/wikipedia/commons/5/59/Bayer_04_Leverkusen_logo.svg",
+            "Newcastle United": "https://upload.wikimedia.org/wikipedia/hif/2/25/Newcastle_United_Logo.png",
+            "Atalanta": "https://upload.wikimedia.org/wikipedia/commons/e/e5/AtalantaBC.svg",
+            "Paris Saint-Germain FC": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg"
         };
 
-          function updatePlayerStats() {
+        // Calculate total losses across all players
+        function calculateTotalLosses() {
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            return players.reduce((total, player) => total + (player.losses || 0), 0);
+        }
+
+        // Calculate losses by club
+        function calculateClubLosses() {
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            let clubLosses = {};
+            
+            players.forEach(player => {
+                if (!clubLosses[player.club]) {
+                    clubLosses[player.club] = 0;
+                }
+                clubLosses[player.club] += player.losses || 0;
+            });
+            
+            return clubLosses;
+        }
+
+        // Update the summary panel
+        function updateSummary() {
+            // Update total losses
+            document.getElementById("totalLosses").textContent = calculateTotalLosses();
+            
+            // Update club-wise losses
+            let clubLosses = calculateClubLosses();
+            let clubLossesContainer = document.getElementById("clubLossesContainer");
+            clubLossesContainer.innerHTML = "";
+            
+            for (let club in clubLosses) {
+                if (clubLosses[club] > 0) {
+                    let clubItem = document.createElement("div");
+                    clubItem.className = "club-loss-item";
+                    clubItem.innerHTML = `
+                        <img src="${clubs[club]}" class="club-logo" onerror="this.style.display='none'">
+                        ${club}: ${clubLosses[club]}
+                    `;
+                    clubLossesContainer.appendChild(clubItem);
+                }
+            }
+        }
+
+        function updatePlayerStats() {
             let players = JSON.parse(localStorage.getItem("players")) || [];
             let playersContainer = document.getElementById("playersContainer");
-            playersContainer.innerHTML = ""; // Clear the container before displaying updated data
+            playersContainer.innerHTML = "";
 
-            // Loop through each player and display their stats
             players.forEach((player, index) => {
                 let playerDiv = document.createElement("div");
                 playerDiv.classList.add("player-box");
 
                 playerDiv.innerHTML = `
-                    <h3 style="font-size: 14px; margin: 0;"><img src="${clubs[player.club]}" class="club-logo">${player.name} - ${player.club}</h3>
+                    <h3 style="font-size: 14px; margin: 0;">
+                        <img src="${clubs[player.club]}" class="club-logo" onerror="this.src='https://via.placeholder.com/25'">
+                        ${player.name} - ${player.club}
+                    </h3>
                     <p>💰 ተከፈለ: <span>${player.price}</span> ብር</p>
-                    <p>❌ Losses: <span id="losses-${index}">${player.losses}</span></p>
+                    <p>❌ Losses: <span id="losses-${index}">${player.losses || 0}</span></p>
                     <button class="lose" onclick="updateLoss(${index})">❌ Lose</button>
                     <button class="remove" onclick="removePlayer(${index})">🗑️ ቻው</button>
                     <button onclick="addNote('${player.name}')">📌 Add Note</button>
-                  <p id="note_${player.name}" class="player-note">${player.note ? `📌 ${player.note}` : '📌 No Notes'}</p>
+                    <p id="note_${player.name}" class="player-note">${player.note ? `📌 ${player.note}` : '📌 No Notes'}</p>
                 `;
                 playersContainer.appendChild(playerDiv);
             });
+            
+            updateSummary();
         }
-//<button class="win" onclick="updateWin(${index})">✅ Win</button> 
 
-     //   function updateWin(playerIndex) {
-       //     let players = JSON.parse(localStorage.getItem("players")) || [];
-         //   players[playerIndex].wins++;
-           // localStorage.setItem("players", JSON.stringify(players));
-            //updatePlayerStats();
-        //}
+        function addNote(playerName) {
+            let note = prompt("Enter a note for " + playerName);
+            if (note === null || note.trim() === "") return;
 
+            let players = JSON.parse(localStorage.getItem("players")) || [];
+            let playerIndex = players.findIndex(p => p.name === playerName);
+            if (playerIndex === -1) return;
 
-function addNote(playerName) {
-    let note = prompt("Enter a note for " + playerName);
-    if (note === null || note.trim() === "") return; // Cancel or empty note
-
-    let players = JSON.parse(localStorage.getItem("players")) || [];
-    let playerIndex = players.findIndex(p => p.name === playerName);
-    if (playerIndex === -1) return;
-
-    players[playerIndex].note = note; // Save note to player object
-    localStorage.setItem("players", JSON.stringify(players)); // Save updated players list
-
-    document.getElementById(`note_${playerName}`).innerText = `📌 ${note}`; // Update UI
-}
-
-
+            players[playerIndex].note = note;
+            localStorage.setItem("players", JSON.stringify(players));
+            document.getElementById(`note_${playerName}`).innerText = `📌 ${note}`;
+        }
 
         function updateLoss(playerIndex) {
             let players = JSON.parse(localStorage.getItem("players")) || [];
+            if (!players[playerIndex].losses) {
+                players[playerIndex].losses = 0;
+            }
             players[playerIndex].losses++;
             localStorage.setItem("players", JSON.stringify(players));
             updatePlayerStats();
@@ -196,12 +252,12 @@ function addNote(playerName) {
 
         function removePlayer(playerIndex) {
             let players = JSON.parse(localStorage.getItem("players")) || [];
-            players.splice(playerIndex, 1); // Remove the player at the given index
+            players.splice(playerIndex, 1);
             localStorage.setItem("players", JSON.stringify(players));
             updatePlayerStats();
         }
 
-        // Call updatePlayerStats to initialize and display the current player stats
+        // Initialize the page
         updatePlayerStats();
     </script>
 </body>
