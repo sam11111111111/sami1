@@ -73,7 +73,8 @@
 }
 
 .total-price {
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: bold;
     color: green;
 }
 
@@ -106,6 +107,17 @@
     font-size: 30px;
     color: whitesmoke;
 }
+.ga{
+    color: #008CBA;
+    font-size: 15px;
+    font-weight: bold;
+}
+#ad{
+    background: rgba(0, 0, 0, 0.5);
+    color: whitesmoke;
+    font-weight: bold;
+}
+
     </style>
 </head>
 <body>
@@ -120,7 +132,7 @@
 
 
     <input type="text" id="playerName" placeholder="የተጫዋች ስም">
-    <button onclick="addPlayer()">➕ ጨምር</button>
+    <button onclick="addPlayer()" id="ad">➕ ጨምር</button>
 
 <div id="counters"></div>
     <script>
@@ -160,14 +172,15 @@ function createCounter(player) {
 
     counter.innerHTML = `
         <span class="total-price">🕹️ ${player.name}</span> |
-        ጨዋታ: <span id="count_${player.name}">${player.count}</span> |
+        🎮: <span id="count_${player.name}" class="ga">${player.count}</span> |
+        💰 <span id="price_${player.name}" class="total-price">${player.count * gamePrice}</span> ብር |
         <button onclick="updateCount('${player.name}', 1)" class="increase"> +1 </button>
         <button onclick="updateCount('${player.name}', -1)" class="decrease"> -1 </button>
         <button onclick="resetCount('${player.name}')" class="reset"> Reset </button> |
-        💰 <span id="price_${player.name}" class="total-price">${player.count * gamePrice}</span> ብር |
+        
         <button class="remove-btn" onclick="removePlayer('${player.name}')">🗑️</button> |
-        <button onclick="addNote('${player.name}')">📌 Add Note</button>
-        <p id="note_${player.name}" class="player-note">${player.note ? `📌 ${player.note}` : '📌 No Notes'}</p>
+        <button onclick="addNote('${player.name}')">📌 ማስታወሻ</button>
+        <p id="note_${player.name}" class="player-note">${player.note ? `📌 ${player.note}` : '📌ማስታወሻ የለም'}</p>
     `;
 
     document.getElementById("counters").appendChild(counter);
