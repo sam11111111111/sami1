@@ -155,6 +155,8 @@
                     <p>❌ Losses: <span id="losses-${index}">${player.losses}</span></p>
                     <button class="lose" onclick="updateLoss(${index})">❌ Lose</button>
                     <button class="remove" onclick="removePlayer(${index})">🗑️ ቻው</button>
+                    <button onclick="addNote('${player.name}')">📌 Add Note</button>
+                  <p id="note_${player.name}" class="player-note">${player.note ? `📌 ${player.note}` : '📌 No Notes'}</p>
                 `;
                 playersContainer.appendChild(playerDiv);
             });
@@ -167,6 +169,23 @@
            // localStorage.setItem("players", JSON.stringify(players));
             //updatePlayerStats();
         //}
+
+
+function addNote(playerName) {
+    let note = prompt("Enter a note for " + playerName);
+    if (note === null || note.trim() === "") return; // Cancel or empty note
+
+    let players = JSON.parse(localStorage.getItem("players")) || [];
+    let playerIndex = players.findIndex(p => p.name === playerName);
+    if (playerIndex === -1) return;
+
+    players[playerIndex].note = note; // Save note to player object
+    localStorage.setItem("players", JSON.stringify(players)); // Save updated players list
+
+    document.getElementById(`note_${playerName}`).innerText = `📌 ${note}`; // Update UI
+}
+
+
 
         function updateLoss(playerIndex) {
             let players = JSON.parse(localStorage.getItem("players")) || [];
