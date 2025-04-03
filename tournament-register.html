@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <title>Tournament Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #1e1e2e;
+            color: white;
+            background-image: url('ps1.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        #menu {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 30px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        h2 {
+            margin-top: 0;
+        }
+        
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+        }
+        
+        button {
+            background-color: #FFB22C;
+            color: #10375C;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .player-list {
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .player-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .remove-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 2px 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <a href="stats.html" id="menu"><i class="bi bi-arrow-left-short"></i></a>
+    
+    <div class="container">
+        <h2>🏆 Tournament Registration</h2>
+        
+        <form id="tournamentForm">
+            <select id="tournamentType" required>
+                <option value="" disabled selected>Select Tournament Type</option>
+                <option value="single">Single Elimination</option>
+                <option value="double">Double Elimination</option>
+            </select>
+            
+            <select id="availablePlayers" multiple size="5" style="height: 150px;">
+                <!-- Players will be loaded here -->
+            </select>
+            
+            <button type="button" onclick="addSelectedPlayers()">Add Selected Players</button>
+            
+            <div class="player-list" id="selectedPlayers">
+                <h3>Selected Players (0)</h3>
+                <!-- Selected players will appear here -->
+            </div>
+            
+            <input type="text" id="tournamentName" placeholder="Tournament Name" required>
+            
+            <button type="submit">Create Tournament</button>
+        </form>
+    </div>
+
+    <script>
+        // Load all registered players
+        const allPlayers = JSON.parse(localStorage.getItem("players")) || [];
+        let selectedPlayers = [];
+        
+        // Populate available players dropdown
+        function loadPlayers() {
+            const select = document.getElementById("availablePlayers");
+            select.innerHTML = "";
+            
+            allPlayers.forEach(player => {
+                if (!selectedPlayers.some(p => p.name === player.name)) {
+                    const option = document.createElement("option");
+                    option.value = player.name;
+                    option.textContent = `${player.name} (${player.club})`;
+                    select.appendChild(option);
+                }
+            });
+            
+            updateSelectedPlayersDisplay();
+        }
+        
+        // Add selected players to tournament
+        function addSelectedPlayers() {
+            const select = document.getElementById("availablePlayers");
+            const selectedOptions = Array.from(select.selectedOptions);
+            
+            selectedOptions.forEach(option => {
+                const player = allPlayers.find(p => p.name === option.value);
+                if (player) {
+                    selectedPlayers.push(player);
+                }
+            });
+            
+            loadPlayers();
+        }
+        
+        // Remove player from selection
+        function removePlayer(index) {
+            selectedPlayers.splice(index, 1);
+            loadPlayers();
+        }
+        
+        // Update the display of selected players
+        function updateSelectedPlayersDisplay() {
+            const container = document.getElementById("selectedPlayers");
+            container.innerHTML = `<h3>Selected Players (${selectedPlayers.length})</h3>`;
+            
+            if (selectedPlayers.length === 0) {
+                container.innerHTML += "<p>No players selected yet</p>";
+                return;
+            }
+            
+            selectedPlayers.forEach((player, index) => {
+                const div = document.createElement("div");
+                div.className = "player-item";
+                div.innerHTML = `
+                    ${player.name} (${player.club})
+                    <button class="remove-btn" onclick="removePlayer(${index})">×</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // Create new tournament
+        document.getElementById("tournamentForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            if (selectedPlayers.length < 2) {
+                alert("You need at least 2 players for a tournament!");
+                return;
+            }
+            
+            const tournament = {
+                name: document.getElementById("tournamentName").value,
+                type: document.getElementById("tournamentType").value,
+                players: [...selectedPlayers],
+                date: new Date().toISOString(),
+                status: "upcoming"
+            };
+            
+            // Save to localStorage
+            const tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
+            tournaments.push(tournament);
+            localStorage.setItem("tournaments", JSON.stringify(tournaments));
+            
+            alert("Tournament created successfully!");
+            window.location.href = "tournament-view.html";
+        });
+        
+        // Initial load
+        loadPlayers();
+    </script>
+</body>
+</html>

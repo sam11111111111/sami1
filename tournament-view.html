@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <title>Tournament View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #1e1e2e;
+            color: white;
+            background-image: url('ps1.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        #menu {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 30px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .tournament-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .tournament-card {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: left;
+        }
+        
+        .tournament-card h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+        }
+        
+        .tournament-info {
+            margin-bottom: 15px;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status.upcoming {
+            background: #FFB22C;
+            color: #10375C;
+        }
+        
+        .status.in-progress {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .status.completed {
+            background: #2196F3;
+            color: white;
+        }
+        
+        button {
+            background: #FFB22C;
+            color: #10375C;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="stats.html" id="menu"><i class="bi bi-arrow-left-short"></i></a>
+    
+    <div class="container">
+        <h2>🏆 Tournament Dashboard</h2>
+        
+        <a href="tournament-register.html">
+            <button>Create New Tournament</button>
+        </a>
+        
+        <div class="tournament-list" id="tournamentsContainer">
+            <!-- Tournaments will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        // Load all tournaments
+        const tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
+        
+        function displayTournaments() {
+            const container = document.getElementById("tournamentsContainer");
+            container.innerHTML = "";
+            
+            if (tournaments.length === 0) {
+                container.innerHTML = "<p>No tournaments created yet</p>";
+                return;
+            }
+            
+            tournaments.forEach((tournament, index) => {
+                const card = document.createElement("div");
+                card.className = "tournament-card";
+                
+                const statusClass = tournament.status || "upcoming";
+                
+                card.innerHTML = `
+                    <h3>${tournament.name}</h3>
+                    <div class="tournament-info">
+                        <p><strong>Type:</strong> ${tournament.type === "single" ? "Single Elimination" : "Double Elimination"}</p>
+                        <p><strong>Players:</strong> ${tournament.players.length}</p>
+                        <p><strong>Date:</strong> ${new Date(tournament.date).toLocaleDateString()}</p>
+                        <span class="status ${statusClass}">${statusClass.replace("-", " ")}</span>
+                    </div>
+                    <button onclick="viewTournament(${index})">View Tournament</button>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        function viewTournament(index) {
+            localStorage.setItem("currentTournamentIndex", index);
+            window.location.href = "tournament-bracket.html";
+        }
+        
+        // Initial load
+        displayTournaments();
+    </script>
+</body>
+</html>
