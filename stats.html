@@ -18,6 +18,21 @@
             padding: 0;
         }
 
+        .search-container {
+            margin: 15px auto;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        #playerSearch {
+            width: 100%;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
         .summary-panel {
             background: rgba(0, 0, 0, 0.7);
             padding: 10px;
@@ -58,7 +73,6 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 5px;
-           
         }
 
         .player-box {
@@ -69,12 +83,12 @@
             margin-bottom: 5px;
             text-align: left;
             font-size: 14px;
-            background: rgba(0, 0, 0, 0.3); /* Default dark background */
+            background: rgba(0, 0, 0, 0.3);
             transition: background 0.3s ease;
         }
 
         .player-box.has-note {
-            background: rgba(255, 255, 255, 0.15); /* Lighter background when has note */
+            background: rgba(255, 255, 255, 0.15);
         }
 
         button {
@@ -155,6 +169,11 @@
 
     <h2>🏆 ክለቦች 🏆</h2>
     
+    <!-- Search Bar -->
+    <div class="search-container">
+        <input type="text" id="playerSearch" placeholder="🔍 ተጫዋች ፈልግ..." oninput="searchPlayers()">
+    </div>
+    
     <!-- Summary Panel -->
     <div class="summary-panel">
         <div class="total-losses">❌ ጠቅላላ: <span id="totalLosses">0</span></div>
@@ -177,9 +196,9 @@
             "Inter Milan": "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
             "AC Milan": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg",
             "Juventus": "https://upload.wikimedia.org/wikipedia/commons/d/da/Juventus_Logo.png",
-            "Bayer Leverkusen": "Bayer_04_Leverkusen_logo.svg",
+            "Bayer Leverkusen": "https://upload.wikimedia.org/wikipedia/commons/5/59/Bayer_04_Leverkusen_logo.svg",
             "Newcastle United": "https://upload.wikimedia.org/wikipedia/hif/2/25/Newcastle_United_Logo.png",
-            "Atalanta": "AtalantaBC.svg",
+            "Atalanta": "https://upload.wikimedia.org/wikipedia/commons/e/e5/AtalantaBC.svg",
             "Paris Saint-Germain FC": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg"
         };
 
@@ -204,12 +223,25 @@
             return clubLosses;
         }
 
+        // Search players by name
+        function searchPlayers() {
+            const searchTerm = document.getElementById("playerSearch").value.toLowerCase();
+            const playerBoxes = document.querySelectorAll(".player-box");
+            
+            playerBoxes.forEach(box => {
+                const playerName = box.querySelector("h3").textContent.toLowerCase();
+                if (playerName.includes(searchTerm)) {
+                    box.style.display = "";
+                } else {
+                    box.style.display = "none";
+                }
+            });
+        }
+
         // Update the summary panel
         function updateSummary() {
-            // Update total losses
             document.getElementById("totalLosses").textContent = calculateTotalLosses();
             
-            // Update club-wise losses
             let clubLosses = calculateClubLosses();
             let clubLossesContainer = document.getElementById("clubLossesContainer");
             clubLossesContainer.innerHTML = "";
@@ -261,7 +293,7 @@
         }
 
         function addNote(playerName) {
-            let note = prompt("Enter a note for " + playerName);
+            let note = prompt("ማስታወሻ አስገባ ለ " + playerName);
             if (note === null) return;
 
             let players = JSON.parse(localStorage.getItem("players")) || [];
