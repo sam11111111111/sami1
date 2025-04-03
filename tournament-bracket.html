@@ -140,6 +140,11 @@
             border: 1px solid #444;
             border-radius: 3px;
         }
+        
+        .round-complete {
+            background: rgba(0,150,136,0.2);
+            border-left: 3px solid #009688;
+        }
     </style>
 </head>
 <body>
@@ -167,17 +172,17 @@
         let tournament = tournaments[tournamentIndex] || {
             name: "New Tournament",
             type: "single",
+            game: "FIFA",
+            bestOf: 3,
             players: [],
             rounds: [],
             status: "upcoming"
         };
 
-        // Initialize tournament if new
+        // Initialize tournament
         function initializeTournament() {
             if (!tournament.rounds || tournament.rounds.length === 0) {
-                tournament.rounds = [];
                 generateInitialRound();
-                saveTournament();
             }
             updateTournamentInfo();
             generateBracket();
@@ -185,25 +190,26 @@
 
         // Generate first round
         function generateInitialRound() {
+            tournament.rounds = [];
             let matches = [];
             let players = tournament.players;
             
-            // If no players, create empty matches
+            // Create first round matches
+            for (let i = 0; i < players.length; i += 2) {
+                let match = createNewMatch();
+                match.player1 = players[i];
+                if (players[i+1]) match.player2 = players[i+1];
+                matches.push(match);
+            }
+            
+            // If no players, create two empty matches
             if (players.length === 0) {
                 matches.push(createNewMatch());
                 matches.push(createNewMatch());
-            } 
-            // Otherwise create matches with players
-            else {
-                for (let i = 0; i < players.length; i += 2) {
-                    let match = createNewMatch();
-                    match.player1 = players[i];
-                    if (players[i+1]) match.player2 = players[i+1];
-                    matches.push(match);
-                }
             }
             
-            tournament.rounds = [matches];
+            tournament.rounds.push(matches);
+            saveTournament();
         }
 
         // Create a new match object
@@ -217,7 +223,8 @@
                 player2Wins: 0,
                 winner: null,
                 isTie: false,
-                isTiebreaker: false
+                isTiebreaker: false,
+                advanced: false
             };
         }
 
@@ -226,6 +233,7 @@
             document.getElementById("tournamentTitle").textContent = tournament.name;
             document.getElementById("tournamentInfo").textContent = 
                 `${tournament.type === "single" ? "Single Elimination" : "Double Elimination"} | 
+                Game: ${tournament.game} | 
                 ${tournament.players.length} Players | 
                 Status: ${tournament.status || "upcoming"}`;
         }
@@ -237,8 +245,11 @@
             
             tournament.rounds.forEach((round, roundIndex) => {
                 const roundDiv = document.createElement("div");
-                roundDiv.className = "round";
-                roundDiv.innerHTML = `<h3>${round[0]?.isTiebreaker ? "Tiebreaker Round" : "Round " + (roundIndex + 1)}</h3>`;
+                roundDiv.className = `round ${isRoundComplete(roundIndex) ? 'round-complete' : ''}`;
+                
+                const roundTitle = document.createElement("h3");
+                roundTitle.textContent = round[0]?.isTiebreaker ? "Tiebreaker Round" : "Round " + (roundIndex + 1);
+                roundDiv.appendChild(roundTitle);
                 
                 round.forEach((match, matchIndex) => {
                     const matchDiv = document.createElement("div");
@@ -252,6 +263,7 @@
                         <div class="series-info">
                             ${tournament.bestOf ? `Best of ${tournament.bestOf}` : 'Single match'}
                             ${match.isTiebreaker ? '<span style="color:#FFC107;">(Tiebreaker)</span>' : ''}
+                            ${match.advanced ? '<span style="color:#4CAF50;">(Advanced)</span>' : ''}
                         </div>
                         
                         <div class="player-row ${match.winner === player1Name ? 'winner' : ''}">
@@ -282,19 +294,12 @@
                         <div style="text-align:center;margin-top:10px;color:#4CAF50;">
                             Winner: ${match.winner}
                         </div>` : ''}
-                        
-                        <div style="text-align:center;margin-top:10px;">
-                            <button class="delete-btn" style="padding:3px 6px;font-size:12px;" 
-                                onclick="deleteMatch(${roundIndex}, ${matchIndex})">
-                                Delete Match
-                            </button>
-                        </div>
                     `;
                     
                     roundDiv.appendChild(matchDiv);
                 });
                 
-                // Add button to add matches to this round
+                // Add button to add matches to this round (only for last round)
                 if (roundIndex === tournament.rounds.length - 1) {
                     const addMatchBtn = document.createElement("button");
                     addMatchBtn.className = "add-round-btn";
@@ -352,13 +357,14 @@
                 }
             }
             
-            // Reset scores when players change
+            // Reset match when players change
             match.score1 = 0;
             match.score2 = 0;
             match.player1Wins = 0;
             match.player2Wins = 0;
             match.winner = null;
             match.isTie = false;
+            match.advanced = false;
             
             saveTournament();
             generateBracket();
@@ -367,6 +373,7 @@
         // Add win to a player
         function addWin(roundIndex, matchIndex, playerNum) {
             const match = tournament.rounds[roundIndex][matchIndex];
+            const winsNeeded = tournament.bestOf ? Math.ceil(tournament.bestOf/2) : 1;
             
             if (playerNum === 1) {
                 match.player1Wins = (match.player1Wins || 0) + 1;
@@ -376,44 +383,58 @@
                 match.score2 = (match.score2 || 0) + 1;
             }
             
+            // Check if match is complete
             checkMatchCompletion(roundIndex, matchIndex);
         }
 
-        // Check if match is complete
+        // Check if all matches in a round are complete
+        function isRoundComplete(roundIndex) {
+            const round = tournament.rounds[roundIndex];
+            if (!round) return false;
+            
+            return round.every(match => {
+                const winsNeeded = tournament.bestOf ? Math.ceil(tournament.bestOf/2) : 1;
+                return match.winner || 
+                       match.player2?.isBye ||
+                       match.player1Wins >= winsNeeded || 
+                       match.player2Wins >= winsNeeded ||
+                       match.isTie;
+            });
+        }
+
+        // Check if match is complete and handle progression
         function checkMatchCompletion(roundIndex, matchIndex) {
             const match = tournament.rounds[roundIndex][matchIndex];
             const winsNeeded = tournament.bestOf ? Math.ceil(tournament.bestOf/2) : 1;
             
             // Check for BYE automatic win
-            if (match.player2.isBye) {
+            if (match.player2?.isBye) {
                 match.winner = match.player1.name;
                 match.isTie = false;
-                advanceWinner(roundIndex, matchIndex, match.winner);
-                saveTournament();
-                generateBracket();
-                return;
             }
-            
             // Check if either player has enough wins
-            if (match.player1Wins >= winsNeeded) {
+            else if (match.player1Wins >= winsNeeded) {
                 match.winner = match.player1.name;
                 match.isTie = false;
-                advanceWinner(roundIndex, matchIndex, match.winner);
             } 
             else if (match.player2Wins >= winsNeeded) {
                 match.winner = match.player2.name;
                 match.isTie = false;
-                advanceWinner(roundIndex, matchIndex, match.winner);
             }
             // Check for tie
             else if (tournament.bestOf && (match.player1Wins + match.player2Wins) >= tournament.bestOf) {
                 match.isTie = true;
                 match.winner = null;
-                
-                // For final matches, automatically create tiebreaker
-                if (roundIndex === tournament.rounds.length - 1) {
-                    createTiebreaker(roundIndex, matchIndex);
-                }
+            }
+            
+            // If round is complete, advance winners
+            if (isRoundComplete(roundIndex)) {
+                tournament.rounds[roundIndex].forEach((match, idx) => {
+                    if (match.winner && !match.advanced) {
+                        advanceWinner(roundIndex, idx, match.winner);
+                        match.advanced = true;
+                    }
+                });
             }
             
             saveTournament();
@@ -422,23 +443,22 @@
 
         // Advance winner to next round
         function advanceWinner(roundIndex, matchIndex, winnerName) {
-            // Don't advance winners from tiebreaker rounds
-            if (tournament.rounds[roundIndex][matchIndex].isTiebreaker) {
+            // Don't advance from tiebreakers or if already advanced
+            if (tournament.rounds[roundIndex][matchIndex].isTiebreaker || 
+                tournament.rounds[roundIndex][matchIndex].advanced) {
                 return;
             }
             
             const nextRoundIndex = roundIndex + 1;
             if (nextRoundIndex >= tournament.rounds.length) {
-                return;
-            }
-            
-            // Ensure next round exists
-            if (!tournament.rounds[nextRoundIndex]) {
-                tournament.rounds[nextRoundIndex] = [];
+                addNewRound();
             }
             
             // Find position in next round
             const nextMatchIndex = Math.floor(matchIndex / 2);
+            if (!tournament.rounds[nextRoundIndex]) {
+                tournament.rounds[nextRoundIndex] = [];
+            }
             if (!tournament.rounds[nextRoundIndex][nextMatchIndex]) {
                 tournament.rounds[nextRoundIndex][nextMatchIndex] = createNewMatch();
             }
@@ -453,7 +473,8 @@
                 nextMatch.player2 = winner;
             }
             
-            saveTournament();
+            // Mark as advanced
+            tournament.rounds[roundIndex][matchIndex].advanced = true;
         }
 
         // Create tiebreaker match
@@ -497,21 +518,6 @@
             tournament.rounds[roundIndex].push(createNewMatch());
             saveTournament();
             generateBracket();
-        }
-
-        // Delete a match
-        function deleteMatch(roundIndex, matchIndex) {
-            if (confirm("Delete this match?")) {
-                tournament.rounds[roundIndex].splice(matchIndex, 1);
-                
-                // Remove round if empty
-                if (tournament.rounds[roundIndex].length === 0) {
-                    tournament.rounds.splice(roundIndex, 1);
-                }
-                
-                saveTournament();
-                generateBracket();
-            }
         }
 
         // Complete the tournament
