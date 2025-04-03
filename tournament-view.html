@@ -44,6 +44,7 @@
             border-radius: 10px;
             width: 300px;
             text-align: left;
+            position: relative;
         }
         
         .tournament-card h3 {
@@ -89,6 +90,24 @@
             font-weight: bold;
             margin-top: 10px;
         }
+        
+        .delete-btn {
+            background: #f44336;
+            color: white;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        
+        .game-info {
+            background: rgba(255,255,255,0.1);
+            padding: 5px;
+            border-radius: 3px;
+            margin: 5px 0;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -108,7 +127,7 @@
 
     <script>
         // Load all tournaments
-        const tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
+        let tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
         
         function displayTournaments() {
             const container = document.getElementById("tournamentsContainer");
@@ -124,16 +143,25 @@
                 card.className = "tournament-card";
                 
                 const statusClass = tournament.status || "upcoming";
+                const gameType = tournament.game || "Not specified";
+                const bestOf = tournament.bestOf ? `Best of ${tournament.bestOf}` : "Single match";
                 
                 card.innerHTML = `
+                    <button class="delete-btn" onclick="deleteTournament(${index})">✕</button>
                     <h3>${tournament.name}</h3>
                     <div class="tournament-info">
+                        <div class="game-info">
+                            <strong>Game:</strong> ${gameType}<br>
+                            <strong>Format:</strong> ${bestOf}
+                        </div>
                         <p><strong>Type:</strong> ${tournament.type === "single" ? "Single Elimination" : "Double Elimination"}</p>
                         <p><strong>Players:</strong> ${tournament.players.length}</p>
                         <p><strong>Date:</strong> ${new Date(tournament.date).toLocaleDateString()}</p>
                         <span class="status ${statusClass}">${statusClass.replace("-", " ")}</span>
                     </div>
                     <button onclick="viewTournament(${index})">View Tournament</button>
+                    ${tournament.status === "completed" ? 
+                        `<button onclick="viewResults(${index})" style="background:#9C27B0;color:white;">View Results</button>` : ''}
                 `;
                 
                 container.appendChild(card);
@@ -143,6 +171,19 @@
         function viewTournament(index) {
             localStorage.setItem("currentTournamentIndex", index);
             window.location.href = "tournament-bracket.html";
+        }
+        
+        function viewResults(index) {
+            localStorage.setItem("currentTournamentIndex", index);
+            window.location.href = "tournament-results.html";
+        }
+        
+        function deleteTournament(index) {
+            if (confirm("Are you sure you want to delete this tournament? This cannot be undone.")) {
+                tournaments.splice(index, 1);
+                localStorage.setItem("tournaments", JSON.stringify(tournaments));
+                displayTournaments();
+            }
         }
         
         // Initial load
