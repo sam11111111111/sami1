@@ -188,7 +188,7 @@ function createCounter(player) {
 
 
 function addNote(playerName) {
-    let note = prompt("Enter a note for " + playerName);
+    let note = prompt("ማስታወሻ አስገባ ለ " + playerName);
     if (note === null || note.trim() === "") return; // Cancel or empty note
 
     let players2 = JSON.parse(localStorage.getItem("players2")) || [];
@@ -226,7 +226,7 @@ function addNote(playerName) {
         }
 
         function removePlayer(playerName) {
-            let confirmDelete = confirm(`እርግጠኛ ነዎት ላስወግደው ${playerName}?`);
+            let confirmDelete = confirm(`እርግጠኛ ነህ ${playerName} ላስወግደው?`);
             if (!confirmDelete) return;
 
             let players2 = JSON.parse(localStorage.getItem("players2")) || [];
