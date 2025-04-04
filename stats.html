@@ -166,6 +166,11 @@
             .player-box {
                 width: 90%;
             }
+
+            @media (max-width: 768px) {
+    /* Mobile-friendly styles */
+    input, select { width: 90%; }
+}
             .club-loss-item {
                 font-size: 10px;
                 padding: 3px 6px;
@@ -198,24 +203,203 @@
         document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage")})`;
     
         const clubs = {
-            "Barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
-            "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
+          
             "Liverpool_FC": "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
+
             "Manchester United": "logo/Manchester_United_FC_crest.svg",
             "Manchester City": "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg",
             "Aston Villa": "https://upload.wikimedia.org/wikipedia/en/9/9a/Aston_Villa_FC_new_crest.svg",
-            "Borussia Dortmund": "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg",
-            "Inter Milan": "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
-            "AC Milan": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg",
-            "Juventus": "https://upload.wikimedia.org/wikipedia/commons/d/da/Juventus_Logo.png",
-
-            "Bayer Leverkusen": "logo/Bayer_04_Leverkusen_logo.svg",
-
             "Newcastle United": "https://upload.wikimedia.org/wikipedia/hif/2/25/Newcastle_United_Logo.png",
 
-            "Atalanta": "logo/AtalantaBC.svg",
 
-            "Paris Saint-Germain FC": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg"
+                "Arsenal": "logo/arsenal.svg",
+
+                "Chelsea": "logo/Chelsea.svg",
+
+                "Bournemouth": "logo/Bournemouth.svg",
+
+                "Crystal Palace": "logo/Crystal Palace.svg",
+                "Everton": "logo/Everton.svg",
+                "Fulham": "logo/Fulham.svg",
+                "Leicester City": "logo/Leicester City.svg",
+
+                "Wolverhampton Wanderers": "logo/Wolverhampton Wanderers.svg",
+                "Tottenham Hotspur": "logo/Tottenham Hotspur.svg",
+
+                "West Ham United": "logo/West Ham United.svg",
+                "Southampton": "logo/Southampton.svg",
+
+                "Nottingham Forest": "logo/Nottingham Forest.svg",
+
+
+
+//laliga
+
+            "Barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
+            "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
+
+
+
+                "Atlético Madrid": "logo/Atlético Madrid.svg",
+
+                "Sevilla FC": "logo/Sevilla FC.svg",
+
+                "Valencia CF": "logo/Valencia CF.svg",
+
+                "Real Sociedad": "logo/Real Sociedad.svg",
+
+                "Real Betis": "logo/Real Betis.svg",
+                "Villarreal CF": "logo/Villarreal CF.svg",
+
+                "Athletic Bilbao": "logo/Athletic Bilbao.svg",
+
+                "Celta de Vigo": "logo/Celta de Vigo.svg",
+
+                "Getafe CF": "logo/Getafe CF.svg",
+
+                "Levante UD": "logo/Levante UD.svg",
+
+                "Rayo Vallecano": "logo/Rayo Vallecano.svg",
+
+                "Deportivo Alavés": "logo/Deportivo Alavés.svg",
+
+                "Real Valladolid" : "logo/Real Valladolid",
+
+
+//seria
+
+
+                "Inter Milan": "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
+                "AC Milan": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg",
+                "Juventus": "https://upload.wikimedia.org/wikipedia/commons/d/da/Juventus_Logo.png",
+                "Atalanta": "logo/AtalantaBC.svg",
+
+
+
+                "Bologna": "logo/Bologna.svg",
+                "Cagliari": "logo/Cagliari.svg",
+
+                "Empoli": "logo/Empoli.svg",
+
+                "Fiorentina": "logo/AtalantaBC.svg",
+
+                "Napoli": "logo/Napoli.svg",
+                "Roma": "logo/Roma.svg",
+
+                "Sampdoria": "logo/Sampdoria.svg",
+                "Lazio": "logo/Lazio.svg",
+
+                "Sampdoria": "logo/Sampdoria",
+
+
+
+//bondes
+
+
+                "Borussia Dortmund": "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg",
+                "Bayer Leverkusen": "logo/Bayer_04_Leverkusen_logo.svg",
+
+                "Bayern Munich": "logo/Bayern Munich.svg",
+
+                "Borussia Mönchengladbach": "logo/Borussia Mönchengladbach.svg",
+
+                "FC Schalke 04": "logo/FC Schalke 04.svg",
+                "FC Augsburg": "logo/FC Augsburg.svg",
+
+                "Arminia Bielefeld": "logo/Arminia Bielefeld.svg",
+                "VfB Stuttgart": "VfB Stuttgart",
+                "Union Berlin" :"Union Berlin",
+
+
+                "Werder Bremen": "Werder Bremen",
+                "SC Freiburg": "SC Freiburg",
+                "TSG 1899 Hoffenheim": "TSG 1899 Hoffenheim",
+                "Hertha BSC": "Hertha BSC",
+                "RB Leipzig": "RB Leipzig",
+                "Eintracht Frankfurt": "Eintracht Frankfurt",
+                "VfL Wolfsburg": "VfL Wolfsburg",
+
+            
+            
+          //lig1
+                  "Paris Saint-Germain FC": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg",
+
+                "Brest": "logo/Brest.svg",
+
+                "Le Havre": "logo/Le Havre.svg",
+                "Lens": "logo/Lens.svg",
+                "Marseille": "logo/Marseille.svg",
+
+                "Reims": "logo/Reims.svg",
+                "Monaco": "logo/Monaco",
+                "Rennes": "Rennes",
+                "Nantes": "Nantes",
+
+                 "Montpellier": "Montpellier",
+
+                "Strasbourg": "Strasbourg",
+                "Toulouse": "Toulouse",
+
+
+
+
+
+
+
+
+//country
+
+
+                "Ethiopia": "ethio",
+
+                "Egipt": "eg",
+                "South Africa": "s",
+
+                //eroup
+
+                "England": "England ",
+
+                "Spain": "Spain  ",
+
+                "Italy": "Italy  ",
+
+                "Germany": "Germany",
+
+                "France": "France",
+
+
+                "Portugal": "Portugal",
+
+                "Netherlands": "Netherlands",
+
+                "Belgium": "Belgium ",
+
+                "Turkey": "Turkey",
+
+                "Scotland": "Scotland ",
+
+                "Russia": "Russia",
+
+                "Greece": "Greece",
+
+                "Ukraine": "Ukraine"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         };
 
         // Calculate total losses across all players

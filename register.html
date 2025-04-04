@@ -17,9 +17,8 @@
         background-size: cover;
         height: 100hv;
 
-
+         transition: background-color 0.3s, color 0.3s;
         }
-      
 
         input{padding: 10px; width: auto; margin: 10px 0; border-radius: 5px;}
         select, button { padding: 10px; width: 100%; margin: 10px 0; border-radius: 5px; }
@@ -39,21 +38,59 @@
        }
 
      #menu{
-
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    font-size: 46px;
-
-    color: white;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        font-size: 46px;
+        color: white;
+    }
+ 
+/* Light mode styles */
+body.light-mode {
+    background-color: #f5f5f5;
+    color: #333;
 }
+
+.light-mode .count p {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.light-mode button:not(#lyew) {
+    background-color: #10375C;
+    color: #FFB22C;
+}
+
+.light-mode #lyew {
+    background-color: #854836;
+    color: #F6F0F0;
+}
+
+/* Theme toggle button */
+#themeToggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.light-mode #themeToggle {
+    color: #333;
+}
+
     </style>
 </head>
 <body>
       <a href="for_2.html" id="menu">  <i class="bi bi-arrow-left-short fs-1" ></i> </a>
+<button id="themeToggle" style="position:fixed; top:5px; right:10px; padding:5px 10px; width: 10%;">
+    <i class="bi bi-moon-fill"></i> <!-- Default dark mode icon -->
+</button>
 <br>
     <h2>JO የተጫዋች መመዝገቢያ</h2>
-   
+
+
         <form id="registerForm">
             <label for="playerName11">የተጫዋች ስም</label>
             <input type="text" id="playerName11" placeholder="ስሙ ማን ነው?" required>
@@ -63,9 +100,22 @@
             <input type="number" id="playerPrice" placeholder="ብር ያስገቡ" min="1" required>
 
 <br>
+            <label for="category">የክለብ ምድብ</label>
+            <select id="category" required>
+                <option value="" disabled selected>ምድብ ምረጥ</option>
+                <option value="premier">Premier League</option>
+                <option value="laliga">La Liga</option>
+                <option value="seriea">Serie A</option>
+                <option value="bundesliga">Bundesliga</option>
+                <option value="ligue1">Ligue 1</option>
+                <option value="other">Other</option>
+            </select>
+
+<br>
             <label for="club">ክለብ</label>
+            <br>
             <select id="club" required>
-                <option value="" disabled selected>ክለብ ይምረጡ</option>
+                <option value="" disabled selected>ክለብ ምረጥ</option>
                 <!-- Club options will be populated here dynamically -->
             </select>
 
@@ -81,50 +131,258 @@
         </div>
     
       
+<script type="text/javascript">
+// Theme management
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.body.classList.toggle('light-mode', savedTheme === 'light');
+    updateThemeIcon();
+}
+
+function toggleTheme() {
+    document.body.classList.toggle('light-mode');
+    const currentTheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+    localStorage.setItem('theme', currentTheme);
+    updateThemeIcon();
+}
+
+function updateThemeIcon() {
+    const icon = document.querySelector('#themeToggle i');
+    if (document.body.classList.contains('light-mode')) {
+        icon.classList.remove('bi-moon-fill');
+        icon.classList.add('bi-sun-fill');
+    } else {
+        icon.classList.remove('bi-sun-fill');
+        icon.classList.add('bi-moon-fill');
+    }
+}
+
+// Initialize theme and add event listener
+document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+});
+</script>
+
+
+
+
    <script>
         // Apply saved background
         document.body.style.backgroundImage = `url(${localStorage.getItem("bgImage") })`;
   
-     const clubs = {
-             "Barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
-            "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
-            "Liverpool_FC": "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
+     const clubsByCategory = {
+            "premier": {
 
-             "Manchester United": "logo/Manchester_United_FC_crest.svg",
-
-             "Manchester City": "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg",
-            "Aston Villa": "https://upload.wikimedia.org/wikipedia/en/9/9a/Aston_Villa_FC_new_crest.svg",
-
-            "Borussia Dortmund": "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg",
-            "Inter Milan": "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
-
-            "AC Milan": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg",
-            "Juventus": "https://upload.wikimedia.org/wikipedia/commons/d/da/Juventus_Logo.png",
+                "Manchester United": "logo/Manchester_United_FC_crest.svg",
+                "Manchester City": "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg",
 
 
-            "Bayer Leverkusen": "logo/Bayer_04_Leverkusen_logo.svg",  // Corrected the name and logo
-            "Newcastle United": "https://upload.wikimedia.org/wikipedia/hif/2/25/Newcastle_United_Logo.png",  // Corrected club and logo
-            
-            "Atalanta": "logo/AtalantaBC.svg",
+                "Liverpool_FC": "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
+                "Aston Villa": "https://upload.wikimedia.org/wikipedia/en/9/9a/Aston_Villa_FC_new_crest.svg",
+                "Newcastle United": "https://upload.wikimedia.org/wikipedia/hif/2/25/Newcastle_United_Logo.png", 
 
-            "Paris Saint-Germain FC": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg"
-};
+
+                "Arsenal": "logo/arsenal.svg",
+
+                "Chelsea": "logo/Chelsea.svg",
+
+                "Bournemouth": "logo/Bournemouth.svg",
+
+                "Crystal Palace": "logo/Crystal Palace.svg",
+                "Everton": "logo/Everton.svg",
+                "Fulham": "logo/Fulham.svg",
+                "Leicester City": "logo/Leicester City.svg",
+
+                "Wolverhampton Wanderers": "logo/Wolverhampton Wanderers.svg",
+                "Tottenham Hotspur": "logo/Tottenham Hotspur.svg",
+
+                "West Ham United": "logo/West Ham United.svg",
+                "Southampton": "logo/Southampton.svg",
+
+                "Nottingham Forest": "logo/Nottingham Forest.svg"
+
+
+        
+
+
+
+            },
+            "laliga": {
+                "Barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
+                "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
+
+
+
+
+                "Atlético Madrid": "logo/Atlético Madrid.svg",
+
+                "Sevilla FC": "logo/Sevilla FC.svg",
+
+                "Valencia CF": "logo/Valencia CF.svg",
+
+                "Real Sociedad": "logo/Real Sociedad.svg",
+
+                "Real Betis": "logo/Real Betis.svg",
+                "Villarreal CF": "logo/Villarreal CF.svg",
+
+                "Athletic Bilbao": "logo/Athletic Bilbao.svg",
+
+                "Celta de Vigo": "logo/Celta de Vigo.svg",
+
+                "Getafe CF": "logo/Getafe CF.svg",
+
+                "Levante UD": "logo/Levante UD.svg",
+
+                "Rayo Vallecano": "logo/Rayo Vallecano.svg",
+
+                "Deportivo Alavés": "logo/Deportivo Alavés.svg",
+
+                "Real Valladolid" : "logo/Real Valladolid"
+
+
+
+
+
+
+            },
+            "seriea": {
+                "Inter Milan": "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
+                "AC Milan": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg",
+                "Juventus": "https://upload.wikimedia.org/wikipedia/commons/d/da/Juventus_Logo.png",
+                "Atalanta": "logo/AtalantaBC.svg",
+
+
+
+                "Bologna": "logo/Bologna.svg",
+                "Cagliari": "logo/Cagliari.svg",
+
+                "Empoli": "logo/Empoli.svg",
+
+                "Fiorentina": "logo/AtalantaBC.svg",
+
+                "Napoli": "logo/Napoli.svg",
+                "Roma": "logo/Roma.svg",
+
+                "Sampdoria": "logo/Sampdoria.svg",
+                "Lazio": "logo/Lazio.svg",
+
+                "Sampdoria": "logo/Sampdoria"
+
+
+            },
+            "bundesliga": {
+                "Borussia Dortmund": "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg",
+                "Bayer Leverkusen": "logo/Bayer_04_Leverkusen_logo.svg",
+
+                "Bayern Munich": "logo/Bayern Munich.svg",
+
+                "Borussia Mönchengladbach": "logo/Borussia Mönchengladbach.svg",
+
+                "FC Schalke 04": "logo/FC Schalke 04.svg",
+                "FC Augsburg": "logo/FC Augsburg.svg",
+
+                "Arminia Bielefeld": "logo/Arminia Bielefeld.svg",
+                "VfB Stuttgart": "VfB Stuttgart",
+                "Union Berlin" :"Union Berlin",
+
+                "Werder Bremen": "Werder Bremen",
+                "SC Freiburg": "SC Freiburg",
+                "TSG 1899 Hoffenheim": "TSG 1899 Hoffenheim",
+                "Hertha BSC": "Hertha BSC",
+                "RB Leipzig": "RB Leipzig",
+                "Eintracht Frankfurt": "Eintracht Frankfurt",
+                "VfL Wolfsburg": "VfL Wolfsburg"
+
+            },
+            "ligue1": {
+                "Paris Saint-Germain FC": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg",
+
+                "Brest": "logo/Brest.svg",
+
+                "Le Havre": "logo/Le Havre.svg",
+                "Lens": "logo/Lens.svg",
+                "Marseille": "logo/Marseille.svg",
+
+                "Reims": "logo/Reims.svg",
+                "Monaco": "logo/Monaco",
+                "Rennes": "Rennes",
+                "Nantes": "Nantes",
+
+
+                "Montpellier": "Montpellier",
+
+                "Strasbourg": "Strasbourg",
+                "Toulouse": "Toulouse"
+
+            },
+            "Africa": {
+                "Ethiopia": "ethio",
+
+                "Egipt": "eg",
+                "South Africa": "s"
+
+            },
+            "European Clubs":{
+
+                "England": "England ",
+                "Spain": "Spain  ",
+
+                "Italy": "Italy  ",
+
+                "Germany": "Germany",
+
+                "France": "France",
+
+
+                "Portugal": "Portugal",
+
+                "Netherlands": "Netherlands",
+
+                "Belgium": "Belgium ",
+
+                "Turkey": "Turkey",
+
+                "Scotland": "Scotland ",
+
+                "Russia": "Russia",
+
+                "Greece": "Greece",
+
+                "Ukraine": "Ukraine"
+
+
+
+
+            },
+            "other": {
+                // Add other clubs here if needed
+            }
+
+        };
 
 let players = JSON.parse(localStorage.getItem("players")) || [];
 
         function updateClubOptions() {
+            const categorySelect = document.getElementById("category");
             const clubSelect = document.getElementById("club");
+            const selectedCategory = categorySelect.value;
+            
             clubSelect.innerHTML = '<option value="" disabled selected>ክለብ ምረጥ</option>';
 
             const registeredClubs = players.map(player => player.club);
-            Object.keys(clubs).forEach(club => {
-                if (!registeredClubs.includes(club)) {
-                    const option = document.createElement("option");
-                    option.value = club;
-                    option.textContent = club;
-                    clubSelect.appendChild(option);
-                }
-            });
+            
+            if (selectedCategory) {
+                const categoryClubs = clubsByCategory[selectedCategory];
+                Object.keys(categoryClubs).forEach(club => {
+                    if (!registeredClubs.includes(club)) {
+                        const option = document.createElement("option");
+                        option.value = club;
+                        option.textContent = club;
+                        clubSelect.appendChild(option);
+                    }
+                });
+            }
         }
 
         function updatePlayerCount() {
@@ -134,12 +392,15 @@ let players = JSON.parse(localStorage.getItem("players")) || [];
             document.getElementById("totalAmount").innerText = totalAmount;
         }
 
+        document.getElementById("category").addEventListener("change", updateClubOptions);
+
         document.getElementById("registerForm").addEventListener("submit", function (e) {
             e.preventDefault();
 
             const playerName11 = document.getElementById("playerName11").value;
             const club = document.getElementById("club").value;
             const playerPrice = parseFloat(document.getElementById("playerPrice").value);
+            const category = document.getElementById("category").value;
 
             if (playerName11 && club && playerPrice > 0) {
                 players.push({ name: playerName11, club: club, price: playerPrice, wins: 0, losses: 0 });
@@ -150,16 +411,21 @@ let players = JSON.parse(localStorage.getItem("players")) || [];
                 message.style.display = "block";
                 message.innerText = `${playerName11} ለ ${club} ፈርሟል!`;
 
+                // Clear only player name and price fields
                 document.getElementById("playerName11").value = "";
                 document.getElementById("playerPrice").value = "";
+                
+                // Keep the category selection and update club options
+                document.getElementById("category").value = category;
+                updateClubOptions();
+                
+                // Reset club selection
                 document.getElementById("club").value = "";
 
                 updatePlayerCount();
-                updateClubOptions();
             }
         });
 
-        updateClubOptions();
         updatePlayerCount();
     </script>
 
