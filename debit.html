@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <title>💸 Player Debt Tracking</title>
     <style>
         body { 
@@ -64,6 +65,14 @@
     color: whitesmoke;
     font-weight: bold;
 }
+     #menu{
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        font-size: 46px;
+        color: white;
+    }
+
 
     </style>
 </head>
@@ -74,13 +83,20 @@
     </script>
     <h2>💸 የተጫዋች ዕዳ  💸</h2>
 
+
+  <a href="for_2.html" id="menu">  <i class="bi bi-arrow-left-short fs-1" ></i> </a>
+      
+
     <input type="text" id="playerName12" placeholder="የተጫዋች ስም">
     <input type="number" id="debtAmount" placeholder="ዕዳ">
     <button onclick="addPlayer()" id="ad"> ➕ ተጫዋች ጨምር</button>
 
+ <p id="totalDebt">📉 ጠቅላላ ዕዳ: 0 ብር</p>
+
+
     <div id="debtList"></div>
 
-    <p id="totalDebt">📉 ጠቅላላ ዕዳ: 0 ብር</p>
+   
 
     <a href="for_2.html">⬅ ተመለስ</a>
 
